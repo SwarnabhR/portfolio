@@ -1,26 +1,390 @@
+/* ============================================================
+   S. ROY PORTFOLIO — Global Styles
+   Next.js 16 · Tailwind v4 · TypeScript
+   Design system: (adapted for S. Roy / oxy)
+   Source of truth: colors_and_type.css 
+   ============================================================
+
+   FILE STRUCTURE:
+   1. Tailwind import
+   2. Raw color palette      ← never use these directly
+   3. Semantic aliases       ← always use these in components
+   4. Gradient presets
+   5. Typography tokens
+   6. Spacing tokens
+   7. Radius + transition + shadow + input tokens
+   8. @theme inline          ← registers tokens as Tailwind utilities
+   9. Base reset
+   ============================================================ */
+
 @import "tailwindcss";
 
+/* ============================================================
+   SECTION 2+3 — Color Palette + Semantic Aliases
+   ------------------------------------------------------------
+   Raw values are prefixed --color-*
+   Semantic aliases (--bg, --fg-1 etc.) are what components use.
+
+   RULE: Never use raw hex codes in components.
+         Always reference a semantic token.
+   ============================================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+  /* ── Raw palette (confirmed from Framer source) ─────────── */
+  --color-black:   #0a0a0c;   /* confirmed page bg */
+  --color-black-2: #060606;   /* hero + darkest sections */
+  --color-black-3: #14171d;   /* alt dark sections */
+  --color-black-4: #1a1a1a;   /* card surfaces */
+  --color-white:   #ffffff;
+
+  /* Alpha whites — used for text and borders */
+  --color-white-80: rgba(255, 255, 255, 0.80);
+  --color-white-55: rgba(255, 255, 255, 0.55);
+  --color-white-25: rgba(255, 255, 255, 0.25);
+  --color-white-12: rgba(255, 255, 255, 0.12);
+  --color-white-06: rgba(255, 255, 255, 0.06);
+
+  /* Gradient accent raws — warm atmospheric palette (confirmed) */
+  --color-magenta:  #c2185b;
+  --color-purple:   #6a0dad;
+  --color-orange:   #e65100;
+  --color-yellow:   #f9a825;
+  --color-red-warm: #b71c1c;
+
+  /* Special surfaces */
+  --color-card:      #ffffff;   /* testimonial cards — white on dark */
+  --color-card-dark: #1a1a1a;
+
+  /* Form */
+  --color-border-gray: #858689;   /* confirmed form input border colour */
+  --color-placeholder: #ffffffb3; /* confirmed input placeholder */
+
+  /* ── Semantic aliases ────────────────────────────────────── */
+  /*
+     Named by PURPOSE.
+     --bg = "page background", not "dark colour"
+     This means if you ever change the bg colour,
+     you change it here once — not in 30 component files.
+  */
+  --bg:      var(--color-black);    /* #0a0a0c */
+  --bg-hero: var(--color-black-2);  /* #060606 */
+  --bg-2:    var(--color-black-3);  /* #14171d */
+  --bg-card: var(--color-black-4);  /* #1a1a1a */
+
+  /* Text — three levels of visual hierarchy */
+  --fg-1: var(--color-white);       /* headings, primary */
+  --fg-2: var(--color-white-55);    /* body copy */
+  --fg-3: var(--color-white-25);    /* captions, faint */
+
+  /* Borders */
+  --border:       var(--color-white-12);          /* 0.12 — section dividers */
+  --border-pill:  rgba(255, 255, 255, 0.25);       /* pill label borders */
+  --border-input: rgba(255, 255, 255, 0.30);       /* form input bottom border */
+  --border-cta:   rgba(255, 255, 255, 0.18);       /* CTA button border */
+
+  /* ============================================================
+     SECTION 4 — Gradient Presets
+     ------------------------------------------------------------
+     Atmospheric radial gradients. Three zones:
+
+     --gradient-hero     → Entry  (hero section, top of page)
+     --gradient-contact  → Exit   (contact section, warmest)
+
+     RULE: Atmosphere only at ENTRY and EXIT.
+           Middle sections (services, blog, testimonials) = clean.
+           This gives the page rhythm and breathing room.
+     ============================================================ */
+
+  --gradient-hero:
+    radial-gradient(
+      ellipse 60% 50% at 80% 50%,
+      rgba(194, 24,  91, 0.55) 0%,
+      rgba(106, 13, 173, 0.35) 35%,
+      rgba(230, 81,   0, 0.20) 60%,
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 40% 60% at 95% 80%,
+      rgba(249, 168, 37, 0.30) 0%,
+      transparent 60%
+    );
+
+  --gradient-contact:
+    radial-gradient(
+      ellipse 90% 80% at 70% 60%,
+      rgba(194, 24,  91, 0.70) 0%,
+      rgba(230, 81,   0, 0.50) 40%,
+      rgba(249, 168, 37, 0.30) 70%,
+      transparent 90%
+    );
+
+  /* About section — subtle mid gradient */
+  --gradient-about:
+    radial-gradient(
+      ellipse 60% 70% at 60% 50%,
+      rgba(40, 0, 90, 0.18) 0%,
+      rgba(80, 0, 20, 0.10) 50%,
+      transparent 75%
+    );
+
+  /* ============================================================
+     SECTION 5 — Typography Tokens
+     ------------------------------------------------------------
+     Single font — Manrope only. No mixing fonts.
+     next/font/google injects --font-manrope on <html>.
+     We reference it here as the first value in the stack.
+     The fallback 'Manrope' string only fires if build fails.
+     ============================================================ */
+
+  --font-sans: var(--font-manrope), 'Manrope', system-ui, -apple-system, sans-serif;
+
+  /* Size scale — confirmed from Framer source presets */
+  --text-xs:      11px;                        /* pill labels, metadata */
+  --text-sm:      13px;                        /* small UI elements */
+  --text-base:    15px;                        /* body copy */
+  --text-label:   15px;                        /* label preset, 0.1em tracking */
+  --text-md:      20px;                        /* default body size */
+  --text-lg:      24px;                        /* sub-headings */
+  --text-xl:      32px;                        /* section headings */
+  --text-2xl:     48px;                        /* large headings */
+  --text-3xl:     64px;                        /* page titles */
+  --text-4xl:     100px;                       /* display tablet */
+  --text-display: clamp(62px, 10vw, 120px);    /* hero h1 — confirmed */
+  --text-bg-word: clamp(110px, 19vw, 210px);   /* decorative bg text */
+
+  /* Weights — only the 5 weights we load from Google Fonts */
+  --weight-extralight: 200;
+  --weight-light:      300;   /* body copy — confirmed */
+  --weight-regular:    400;   /* headings  — confirmed */
+  --weight-semibold:   600;
+  --weight-bold:       700;
+
+  /* Line heights — confirmed from Framer presets */
+  --leading-none:    1.00;   /* display headings */
+  --leading-snug:    1.30;   /* section headings */
+  --leading-normal:  1.50;
+  --leading-relaxed: 1.60;   /* body copy — confirmed (NOT 1.65) */
+  --leading-input:   1.50;   /* form inputs */
+
+  /* Letter spacing — confirmed from Framer presets */
+  --tracking-tight:  -0.03em;   /* headings + display */
+  --tracking-normal:  0em;
+  --tracking-wide:    0.06em;
+  --tracking-wider:   0.10em;   /* pill labels */
+
+  /* Form input tokens — confirmed from contact page */
+  --input-font-size:   20px;
+  --input-weight:      400;
+  --input-border:      0.5px solid var(--color-border-gray);
+  --input-placeholder: var(--color-placeholder);
+
+  /* ============================================================
+     SECTION 6 — Spacing Tokens
+     ------------------------------------------------------------
+     4px base unit.
+     --space-1  to --space-3  → tight UI (icon gaps, badge padding)
+     --space-4  to --space-8  → component spacing (card padding)
+     --space-10 to --space-32 → layout spacing (section padding)
+
+     RULE: Never write arbitrary px values in components.
+           Always use a token.
+     ============================================================ */
+
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ============================================================
+     SECTION 7 — Radius · Transitions · Shadows
+     ============================================================ */
+
+  /* Border radius — two values only, sharp or pill */
+  --radius-none: 0px;
+  --radius-sm:   4px;     /* confirmed — cards, buttons, inputs */
+  --radius-pill: 999px;   /* section label pills only */
+
+  /* Transitions */
+  --transition-fast:   0.2s ease;
+  --transition-base:   0.3s ease;
+  --transition-slow:   0.5s ease;
+  --transition-reveal: 0.7s ease;   /* scroll reveal animations */
+
+  /* Shadows — confirmed from source */
+  --shadow-card:        0 4px 32px rgba(0, 0, 0, 0.18);   /* general cards */
+  --shadow-testimonial: 0 8px 40px rgba(0, 0, 0, 0.15);   /* testimonial white cards */
 }
 
+/* ============================================================
+   SECTION 8 — @theme inline
+   ------------------------------------------------------------
+   Tailwind v4 syntax. Registers CSS vars as utility classes.
+   No tailwind.config.js needed.
+
+   After this block you can write in components:
+     bg-bg         → background: var(--bg)
+     text-fg-2     → color: var(--fg-2)
+     text-display  → font-size: var(--text-display)
+     p-6           → padding: var(--space-6)
+
+   'inline' = values stay as CSS var references at runtime,
+   not resolved at build time. Required for rgba() chains.
+   ============================================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Surface colors → bg-bg, bg-bg-hero, bg-bg-2 etc. */
+  --color-bg:       var(--bg);
+  --color-bg-hero:  var(--bg-hero);
+  --color-bg-2:     var(--bg-2);
+  --color-bg-card:  var(--bg-card);
+
+  /* Text colors → text-fg-1, text-fg-2, text-fg-3 */
+  --color-fg-1:     var(--fg-1);
+  --color-fg-2:     var(--fg-2);
+  --color-fg-3:     var(--fg-3);
+
+  /* Border → border-border */
+  --color-border:   var(--border);
+
+  /* Card surface */
+  --color-card:     var(--color-card);
+
+  /* Font family → font-sans */
+  --font-sans: var(--font-sans);
+
+  /* Font sizes → text-xs, text-sm, text-md ... */
+  --font-size-xs:      var(--text-xs);
+  --font-size-sm:      var(--text-sm);
+  --font-size-base:    var(--text-base);
+  --font-size-md:      var(--text-md);
+  --font-size-lg:      var(--text-lg);
+  --font-size-xl:      var(--text-xl);
+  --font-size-2xl:     var(--text-2xl);
+  --font-size-3xl:     var(--text-3xl);
+  --font-size-display: var(--text-display);
+
+  /* Spacing → p-*, m-*, gap-* */
+  --spacing-1:  var(--space-1);
+  --spacing-2:  var(--space-2);
+  --spacing-3:  var(--space-3);
+  --spacing-4:  var(--space-4);
+  --spacing-5:  var(--space-5);
+  --spacing-6:  var(--space-6);
+  --spacing-8:  var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+  --spacing-20: var(--space-20);
+  --spacing-24: var(--space-24);
+  --spacing-32: var(--space-32);
+
+  /* Border radius → rounded-sm, rounded-pill */
+  --radius-sm:   var(--radius-sm);
+  --radius-pill: var(--radius-pill);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   SECTION 9 — Base Reset
+   ------------------------------------------------------------
+   Tailwind preflight handles most resets.
+   We only add what Tailwind doesn't cover.
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* auto — Lenis will handle smooth scroll.
+     Setting 'smooth' here conflicts with Lenis. */
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  hanging-punctuation: first last;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background:   var(--bg);
+  color:        var(--fg-1);
+  font-family:  var(--font-sans);
+  font-size:    var(--text-md);
+  font-weight:  var(--weight-light);
+  line-height:  var(--leading-relaxed);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor:       none;       /* custom cursor replaces system cursor */
+  overflow-x:   hidden;
+  min-height:   100dvh;     /* dvh accounts for mobile browser bars */
+}
+
+::selection {
+  background: rgba(194, 24, 91, 0.35);   /* magenta tint — matches palette */
+  color: var(--fg-1);
+}
+
+:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+img, picture, video, canvas, svg {
+  display:   block;
+  max-width: 100%;
+}
+
+ul, ol {
+  list-style: none;
+  padding:    0;
+  margin:     0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin:          0;
+  font-weight:     var(--weight-regular);
+  letter-spacing:  var(--tracking-tight);
+  line-height:     var(--leading-none);
+  color:           var(--fg-1);
+}
+
+p {
+  margin: 0;
+  color:  var(--fg-2);
+}
+
+button {
+  font:       inherit;
+  cursor:     none;
+  border:     none;
+  background: none;
+  padding:    0;
+}
+
+a {
+  color:           inherit;
+  text-decoration: none;
+  cursor:          none;
+}
+
+input, textarea, select {
+  font:  inherit;
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto !important;
+  }
 }
