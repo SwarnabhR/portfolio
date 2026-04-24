@@ -22,6 +22,7 @@ import Navbar from './components/ui/Navbar';
 import CustomCursor from './components/ui/CustomCursor';
 import SmoothScroll from './components/providers/SmoothScroll';
 import Footer from './components/sections/Footer';
+import { Analytics } from "@vercel/analytics/next"
 
 // ============================================================
 // FONT LOADING
@@ -143,6 +144,7 @@ export default function RootLayout({
           <main>{children}</main>
         </SmoothScroll>
         <Footer />
+        <Analytics />
       </body>
     </html>
   )
