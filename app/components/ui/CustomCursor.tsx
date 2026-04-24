@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from "react"
 
 export default function CustomCursor() {
+    const [isTouch] = useState(() => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)
     const [isVisible, setIsVisible] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
     const [isTextHovered, setIsTextHovered] = useState(false)
@@ -15,6 +16,7 @@ export default function CustomCursor() {
     const rafId = useRef<number>(0)
 
     useEffect(() => {
+        if (isTouch) return
         const onMouseMove = (e: MouseEvent) => {
             setIsVisible(prev => {
                 if (!prev) return true
@@ -62,7 +64,9 @@ export default function CustomCursor() {
             document.documentElement.removeEventListener('mouseenter', onMouseEnter)
             document.documentElement.removeEventListener('mouseleave', onMouseLeave)
         }
-    }, [])
+    }, [isTouch])
+
+    if (isTouch) return null
 
     return (
         <>
