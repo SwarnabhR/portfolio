@@ -166,7 +166,7 @@
   --text-3xl:     64px;                        /* page titles */
   --text-4xl:     100px;                       /* display tablet */
   --text-display: clamp(62px, 10vw, 120px);    /* hero h1 — confirmed */
-  --text-bg-word: clamp(110px, 19vw, 210px);   /* decorative bg text */
+  --text-bg-word: clamp(48px, 16vw, 210px);    /* decorative bg text */
 
   /* Weights — only the 5 weights we load from Google Fonts */
   --weight-extralight: 200;
