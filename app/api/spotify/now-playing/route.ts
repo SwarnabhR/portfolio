@@ -46,16 +46,14 @@ export async function GET() {
       },
     })
 
-    const cache = { 'Cache-Control': 'no-store' }
-
     if (response.status === 204) {
-      return NextResponse.json({ debug: '204 - nothing playing' }, { headers: cache })
+      return NextResponse.json({ isPlaying: false })
     }
 
     const data = await response.json()
 
     if (!data.item) {
-      return NextResponse.json({ debug: 'no item', raw: data }, { headers: cache })
+      return NextResponse.json({ isPlaying: false })
     }
 
     return NextResponse.json({
@@ -67,7 +65,7 @@ export async function GET() {
       url: data.item.external_urls.spotify,
       duration: data.item.duration_ms,
       progress: data.progress_ms,
-    }, { headers: cache })
+    })
   } catch (error) {
     console.error('Spotify API error:', error)
     return NextResponse.json(
