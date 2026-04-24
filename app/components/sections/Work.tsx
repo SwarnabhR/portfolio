@@ -1,6 +1,7 @@
 'use client'
 
 import { useReveal } from '@/hooks/useReveal'
+import CtaLink from '@/components/ui/CtaLink'
 
 const PROJECTS = [
   {
@@ -150,13 +151,7 @@ export default function Work() {
 
         {/* CTA */}
         <div className="mt-12 flex justify-end">
-          <a
-            href="#contact"
-            className="text-sm text-fg-1 inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300"
-            style={{ borderColor: 'var(--border-pill)' }}
-          >
-            see all works ↗
-          </a>
+          <CtaLink href="#contact">see all works ↗</CtaLink>
         </div>
 
       </div>

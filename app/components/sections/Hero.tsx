@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { useScrollY } from '@/hooks/useScrollY'
+import CtaLink from '@/components/ui/CtaLink'
 
 export default function Hero() {
   const heroRef  = useRef<HTMLElement>(null)
@@ -116,18 +117,7 @@ export default function Hero() {
             and ML pipelines for NSE/BSE equities.
           </p>
 
-          <a
-            href="#contact"
-            className="text-sm font-light inline-flex items-center gap-1 border-b pb-0.5 transition-colors duration-300"
-            style={{
-              color: 'rgba(255,255,255,0.7)',
-              borderColor: 'rgba(255,255,255,0.22)',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-          >
-            contact me ↗
-          </a>
+          <CtaLink href="#contact">contact me ↗</CtaLink>
         </div>
       </div>
     </section>

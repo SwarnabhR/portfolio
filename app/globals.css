@@ -99,27 +99,39 @@
            This gives the page rhythm and breathing room.
      ============================================================ */
 
+  /* Void Bloom — gothic/cosmic deep space palette (confirmed from preview) */
   --gradient-hero:
     radial-gradient(
-      ellipse 60% 50% at 80% 50%,
-      rgba(194, 24,  91, 0.55) 0%,
-      rgba(106, 13, 173, 0.35) 35%,
-      rgba(230, 81,   0, 0.20) 60%,
-      transparent 80%
+      ellipse 55% 60% at 75% 40%,
+      rgba(72,  0, 120, 0.70) 0%,
+      rgba(25,  0,  60, 0.55) 35%,
+      rgba(100, 0,  30, 0.25) 60%,
+      transparent 85%
     ),
     radial-gradient(
-      ellipse 40% 60% at 95% 80%,
-      rgba(249, 168, 37, 0.30) 0%,
+      ellipse 40% 50% at 95% 85%,
+      rgba(0,  20,  80, 0.50) 0%,
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 30% 40% at 10% 20%,
+      rgba(0,  40,  60, 0.30) 0%,
       transparent 60%
     );
 
+  /* Crimson Nebula — warmest exit bloom */
   --gradient-contact:
     radial-gradient(
-      ellipse 90% 80% at 70% 60%,
-      rgba(194, 24,  91, 0.70) 0%,
-      rgba(230, 81,   0, 0.50) 40%,
-      rgba(249, 168, 37, 0.30) 70%,
+      ellipse 80% 70% at 65% 55%,
+      rgba(120,  0, 30, 0.75) 0%,
+      rgba( 60,  0, 80, 0.55) 35%,
+      rgba(  0, 15, 60, 0.30) 65%,
       transparent 90%
+    ),
+    radial-gradient(
+      ellipse 40% 40% at 20% 80%,
+      rgba(0, 30, 50, 0.40) 0%,
+      transparent 60%
     );
 
   /* About section — subtle mid gradient */

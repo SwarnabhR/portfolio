@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useReveal } from '@/hooks/useReveal'
+import CtaLink from '@/components/ui/CtaLink'
 
 const FIELDS = [
   { name: 'name',    label: 'Name',    type: 'text',  placeholder: 'Jane Smith'       },
@@ -34,17 +35,10 @@ export default function Contact() {
     const focused = activeField === key
     const dimmed  = !!activeField && !focused && !form[key as keyof typeof form]
     return {
-      width: '100%',
-      background: 'transparent',
-      border: 'none',
-      borderBottom: `0.5px solid ${focused ? 'rgba(120,0,200,0.5)' : 'var(--color-border-gray)'}`,
-      color: '#fff',
-      fontFamily: 'inherit',
-      fontSize: 20,
-      fontWeight: 300,
-      padding: '10px 0',
-      outline: 'none',
-      resize: 'none' as const,
+      width: '100%', background: 'transparent', border: 'none',
+      borderBottom: `0.5px solid ${focused ? 'rgba(194,24,91,0.5)' : 'var(--color-border-gray)'}`,
+      color: '#fff', fontFamily: 'inherit', fontSize: 20, fontWeight: 300,
+      padding: '10px 0', outline: 'none', resize: 'none' as const,
       opacity: dimmed ? 0.3 : 1,
       filter: dimmed ? 'blur(0.4px)' : 'none',
       transition: 'border-color 0.3s, opacity 0.25s, filter 0.25s',
@@ -58,7 +52,7 @@ export default function Contact() {
       style={{ background: `var(--gradient-contact), var(--bg)` }}
     >
       <style>{`
-        @keyframes glowRun {
+        @keyframes runGlow {
           0%   { left: -60%; }
           100% { left: 110%; }
         }
@@ -94,7 +88,7 @@ export default function Contact() {
         </h2>
       </div>
 
-      {/* 2-col split — flush, no outer padding bottom */}
+      {/* 2-col split */}
       <div className="flex flex-col md:flex-row" style={{ minHeight: 500 }}>
 
         {/* Left — 40% */}
@@ -103,32 +97,21 @@ export default function Contact() {
           className={`md:w-2/5 px-6 md:pl-6 md:pr-12 pt-12 pb-10 flex flex-col justify-between transition-all duration-700 ${
             leftVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ maxWidth: '100%' }}
         >
           <div className="flex flex-col gap-8">
             <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 300 }}>
               Open to quant research roles, algorithmic trading projects,
               and ML engineering collaborations.
             </p>
-
-            <a
-              href="mailto:swarnabh.work@gmail.com"
-              className="text-sm self-start inline-flex items-center gap-1 border-b pb-0.5 transition-colors duration-300"
-              style={{ color: 'rgba(255,255,255,0.7)', borderColor: 'rgba(255,255,255,0.22)' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-            >
+            <CtaLink href="mailto:swarnabh.work@gmail.com" external>
               book a call ↗
-            </a>
+            </CtaLink>
           </div>
 
           {/* Identity chip */}
-          <div
-            className="flex items-center gap-4 pt-8 border-t mt-8"
-            style={{ borderColor: 'var(--border)' }}
-          >
+          <div className="flex items-center gap-4 pt-8 border-t mt-8" style={{ borderColor: 'var(--border)' }}>
             <span
-              className="inline-flex items-center justify-center shrink-0 rounded-full text-fg-1 text-xs tracking-wider font-regular"
+              className="inline-flex items-center justify-center shrink-0 rounded-full text-fg-1 text-xs tracking-wider"
               style={{ width: 44, height: 44, border: '1px solid var(--border-pill)' }}
             >
               SR
@@ -155,59 +138,82 @@ export default function Contact() {
             Share your idea and I&apos;ll reply within 1–2 business days.
           </p>
 
-          {FIELDS.map(({ name, label, type, placeholder }) => (
-            <div key={name} style={{ position: 'relative' }}>
-              <label
-                style={{ fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.35)', display: 'block', marginBottom: 6 }}
+          {FIELDS.map(({ name, label, type, placeholder }) => {
+            const focused = activeField === name
+            const dimmed  = !!activeField && !focused && !form[name as keyof typeof form]
+
+            return (
+              <div
+                key={name}
+                style={{
+                  position: 'relative',
+                  opacity: dimmed ? 0.3 : 1,
+                  filter: dimmed ? 'blur(0.4px)' : 'none',
+                  transition: 'opacity 0.25s, filter 0.25s',
+                }}
               >
-                {label}
-              </label>
+                <label
+                  style={{
+                    fontSize: 12, fontWeight: 300, display: 'block', marginBottom: 6,
+                    color: focused ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.35)',
+                    transition: 'color 0.2s',
+                  }}
+                >
+                  {label}
+                </label>
 
-              {type === 'area' ? (
-                <textarea
-                  name={name}
-                  placeholder={placeholder}
-                  value={form[name as keyof typeof form]}
-                  rows={4}
-                  onFocus={() => setActiveField(name)}
-                  onBlur={() => setActiveField(null)}
-                  onChange={handleChange}
-                  required
-                  style={inputStyle(name)}
-                />
-              ) : (
-                <input
-                  type={type}
-                  name={name}
-                  placeholder={placeholder}
-                  value={form[name as keyof typeof form]}
-                  onFocus={() => setActiveField(name)}
-                  onBlur={() => setActiveField(null)}
-                  onChange={handleChange}
-                  required
-                  style={inputStyle(name)}
-                />
-              )}
+                {type === 'area' ? (
+                  <textarea
+                    name={name} placeholder={placeholder}
+                    value={form[name as keyof typeof form]}
+                    rows={4}
+                    onFocus={() => setActiveField(name)}
+                    onBlur={() => setActiveField(null)}
+                    onChange={handleChange}
+                    required
+                    style={inputStyle(name)}
+                  />
+                ) : (
+                  <input
+                    type={type} name={name} placeholder={placeholder}
+                    value={form[name as keyof typeof form]}
+                    onFocus={() => setActiveField(name)}
+                    onBlur={() => setActiveField(null)}
+                    onChange={handleChange}
+                    required
+                    style={inputStyle(name)}
+                  />
+                )}
 
-              {/* Glow sweep on focus */}
-              <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 1, overflow: 'hidden', pointerEvents: 'none' }}>
-                <div style={{
-                  position: 'absolute', top: 0, left: '-60%',
-                  width: '60%', height: '100%',
-                  background: 'linear-gradient(90deg, transparent, rgba(120,0,200,0.7) 40%, rgba(255,255,255,0.6) 50%, rgba(160,0,40,0.6) 60%, transparent)',
-                  animation: activeField === name ? 'glowRun 1.4s ease-in-out infinite' : 'none',
-                }} />
+                {/* Magenta → white → orange glow sweep on focus */}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 1, overflow: 'hidden', pointerEvents: 'none' }}>
+                  <div style={{
+                    position: 'absolute', top: 0, left: '-60%', width: '60%', height: '100%',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(194,24,91,0.6) 20%, rgba(255,255,255,0.95) 50%, rgba(230,81,0,0.6) 80%, transparent 100%)',
+                    filter: 'blur(0.5px)',
+                    animation: focused ? 'runGlow 1.4s ease-in-out infinite' : 'none',
+                    opacity: focused ? 1 : 0,
+                    transition: 'opacity 0.15s',
+                  }} />
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
 
           <button
             type="submit"
             disabled={status === 'sending' || status === 'sent'}
-            className="self-end text-sm inline-flex items-center gap-1 border-b pb-0.5 transition-colors duration-300 disabled:opacity-40"
-            style={{ color: 'rgba(255,255,255,0.6)', borderColor: 'rgba(255,255,255,0.22)' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
+            className="self-end disabled:opacity-40"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.6)',
+              background: 'transparent', border: 'none',
+              borderBottom: '0.5px solid rgba(255,255,255,0.22)',
+              padding: '4px 0', cursor: 'none', letterSpacing: '0.08em',
+              marginTop: 8, transition: 'color 0.4s ease, border-color 0.4s ease',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.85)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.6)' }}
           >
             {status === 'idle'    && 'send message ↗'}
             {status === 'sending' && 'sending…'}

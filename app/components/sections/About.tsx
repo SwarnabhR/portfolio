@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { useReveal } from '@/hooks/useReveal'
+import CtaLink from '@/components/ui/CtaLink'
 
 const STATS = [
   { value: '3',  label: 'Internships',    badge: 'right' },
@@ -9,26 +11,11 @@ const STATS = [
   { value: '∞',  label: 'Commits',        badge: 'left'  },
 ]
 
-function StatBadge({ value }: { value: string }) {
-  return (
-    <span
-      className="inline-flex items-center justify-center shrink-0 rounded-full text-fg-1 font-regular tracking-tight"
-      style={{
-        width: 34,
-        height: 34,
-        background: 'rgba(255,255,255,0.08)',
-        border: '1px solid rgba(255,255,255,0.12)',
-        fontSize: 11,
-        fontWeight: 500,
-        lineHeight: 1,
-      }}
-    >
-      {value}
-    </span>
-  )
-}
+const ACCENTS = ['#a060ff', '#cc2244', '#4488cc', '#8844aa']
 
 export default function About() {
+  const [hovered, setHovered] = useState<number | null>(null)
+
   const { ref: labelRef,   isVisible: labelVisible   } = useReveal()
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
   const { ref: bodyRef,    isVisible: bodyVisible    } = useReveal()
@@ -87,59 +74,87 @@ export default function About() {
               Based in Bengaluru.
             </p>
 
-            <div className="flex gap-6 pt-4">
-              <a
-                href="#contact"
-                className="text-sm text-fg-1 inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300"
-                style={{ borderColor: 'var(--border-pill)' }}
-              >
-                book a call ↗
-              </a>
-              <a
-                href="/cv.pdf"
-                className="text-sm text-fg-2 inline-flex items-center gap-1 hover:text-fg-1 transition-colors duration-300"
-              >
-                download cv ↗
-              </a>
+            <div className="flex gap-4 pt-4 flex-wrap">
+              <CtaLink href="#contact">book a call ↗</CtaLink>
+              <CtaLink href="/cv.pdf">download cv ↗</CtaLink>
             </div>
           </div>
         </div>
 
-        {/* Right — alternating stat rows with circle badges */}
+        {/* Right — alternating stat rows */}
         <div
           ref={statsRef}
-          className={`flex flex-col gap-1 transition-all duration-700 delay-300 ${
-            statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className="flex flex-col gap-0"
         >
-          {STATS.map(({ value, label, badge }, i) => (
-            <div
-              key={label}
-              className="flex items-center justify-end gap-4 py-4 border-b"
-              style={{
-                borderColor: 'var(--border)',
-                opacity: statsVisible ? 1 : 0,
-                transform: statsVisible ? 'translateY(0)' : 'translateY(12px)',
-                transition: `opacity 0.6s ease ${i * 80 + 300}ms, transform 0.6s ease ${i * 80 + 300}ms`,
-              }}
-            >
-              {badge === 'left' && <StatBadge value={value} />}
+          {STATS.map(({ value, label, badge }, i) => {
+            const accent  = ACCENTS[i]
+            const isHov   = hovered === i
+            const isDimmed = hovered !== null && !isHov
 
-              <span
-                className="text-fg-1 font-regular tracking-tight flex-1"
+            return (
+              <div
+                key={label}
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                className="flex items-center justify-end gap-4 py-4 border-b"
                 style={{
-                  fontSize: 'clamp(32px, 5vw, 52px)',
-                  letterSpacing: '-0.03em',
-                  lineHeight: 1.15,
-                  textAlign: badge === 'left' ? 'left' : 'right',
+                  borderColor: 'var(--border)',
+                  opacity: isDimmed ? 0.22 : statsVisible ? 1 : 0,
+                  transform: statsVisible
+                    ? isHov ? 'translateX(-4px)' : 'translateX(0)'
+                    : 'translateX(20px)',
+                  transition: `opacity 0.5s ease, transform 0.7s ease ${i * 80 + 300}ms`,
+                  cursor: 'default',
                 }}
               >
-                {label}
-              </span>
+                {badge === 'left' && (
+                  <span
+                    className="inline-flex items-center justify-center shrink-0 rounded-full"
+                    style={{
+                      width: 34, height: 34,
+                      background: isHov ? `${accent}14` : 'rgba(255,255,255,0.07)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      fontSize: 11, fontWeight: 500,
+                      color: isHov ? accent : 'rgba(255,255,255,0.5)',
+                      transition: 'color 0.5s, background 0.5s',
+                    }}
+                  >
+                    {value}
+                  </span>
+                )}
 
-              {badge === 'right' && <StatBadge value={value} />}
-            </div>
-          ))}
+                <span
+                  className="font-regular tracking-tight flex-1"
+                  style={{
+                    fontSize: 'clamp(32px, 5vw, 52px)',
+                    letterSpacing: '-0.03em',
+                    lineHeight: 1.15,
+                    textAlign: badge === 'left' ? 'left' : 'right',
+                    color: isHov ? accent : 'rgba(255,255,255,0.85)',
+                    transition: 'color 0.5s, opacity 0.5s',
+                  }}
+                >
+                  {label}
+                </span>
+
+                {badge === 'right' && (
+                  <span
+                    className="inline-flex items-center justify-center shrink-0 rounded-full"
+                    style={{
+                      width: 34, height: 34,
+                      background: isHov ? `${accent}14` : 'rgba(255,255,255,0.07)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      fontSize: 11, fontWeight: 500,
+                      color: isHov ? accent : 'rgba(255,255,255,0.5)',
+                      transition: 'color 0.5s, background 0.5s',
+                    }}
+                  >
+                    {value}
+                  </span>
+                )}
+              </div>
+            )
+          })}
         </div>
 
       </div>

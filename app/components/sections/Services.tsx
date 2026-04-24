@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useReveal } from '@/hooks/useReveal'
 
 const SERVICES = [
@@ -8,23 +8,76 @@ const SERVICES = [
     index: '01',
     title: 'Algorithmic Strategy Development',
     description: 'Signal research to live execution — RSI, VWAP, momentum, mean-reversion on NSE/BSE.',
+    gradient: 'linear-gradient(135deg,#100408,#2a0c00,#180020)',
   },
   {
     index: '02',
     title: 'Backtesting & Research',
     description: 'Walk-forward validation, Sharpe/Sortino analysis, drawdown profiling, cost modelling.',
+    gradient: 'linear-gradient(135deg,#06080f,#000e28,#0a0020)',
   },
   {
     index: '03',
     title: 'Data Pipeline Engineering',
     description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, KiteConnect + WebSocket feeds.',
+    gradient: 'linear-gradient(135deg,#06100a,#001808,#000f08)',
   },
   {
     index: '04',
     title: 'ML for Finance',
     description: 'Feature engineering from OHLCV, predictive models for classification and regression.',
+    gradient: 'linear-gradient(135deg,#100e04,#181200,#110600)',
   },
 ]
+
+function useImageCursor() {
+  const rafRef  = useRef<number>(0)
+  const mx = useRef(0); const my = useRef(0)
+  const cx = useRef(0); const cy = useRef(0)
+  const prevX = useRef(0); const prevY = useRef(0)
+  const vel = useRef(0)
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const imgRef    = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState<typeof SERVICES[0] | null>(null)
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => { mx.current = e.clientX; my.current = e.clientY }
+    window.addEventListener('mousemove', onMove, { passive: true })
+
+    function tick() {
+      cx.current += (mx.current - cx.current) * 0.12
+      cy.current += (my.current - cy.current) * 0.12
+
+      const dx  = mx.current - prevX.current
+      const dy  = my.current - prevY.current
+      const spd = Math.sqrt(dx * dx + dy * dy)
+      vel.current += (spd - vel.current) * 0.25
+      prevX.current = mx.current
+      prevY.current = my.current
+
+      if (cursorRef.current) {
+        cursorRef.current.style.left = `${cx.current}px`
+        cursorRef.current.style.top  = `${cy.current}px`
+      }
+      if (imgRef.current && active) {
+        const blur = Math.min(vel.current * 0.35, 14)
+        const opa  = Math.max(1 - vel.current * 0.022, 0.15)
+        imgRef.current.style.filter  = `blur(${blur.toFixed(1)}px)`
+        cursorRef.current!.style.opacity = String(opa.toFixed(2))
+      }
+
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      cancelAnimationFrame(rafRef.current)
+    }
+  }, [active])
+
+  return { cursorRef, imgRef, active, setActive }
+}
 
 function ServiceRow({
   service,
@@ -41,7 +94,6 @@ function ServiceRow({
 }) {
   const [hovered, setHovered] = useState(false)
   const { ref, isVisible } = useReveal()
-
   const dimmed = anyHover && !hovered
 
   return (
@@ -52,18 +104,17 @@ function ServiceRow({
       className="flex justify-between items-center gap-6 border-b py-5"
       style={{
         borderColor: 'var(--border)',
-        cursor: 'default',
+        cursor: 'none',
         opacity: dimmed ? 0.25 : isVisible ? 1 : 0,
         transform: isVisible
           ? hovered ? 'translateX(-6px)' : 'translateX(0)'
           : 'translateY(20px)',
-        transition: `opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${isVisible ? 0 : index * 80}ms`,
+        transition: `opacity 0.4s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1) ${isVisible ? 0 : index * 80}ms`,
       }}
     >
-      {/* Index + title */}
       <div className="flex items-baseline gap-3">
         <span
-          className="text-xs font-regular tracking-wider transition-colors duration-300"
+          className="text-xs tracking-wider transition-colors duration-300"
           style={{ color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)' }}
         >
           {service.index}
@@ -72,23 +123,17 @@ function ServiceRow({
           className="font-light tracking-tight transition-colors duration-300"
           style={{
             fontSize: 'clamp(18px, 3vw, 28px)',
-            color: hovered ? 'var(--fg-1)' : 'rgba(255,255,255,0.88)',
             letterSpacing: '-0.02em',
+            color: hovered ? 'var(--fg-1)' : 'rgba(255,255,255,0.88)',
           }}
         >
           {service.title}
         </span>
       </div>
 
-      {/* Description — always visible, right-aligned */}
       <p
         className="font-light text-right hidden md:block"
-        style={{
-          fontSize: 13,
-          color: 'rgba(255,255,255,0.4)',
-          maxWidth: 300,
-          lineHeight: 1.6,
-        }}
+        style={{ fontSize: 12, color: 'rgba(255,255,255,0.38)', maxWidth: 280, lineHeight: 1.6 }}
       >
         {service.description}
       </p>
@@ -98,11 +143,42 @@ function ServiceRow({
 
 export default function Services() {
   const [hoverAny, setHoverAny] = useState(false)
+  const { cursorRef, imgRef, active, setActive } = useImageCursor()
   const { ref: labelRef,   isVisible: labelVisible   } = useReveal()
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 
   return (
     <section id="services" className="relative bg-bg py-20 overflow-hidden">
+
+      {/* Velocity-aware image cursor */}
+      <div
+        ref={cursorRef}
+        aria-hidden="true"
+        style={{
+          position: 'fixed', width: 140, height: 90,
+          pointerEvents: 'none', zIndex: 9999,
+          transform: 'translate(-50%,-50%)',
+          opacity: active ? 1 : 0,
+          borderRadius: 1, overflow: 'hidden',
+          transition: 'opacity 0.25s ease',
+        }}
+      >
+        <div
+          ref={imgRef}
+          style={{
+            width: '100%', height: '100%',
+            background: active?.gradient ?? 'transparent',
+            transition: 'background 0.3s',
+          }}
+        />
+        <span style={{
+          position: 'absolute', bottom: 8, left: 10,
+          fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.6)',
+        }}>
+          {active?.title.split(' ')[0]}
+        </span>
+      </div>
 
       {/* bg word — bottom right */}
       <span
@@ -115,7 +191,6 @@ export default function Services() {
 
       <div className="relative max-w-6xl mx-auto px-6">
 
-        {/* Label */}
         <div
           ref={labelRef}
           className={`mb-6 transition-all duration-500 ${
@@ -130,7 +205,6 @@ export default function Services() {
           </span>
         </div>
 
-        {/* Heading */}
         <h2
           ref={headingRef}
           className={`font-light tracking-tight text-fg-1 mb-10 transition-all duration-700 ${
@@ -141,11 +215,10 @@ export default function Services() {
           A range of quant services made to grow your edge.
         </h2>
 
-        {/* Rows */}
         <div
           className="border-t"
           style={{ borderColor: 'var(--border)' }}
-          onMouseLeave={() => setHoverAny(false)}
+          onMouseLeave={() => { setHoverAny(false); setActive(null) }}
         >
           {SERVICES.map((service, i) => (
             <ServiceRow
@@ -153,7 +226,7 @@ export default function Services() {
               service={service}
               index={i}
               anyHover={hoverAny}
-              onEnter={() => setHoverAny(true)}
+              onEnter={() => { setHoverAny(true); setActive(service) }}
               onLeave={() => {}}
             />
           ))}
