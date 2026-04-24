@@ -5,13 +5,32 @@ import { useReveal } from '@/hooks/useReveal'
 import CtaLink from '@/components/ui/CtaLink'
 
 const STATS = [
-  { value: '3',  label: 'internships',    badge: 'right' },
-  { value: '1',  label: 'research paper', badge: 'left'  },
-  { value: '2+', label: 'years in quant', badge: 'right' },
-  { value: '∞',  label: 'commits',        badge: 'left'  },
+  { value: '7+',  label: 'markets covered', badge: 'right' },
+  { value: '20+', label: 'strategies backtested', badge: 'left'  },
+  { value: '1',   label: 'papers published', badge: 'right' },
+  { value: '4+',  label: 'systems deployed', badge: 'left'  },
 ]
 
-const ACCENTS = ['#a060ff', '#cc2244', '#4488cc', '#8844aa']
+const ACCENTS = ['#ffffff', '#e8e8e8', '#f5f5f5', '#e0e0e0']
+
+const CONTENT = [
+  {
+    heading: 'global multi-asset coverage.',
+    body: 'i architect multi-regime execution infrastructure spanning 7+ venues—nse/bse equities, nyse cash markets, crypto perpetuals, g10 forex, and commodity derivatives. the advantage isn\'t depth in a single market; it\'s understanding how they move together. tick-level lob reconciliation across exchanges with heterogeneous microstructure. nanosecond-precision timestamp synchronization. while most traders optimize for one venue, i extract edge from the dependencies between all of them. that\'s institutional-grade execution.'
+  },
+  {
+    heading: 'systematic strategy development.',
+    body: 'i\'ve developed and rigorously backtested 20+ quantitative strategies. cross-sectional momentum. mean-reversion with tail hedging. linked-market propagation signals. walk-forward validation, realistic tca modeling, slippage regimes—this is how i distinguish edge from overfitting. the difference between a strategy that works in backtests and one that actually prints is brutal. my models account for regime-dependent alpha decay and market impact elasticity. that\'s the discipline separating serious traders from casual investors.'
+  },
+  {
+    heading: 'published research.',
+    body: 'veriguard—deepfake detection using fusion nets—was published on first submission. peer-reviewed, rigorous, institutional-grade. current research synthesizes microsecond-granularity alternative data feeds with neural network ensembles to model how macroeconomic shocks propagate across linked markets. saliency maps and shapley decomposition ensure interpretability that satisfies both traders and compliance. this is the level of research that moves institutional capital.'
+  },
+  {
+    heading: 'production-grade systems.',
+    body: 'i maintain 4+ production systems built without compromise. low-latency backtest engines with walk-forward optimization. sub-second tick ingestion with nanosecond timestamps. exchange api orchestration across kiteconnect and ccxt. ml inference pipelines with rigorous model versioning. circuit breaker logic. audit trails. hard latency slas and graceful degradation under market stress. infrastructure that doesn\'t just work—it scales under pressure.'
+  }
+]
 
 export default function About() {
   const [hovered, setHovered] = useState<number | null>(null)
@@ -56,28 +75,22 @@ export default function About() {
 
           <h2
             ref={headingRef}
-            className={`font-regular tracking-tight leading-snug text-fg-1 mb-6 transition-all duration-700 ${
+            className={`font-regular tracking-tight leading-snug text-fg-1 mb-8 transition-all duration-500 ${
               headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
             style={{ fontSize: 'var(--text-xl)' }}
           >
-            architecting systems at the intersection of math and global liquidity.
+            {hovered !== null ? CONTENT[hovered].heading : 'architecting systems at the intersection of math and global liquidity.'}
           </h2>
 
           <div
             ref={bodyRef}
-            className={`space-y-4 transition-all duration-700 delay-150 ${
+            className={`space-y-4 transition-all duration-500 delay-150 ${
               bodyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
             <p className="text-base text-fg-2 leading-relaxed">
-              as a cs graduate based in bengaluru, i engineer institutional-grade quantitative trading architectures. my expertise bridges high-performance computing and advanced market microstructure, focusing on the entire lifecycle of strategy development—from high-fidelity limit order book (lob) ingestion to rigorous, bias-free backtesting frameworks.
-            </p>
-            <p className="text-base text-fg-2 leading-relaxed">
-              i currently develop multi-asset research and execution pipelines encompassing global equities (nse/bse, nyse, sse, lse), crypto, forex, and commodity derivatives like gold and oil. my systems go beyond raw tick feeds, accounting for slippage, latency, and market impact through sophisticated transaction cost analysis (tca).
-            </p>
-            <p className="text-base text-fg-2 leading-relaxed">
-              financial markets are highly non-linear, coupled systems. my research synthesizes high-velocity alternative data, deep learning topologies, and quantitative mathematics to map these dependency networks. instead of isolating discrete signals, i engineer explainable, regime-aware models that capture exactly how macroeconomic shocks propagate across global exchanges.
+              {hovered !== null ? CONTENT[hovered].body : 'as a cs graduate based in bengaluru, i engineer institutional-grade quantitative trading architectures. my expertise bridges high-performance computing and advanced market microstructure, focusing on the entire lifecycle of strategy development—from high-fidelity limit order book (lob) ingestion to rigorous, bias-free backtesting frameworks.'}
             </p>
 
             <div className="flex gap-4 pt-4 flex-wrap">

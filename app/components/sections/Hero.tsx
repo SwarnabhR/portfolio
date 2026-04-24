@@ -238,9 +238,13 @@ export default function Hero() {
         /> */}
 
         {/* Availability */}
-        <div className="text-xs font-light tracking-wide mb-6" style={{ color: 'rgba(255,255,255,0.45)' }}>
-          Available for new projects
-        </div>
+        <span
+          className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-1 border rounded-full px-4 py-1.5 mb-6"
+          style={{ borderColor: 'var(--border-pill)' }}
+        >
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-fg-1" />
+          available for new projects
+        </span>
 
         {/* Heading */}
         <h1
@@ -255,7 +259,7 @@ export default function Hero() {
         {/* Two-col sub layout */}
         <div className="flex flex-wrap justify-between items-end gap-6" style={{ marginTop: '2rem' }}>
           <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 340}}>
-            Building algorithmic trading systems, backtesting platforms, and ML pipelines
+            building algorithmic trading systems, backtesting platforms, and ml pipelines
             that connect fast news, quantitative math, and market reactions across asset classes.
           </p>
           <div style={{ marginBottom: '6rem' }}>

@@ -5,9 +5,9 @@ import { useReveal } from '@/hooks/useReveal'
 import CtaLink from '@/components/ui/CtaLink'
 
 const FIELDS = [
-  { name: 'name',    label: 'Name',    type: 'text',  placeholder: 'Jane Smith'       },
+  { name: 'name',    label: 'Name',    type: 'text',  placeholder: 'jane smith'       },
   { name: 'email',   label: 'Email',   type: 'email', placeholder: 'jane@example.com' },
-  { name: 'message', label: 'Message', type: 'area',  placeholder: 'Leave a message'  },
+  { name: 'message', label: 'Message', type: 'area',  placeholder: 'put me in bro'  },
 ]
 
 export default function Contact() {
@@ -185,7 +185,7 @@ export default function Contact() {
           }`}
         >
           <p style={{ fontSize: 'var(--text-md)', fontWeight: 300, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.3, marginBottom: 8 }}>
-            Share your idea and I&apos;ll reply within 1–2 business days.
+            share your idea and i&apos;ll reply within 1–2 business days.
           </p>
 
           {FIELDS.map(({ name, label, type, placeholder }) => {
