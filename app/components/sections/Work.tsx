@@ -105,7 +105,7 @@ export default function Work() {
             className="text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
             style={{ borderColor: 'var(--border-pill)' }}
           >
-            Work
+            ✦ Work
           </span>
         </div>
 
@@ -126,7 +126,17 @@ export default function Work() {
           ))}
         </div>
 
+        <div className='mt-12'>
+            <a 
+                href="#contact"
+                className='text-sm text-fg-1 inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300'
+                style={{borderColor: 'var(--border-pill)'}}
+            >
+                see all works ↗
+            </a>
+        </div>
       </div>
+      
     </section>
   )
 }

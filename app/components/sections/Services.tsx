@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useReveal } from '@/hooks/useReveal'
 
 const SERVICES = [
@@ -29,31 +30,62 @@ const SERVICES = [
   },
 ]
 
-function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: number }) {
+function ServiceRow({
+  service,
+  index,
+}: {
+  service: (typeof SERVICES)[0]
+  index: number
+}) {
+  const [hovered, setHovered] = useState(false)
   const { ref, isVisible } = useReveal()
 
   return (
     <div
       ref={ref}
-      className={`border p-8 flex flex-col gap-4 transition-all duration-700 hover:bg-bg-card`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="border-b py-8 grid grid-cols-[48px_1fr_auto] gap-6 items-start group"
       style={{
         borderColor: 'var(--border)',
-        transitionDelay: `${index * 100}ms`,
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
-        transition: `opacity 0.7s ease ${index * 100}ms, transform 0.7s ease ${index * 100}ms, background 0.3s ease`,
+        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+        transition: `opacity 0.6s ease ${index * 80}ms, transform 0.6s ease ${index * 80}ms`,
       }}
     >
-      <span className="text-sm text-fg-3 font-light">{service.index}</span>
-      <h3
-        className="font-regular tracking-tight text-fg-1"
-        style={{ fontSize: 'var(--text-lg)' }}
+      {/* Index */}
+      <span className="text-xs text-fg-3 pt-1 tracking-wider">{service.index}</span>
+
+      {/* Title + reveal description */}
+      <div className="flex flex-col gap-0 overflow-hidden">
+        <h3
+          className="text-fg-1 font-regular tracking-tight transition-colors duration-300 group-hover:text-fg-2"
+          style={{ fontSize: 'var(--text-xl)' }}
+        >
+          {service.title}
+        </h3>
+
+        {/* Description — slides down on hover */}
+        <div
+          className="overflow-hidden transition-all duration-500"
+          style={{ maxHeight: hovered ? '80px' : '0px' }}
+        >
+          <p className="text-base text-fg-2 leading-relaxed pt-3">
+            {service.description}
+          </p>
+        </div>
+      </div>
+
+      {/* Arrow — slides in on hover */}
+      <span
+        className="text-fg-3 pt-1 transition-all duration-300"
+        style={{
+          opacity: hovered ? 1 : 0,
+          transform: hovered ? 'translateX(0)' : 'translateX(-6px)',
+        }}
       >
-        {service.title}
-      </h3>
-      <p className="text-base text-fg-2 leading-relaxed">
-        {service.description}
-      </p>
+        ↗
+      </span>
     </div>
   )
 }
@@ -63,7 +95,7 @@ export default function Services() {
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 
   return (
-    <section id="services" className="bg-bg-2 py-32">
+    <section id="services" className="bg-bg py-32">
       <div className="max-w-6xl mx-auto px-6">
 
         {/* Label */}
@@ -74,27 +106,28 @@ export default function Services() {
           }`}
         >
           <span
-            className="text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
+            className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-1 border rounded-full px-4 py-1.5"
             style={{ borderColor: 'var(--border-pill)' }}
           >
-            Services
+            ✦ Services
           </span>
         </div>
 
         {/* Heading */}
         <h2
           ref={headingRef}
-          className={`text-3xl font-regular tracking-tight leading-none text-fg-1 mb-16 transition-all duration-700 ${
+          className={`font-regular tracking-tight leading-none text-fg-1 mb-16 transition-all duration-700 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
+          style={{ fontSize: 'var(--text-xl)' }}
         >
-          What I build.
+          What I help with.
         </h2>
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 gap-px bg-border">
+        {/* Rows */}
+        <div className="border-t" style={{ borderColor: 'var(--border)' }}>
           {SERVICES.map((service, i) => (
-            <ServiceCard key={service.index} service={service} index={i} />
+            <ServiceRow key={service.index} service={service} index={i} />
           ))}
         </div>
 

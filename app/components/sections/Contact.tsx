@@ -43,7 +43,7 @@ export default function Contact() {
               className="text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
               style={{ borderColor: 'var(--border-pill)' }}
             >
-              Contact
+              ✦ Contact
             </span>
           </div>
 
@@ -126,8 +126,8 @@ export default function Contact() {
           <button
             type="submit"
             disabled={status === 'sending' || status === 'sent'}
-            className="mt-2 self-start inline-flex items-center gap-2 px-6 py-3 text-sm tracking-widest uppercase text-fg-1 border transition-all duration-300 hover:bg-fg-1/10 disabled:opacity-50"
-            style={{ borderColor: 'var(--border-cta)' }}
+            className="mt-2 self-start text-sm text-fg-1 inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300 disabled:opacity-40"
+            style={{ borderColor: 'var(--border-pill)' }}
           >
             {status === 'idle' && 'Send Message'}
             {status === 'sending' && 'Sending...'}

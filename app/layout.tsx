@@ -20,6 +20,8 @@ import { Manrope } from 'next/font/google';
 import './globals.css';
 import Navbar from './components/ui/Navbar';
 import CustomCursor from './components/ui/CustomCursor';
+import SmoothScroll from './components/providers/SmoothScroll';
+import Footer from './components/sections/Footer';
 
 // ============================================================
 // FONT LOADING
@@ -137,9 +139,10 @@ export default function RootLayout({
       <body>
         <CustomCursor />
         <Navbar />
-        <main>{children}</main>
-
-        {/* <Footer /> */}
+        <SmoothScroll>
+          <main>{children}</main>
+        </SmoothScroll>
+        <Footer />
       </body>
     </html>
   )
