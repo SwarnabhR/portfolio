@@ -18,7 +18,7 @@ export default function Contact() {
   const { ref: badgeRef,   isVisible: badgeVisible   } = useReveal()
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
   const { ref: leftRef,    isVisible: leftVisible    } = useReveal()
-  const { ref: formRef,    isVisible: formVisible    } = useReveal<HTMLFormElement>()
+  const { ref: formRef,    isVisible: formVisible    } = useReveal<HTMLFormElement>({ threshold: 0.05 })
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -48,7 +48,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden"
+      className="relative overflow-hidden pb-24 md:pb-32"
       style={{ background: `var(--gradient-contact), var(--bg)` }}
     >
       <style>{`
@@ -56,9 +56,45 @@ export default function Contact() {
           0%   { left: -60%; }
           100% { left: 110%; }
         }
+        @keyframes cBlob1 {
+          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); }
+          50% { transform: translate(5vw, -5vw) rotate(10deg) scale(1.05); }
+        }
+        @keyframes cBlob2 {
+          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); }
+          50% { transform: translate(-5vw, -4vw) rotate(-10deg) scale(1.05); }
+        }
       `}</style>
 
-      <div className="max-w-6xl mx-auto px-6 pt-24 pb-0">
+      {/* GPU Blobs Background */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0, overflow: 'hidden',
+          isolation: 'isolate', zIndex: 0, pointerEvents: 'none'
+        }}
+      >
+        <div style={{ position: 'absolute', inset: 0, filter: 'blur(100px)' }}>
+          {/* Magenta/Pink Blob */}
+          <div style={{
+            position: 'absolute', width: '80vw', height: '80vw',
+            bottom: '-30%', left: '-10%',
+            background: 'radial-gradient(ellipse at 50% 50%, rgba(200, 20, 80, 0.45) 0%, rgba(120, 10, 40, 0.2) 50%, transparent 70%)',
+            borderRadius: '40% 60% 34% 66% / 58% 42% 62% 38%',
+            willChange: 'transform', animation: 'cBlob1 20s ease-in-out infinite',
+          }} />
+          {/* Orange/Yellow Blob */}
+          <div style={{
+            position: 'absolute', width: '70vw', height: '70vw',
+            bottom: '-20%', right: '-10%',
+            background: 'radial-gradient(ellipse at 50% 50%, rgba(230, 90, 0, 0.35) 0%, rgba(150, 40, 0, 0.15) 50%, transparent 70%)',
+            borderRadius: '62% 38% 74% 26% / 52% 44% 56% 48%',
+            willChange: 'transform', animation: 'cBlob2 25s ease-in-out infinite',
+          }} />
+        </div>
+      </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-0">
 
         {/* Availability badge */}
         <div
@@ -89,7 +125,7 @@ export default function Contact() {
       </div>
 
       {/* 2-col split */}
-      <div className="flex flex-col md:flex-row" style={{ minHeight: 500 }}>
+      <div className="relative z-10 flex flex-col md:flex-row max-w-6xl mx-auto" style={{ minHeight: 500 }}>
 
         {/* Left — 40% */}
         <div

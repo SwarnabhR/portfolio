@@ -108,7 +108,7 @@ export default function FAQ() {
         Questions
       </span>
 
-      <div className="relative max-w-6xl mx-auto px-6">
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
 
         <div
           ref={labelRef}

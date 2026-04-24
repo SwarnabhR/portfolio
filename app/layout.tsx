@@ -23,6 +23,8 @@ import CustomCursor from './components/ui/CustomCursor';
 import SmoothScroll from './components/providers/SmoothScroll';
 import Footer from './components/sections/Footer';
 import { Analytics } from "@vercel/analytics/next"
+import Image from 'next/image';
+import effectGif from './5a934e84f67d2a61a118ec95b1d6cb74.gif';
 
 // ============================================================
 // FONT LOADING
@@ -173,6 +175,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={manrope.variable} suppressHydrationWarning>
       <body>
+        {/* ── Global GIF Blending Effect ──────────────────────────────── */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none mix-blend-screen"
+          style={{ position: 'fixed', inset: 0, opacity: 0.02, zIndex: 9999 }}
+        >
+          <Image
+            src={effectGif}
+            alt="background effect"
+            fill
+            unoptimized
+            className="object-cover"
+          />
+        </div>
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

@@ -103,8 +103,9 @@ export default function Navbar() {
         }}
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" aria-label="S. Roy — Home" className="text-fg-1 opacity-80 hover:opacity-100 transition-opacity duration-300">
+          <Link href="/" aria-label="S. Roy — Home" className="flex items-center gap-3 text-fg-1 opacity-80 hover:opacity-100 transition-opacity duration-300">
             <LogoSVG />
+            <span className="text-md font-regular tracking-tight leading-none">S. Roy</span>
           </Link>
 
           <button
@@ -136,8 +137,9 @@ export default function Navbar() {
       >
         {/* Overlay top bar */}
         <div className="flex items-center justify-between px-6 py-6 max-w-6xl mx-auto w-full">
-          <Link href="/" onClick={close} aria-label="S. Roy — Home" className="text-fg-1 opacity-80 hover:opacity-100 transition-opacity duration-300">
+          <Link href="/" onClick={close} aria-label="S. Roy — Home" className="flex items-center gap-3 text-fg-1 opacity-80 hover:opacity-100 transition-opacity duration-300">
             <LogoSVG />
+            <span className="text-md font-regular tracking-tight leading-none">S. Roy</span>
           </Link>
           <button
             onClick={close}

@@ -24,8 +24,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-32 overflow-hidden"
-      style={{ background: `var(--gradient-about), var(--bg-2)` }}
+      className="relative bg-bg py-32 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
 
@@ -52,8 +51,7 @@ export default function About() {
             }`}
             style={{ fontSize: 'var(--text-xl)' }}
           >
-            Builder at the intersection of
-            <span className="text-fg-2"> math and markets.</span>
+            Architecting systems at the intersection of math and global liquidity.
           </h2>
 
           <div
@@ -62,24 +60,14 @@ export default function About() {
               bodyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <p className="text-md text-fg-2 leading-relaxed">
-              CS graduate with a focus on quantitative finance and
-              algorithmic trading. I build systems that ingest, analyze,
-              and act on global market data — from raw tick feeds to
-              fully backtested strategies.
+            <p className="text-base text-fg-2 leading-relaxed">
+              As a CS graduate based in Bengaluru, I engineer institutional-grade quantitative trading architectures. My expertise bridges high-performance computing and advanced market microstructure, focusing on the entire lifecycle of strategy development—from high-fidelity Limit Order Book (LOB) ingestion to rigorous, bias-free backtesting frameworks.
             </p>
-            <p className="text-md text-fg-2 leading-relaxed">
-              Currently developing backtesting and research workflows for
-              NSE/BSE, NYSE, SSE, and LSE equities, while also handling
-              cryptocurrencies, forex, and commodity futures like gold and
-              oil. Based in Bengaluru.
+            <p className="text-base text-fg-2 leading-relaxed">
+              I currently develop multi-asset research and execution pipelines encompassing global equities (NSE/BSE, NYSE, SSE, LSE), crypto, forex, and commodity derivatives like gold and oil. My systems go beyond raw tick feeds, accounting for slippage, latency, and market impact through sophisticated Transaction Cost Analysis (TCA).
             </p>
-            <p className="text-md text-fg-2 leading-relaxed">
-              My research blends fast news, deep learning, and quantitative
-              mathematics to model how one market reaction flows into
-              another. Everything is linked, so I build explainable models
-              that trace those dependencies instead of treating signals in
-              isolation.
+            <p className="text-base text-fg-2 leading-relaxed">
+              Financial markets are highly non-linear, coupled systems. My research synthesizes high-velocity alternative data, deep learning topologies, and quantitative mathematics to map these dependency networks. Instead of isolating discrete signals, I engineer explainable, regime-aware models that capture exactly how macroeconomic shocks propagate across global exchanges.
             </p>
 
             <div className="flex gap-4 pt-4 flex-wrap">
@@ -169,3 +157,4 @@ export default function About() {
     </section>
   )
 }
+
