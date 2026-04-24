@@ -9,7 +9,7 @@ const PROJECTS = [
     title: 'S. Roy & Co. Backtesting Platform',
     tags: ['Python', 'QuestDB', 'Streamlit'],
     description:
-      'End-to-end backtesting engine for NSE/BSE equities. Ingests real-time OHLCV data, runs strategy simulations, and outputs risk-adjusted performance metrics.',
+      'End-to-end backtesting engine for NSE/BSE, NYSE, SSE, and LSE equities, with extensible research flows for crypto, forex, and commodity futures. Ingests real-time OHLCV data, runs strategy simulations, and outputs risk-adjusted performance metrics.',
     status: 'In Progress',
   },
   {
@@ -17,7 +17,7 @@ const PROJECTS = [
     title: 'Real-Time Market Data Pipeline',
     tags: ['KiteConnect', 'TimescaleDB', 'Docker'],
     description:
-      'High-frequency tick data ingestion system using Zerodha KiteConnect API. Stores OHLCV data with sub-second latency into a time-series database.',
+      'High-frequency tick and fast-news ingestion system for studying how information propagates through linked markets with sub-second latency.',
     status: 'Live',
   },
   {
@@ -33,7 +33,7 @@ const PROJECTS = [
     title: 'Technical Analysis Screener',
     tags: ['Python', 'RSI', 'VWAP', 'MACD'],
     description:
-      'Automated stock screening system applying RSI, EMA, VWAP, Pivot Points, and MACD filters across NSE equities to surface high-probability setups.',
+      'Automated screening system applying RSI, EMA, VWAP, Pivot Points, and MACD filters across equities, crypto, forex, and commodities to surface high-probability setups.',
     status: 'Live',
   },
 ]
@@ -139,7 +139,7 @@ export default function Work() {
             subtitleVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
-          Systems built for real markets — from data ingestion to live execution.
+          Systems built for real markets — fast news, linked reactions, and cross-asset execution.
         </p>
 
         {/* Project list */}

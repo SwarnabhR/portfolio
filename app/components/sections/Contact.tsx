@@ -101,7 +101,9 @@ export default function Contact() {
           <div className="flex flex-col gap-8">
             <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 300 }}>
               Open to quant research roles, algorithmic trading projects,
-              and ML engineering collaborations.
+              and ML engineering collaborations across global equities,
+              crypto, forex, and commodities, especially where fast news
+              and linked market reactions matter.
             </p>
             <CtaLink href="mailto:swarnabh.work@gmail.com" external>
               book a call ↗

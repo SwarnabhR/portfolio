@@ -243,7 +243,8 @@ export default function Hero() {
         <div className="flex flex-wrap justify-between items-end gap-6">
           <p className="font-light leading-relaxed" style={{ fontSize: 15, color: 'rgba(255,255,255,0.48)', maxWidth: 340 }}>
             Building algorithmic trading systems, backtesting platforms,
-            and ML pipelines for NSE/BSE equities.
+            and ML pipelines that connect fast news, quantitative math,
+            and market reactions across asset classes.
           </p>
           <CtaLink href="#contact">contact me ↗</CtaLink>
         </div>

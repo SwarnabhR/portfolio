@@ -65,13 +65,21 @@ export default function About() {
             <p className="text-md text-fg-2 leading-relaxed">
               CS graduate with a focus on quantitative finance and
               algorithmic trading. I build systems that ingest, analyze,
-              and act on market data — from raw tick feeds to fully
-              backtested strategies.
+              and act on global market data — from raw tick feeds to
+              fully backtested strategies.
             </p>
             <p className="text-md text-fg-2 leading-relaxed">
-              Currently developing a backtesting platform for NSE/BSE
-              equities and exploring ML models for signal generation.
-              Based in Bengaluru.
+              Currently developing backtesting and research workflows for
+              NSE/BSE, NYSE, SSE, and LSE equities, while also handling
+              cryptocurrencies, forex, and commodity futures like gold and
+              oil. Based in Bengaluru.
+            </p>
+            <p className="text-md text-fg-2 leading-relaxed">
+              My research blends fast news, deep learning, and quantitative
+              mathematics to model how one market reaction flows into
+              another. Everything is linked, so I build explainable models
+              that trace those dependencies instead of treating signals in
+              isolation.
             </p>
 
             <div className="flex gap-4 pt-4 flex-wrap">

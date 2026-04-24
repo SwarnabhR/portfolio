@@ -7,17 +7,17 @@ const FAQS = [
   {
     num: '01',
     q: 'What kind of projects do you take on?',
-    a: 'Algorithmic strategy development, backtesting infrastructure, real-time data pipelines, and ML models for equities. I work best on projects where rigour matters — where a 10bps edge or a sub-second latency gain is worth engineering properly.',
+    a: 'Algorithmic strategy development, backtesting infrastructure, real-time data pipelines, and ML models for equities, cryptocurrencies, forex, and commodities. I work best on projects where rigour matters — where a 10bps edge or a sub-second latency gain is worth engineering properly.',
   },
   {
     num: '02',
     q: 'What markets and instruments do you specialise in?',
-    a: 'Primarily NSE and BSE equities and derivatives. My live work covers tick-data ingestion via KiteConnect, OHLCV time-series storage, and strategy simulation across Indian markets. I can adapt tooling to other exchanges given API access.',
+    a: 'I handle Indian and international equities, including NSE/BSE, NYSE, SSE, and LSE, along with cryptocurrencies, forex, and commodity futures such as gold and oil. My work covers tick-data ingestion, OHLCV time-series storage, and strategy simulation across markets, depending on data/API access.',
   },
   {
     num: '03',
-    q: 'What does a typical engagement look like?',
-    a: 'Usually a scoped research sprint: define the hypothesis, validate on historical data, stress-test edge cases, then hand off production-ready code with documentation. I reply within 1–2 business days and keep communication async-friendly.',
+    q: 'How do you approach research and analysis?',
+    a: 'I combine fast news, deep learning, quantitative mathematics, and interpretable models to explain market reactions. The thesis is that everything is linked: rates, indices, equities, crypto, forex, commodities, and news all feed into each other, so I look for dependencies rather than isolated signals.',
   },
   {
     num: '04',

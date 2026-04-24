@@ -7,25 +7,25 @@ const SERVICES = [
   {
     index: '01',
     title: 'Algorithmic Strategy Development',
-    description: 'Signal research to live execution — RSI, VWAP, momentum, mean-reversion on NSE/BSE.',
+    description: 'Signal research to live execution — RSI, VWAP, momentum, and mean-reversion across equities, crypto, forex, and commodities.',
     gradient: 'linear-gradient(135deg,#100408,#2a0c00,#180020)',
   },
   {
     index: '02',
     title: 'Backtesting & Research',
-    description: 'Walk-forward validation, Sharpe/Sortino analysis, drawdown profiling, cost modelling.',
+    description: 'Fast-news analysis, cross-asset dependency research, walk-forward validation, and cost modelling.',
     gradient: 'linear-gradient(135deg,#06080f,#000e28,#0a0020)',
   },
   {
     index: '03',
     title: 'Data Pipeline Engineering',
-    description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, KiteConnect + WebSocket feeds.',
+    description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, exchange APIs, and WebSocket feeds.',
     gradient: 'linear-gradient(135deg,#06100a,#001808,#000f08)',
   },
   {
     index: '04',
     title: 'ML for Finance',
-    description: 'Feature engineering from OHLCV, predictive models for classification and regression.',
+    description: 'Deep learning and interpretable models that explain reactions across linked markets.',
     gradient: 'linear-gradient(135deg,#100e04,#181200,#110600)',
   },
 ]
