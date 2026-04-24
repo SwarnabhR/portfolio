@@ -5,10 +5,11 @@ import Link from 'next/link'
 import { useActiveSection } from '../../hooks/useActiveSection'
 
 const NAV_LINKS = [
-  { label: 'about',    href: '#about'    },
-  { label: 'work',     href: '#work'     },
-  { label: 'services', href: '#services' },
-  { label: 'contact',  href: '#contact'  },
+  { label: 'home',     href: '/',         soon: false },
+  { label: 'work',     href: '/work',     soon: true },
+  { label: 'blog',     href: '/blog',     soon: true  },
+  { label: 'gallery',  href: '/gallery',  soon: true  },
+  { label: 'playlist', href: '/playlist', soon: true  },
 ]
 
 const SOCIALS = [
@@ -147,29 +148,30 @@ export default function Navbar() {
 
         {/* Nav links — full-width, bordered rows */}
         <nav className="flex-1 flex flex-col justify-center">
-          {NAV_LINKS.map(({ label, href }, i) => {
-            const isActive = activeSection === href.replace('#', '')
-            const isHovered = hoveredItem === label
+          {NAV_LINKS.map(({ label, href, soon }, i) => {
+            const isHovered = hoveredItem === label && !soon
             return (
               <Link
                 key={label}
-                href={href}
-                onClick={() => {
+                href={soon ? '#' : href}
+                onClick={(e) => {
+                  if (soon) { e.preventDefault(); return }
                   setHoveredItem(null)
                   close()
                 }}
-                onMouseEnter={() => setHoveredItem(label)}
+                onMouseEnter={() => { if (!soon) setHoveredItem(label) }}
                 onMouseLeave={() => setHoveredItem(null)}
                 className="group relative w-full flex items-center justify-center gap-4 py-3 select-none overflow-hidden"
                 style={{
                   borderBottom: '1px solid rgba(255,255,255,0.06)',
                   background: isHovered ? '#fff' : 'transparent',
-                  opacity: menuOpen ? 1 : 0,
+                  opacity: menuOpen ? (soon ? 0.35 : 1) : 0,
                   transform: menuOpen ? 'translateY(0)' : 'translateY(16px)',
+                  cursor: soon ? 'default' : 'pointer',
                   transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms, background 0.45s cubic-bezier(0.22,1,0.36,1)`,
                 }}
               >
-                <MenuMarquee label={label} visible={isHovered} />
+                {!soon && <MenuMarquee label={label} visible={isHovered} />}
                 <span
                   className="relative z-10"
                   style={{
@@ -188,13 +190,26 @@ export default function Navbar() {
                     fontSize: 'clamp(48px, 7vw, 72px)',
                     fontWeight: 300,
                     letterSpacing: '-0.03em',
-                    color: isHovered ? '#08080a' : isActive ? 'var(--fg-1)' : 'var(--fg-2)',
+                    color: isHovered ? '#08080a' : 'var(--fg-2)',
                     opacity: isHovered ? 0 : 1,
                     transition: 'color 0.35s ease, opacity 0.24s ease',
                   }}
                 >
                   {label}
                 </span>
+                {soon && (
+                  <span
+                    className="relative z-10"
+                    style={{
+                      fontSize: 9, fontWeight: 500, letterSpacing: '0.12em',
+                      textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
+                      border: '1px solid rgba(255,255,255,0.15)', borderRadius: 999,
+                      padding: '3px 8px',
+                    }}
+                  >
+                    soon
+                  </span>
+                )}
               </Link>
             )
           })}

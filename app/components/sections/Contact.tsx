@@ -110,7 +110,7 @@ export default function Contact() {
             style={{ borderColor: 'var(--border-pill)' }}
           >
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-fg-1" />
-            Available for new projects
+            available for new projects
           </span>
         </div>
 
@@ -138,8 +138,8 @@ export default function Contact() {
         >
           <div className="flex flex-col gap-8">
             <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 300 }}>
-              Open to quant research roles, algorithmic trading projects,
-              and ML engineering collaborations across global equities,
+              open for quant research roles, algorithmic trading projects,
+              and ml engineering collaborations across global equities,
               crypto, forex, and commodities, especially where fast news
               and linked market reactions matter.
             </p>
