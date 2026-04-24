@@ -1,77 +1,38 @@
-import Link from 'next/link'
-
-const LINKS = [
-  { label: 'About', href: '#about' },
-  { label: 'Work', href: '#work' },
-  { label: 'Services', href: '#services' },
-  { label: 'Contact', href: '#contact' },
-]
-
-const SOCIALS = [
-  { label: 'GitHub', href: 'https://github.com/swarnabh' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/swarnabh' },
-  { label: 'Email', href: 'mailto:swarnabh@sroy.co' },
-]
+const year = new Date().getFullYear()
 
 export default function Footer() {
   return (
     <footer
-      className="border-t py-16"
+      className="border-t"
       style={{ borderColor: 'var(--border)' }}
     >
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-4 py-4">
 
-        {/* Top row */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
+        <p className="text-xs text-fg-3">
+          © {year} S. Roy · All rights reserved
+        </p>
 
-          {/* Wordmark */}
-          <span className="text-sm font-medium tracking-widest uppercase text-fg-1">
-            S. Roy &amp; Co.
-          </span>
-
-          {/* Nav links */}
-          <ul className="flex flex-wrap gap-6">
-            {LINKS.map(({ label, href }) => (
-              <li key={label}>
-                <Link
-                  href={href}
-                  className="text-xs tracking-wider uppercase text-fg-3 hover:text-fg-1 transition-colors duration-300"
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* Socials */}
-          <ul className="flex gap-6">
-            {SOCIALS.map(({ label, href }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs tracking-wider uppercase text-fg-3 hover:text-fg-1 transition-colors duration-300"
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Divider */}
-        <div className="h-px w-full mb-8" style={{ background: 'var(--border)' }} />
-
-        {/* Bottom row */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <p className="text-xs text-fg-3">
-            © {new Date().getFullYear()} S. Roy. All rights reserved.
-          </p>
-          <p className="text-xs text-fg-3">
-            Built with Next.js · Tailwind v4 · TypeScript
-          </p>
-        </div>
+        <ul className="flex items-center gap-6">
+          {[
+            { label: 'GitHub',   href: 'https://github.com/SwarnabhR', external: true  },
+            { label: 'LinkedIn', href: '#',                             external: false },
+            { label: 'Twitter',  href: '#',                             external: false },
+          ].map(({ label, href, external }) => (
+            <li key={label}>
+              <a
+                href={href}
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener noreferrer' : undefined}
+                className="text-xs text-fg-3 hover:text-fg-1 transition-colors duration-300 tracking-wide"
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <span className="text-xs text-fg-3">✦ Next.js</span>
+          </li>
+        </ul>
 
       </div>
     </footer>

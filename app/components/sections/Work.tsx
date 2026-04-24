@@ -87,12 +87,23 @@ function ProjectRow({ project, index }: { project: typeof PROJECTS[0]; index: nu
 }
 
 export default function Work() {
-  const { ref: labelRef, isVisible: labelVisible } = useReveal()
-  const { ref: headingRef, isVisible: headingVisible } = useReveal()
+  const { ref: labelRef,    isVisible: labelVisible    } = useReveal()
+  const { ref: headingRef,  isVisible: headingVisible  } = useReveal()
+  const { ref: subtitleRef, isVisible: subtitleVisible } = useReveal()
 
   return (
-    <section id="work" className="bg-bg py-32">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="work" className="relative bg-bg py-32 overflow-hidden">
+
+      {/* Decorative background word */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute bottom-8 left-0 font-light leading-none tracking-tight text-fg-1 whitespace-nowrap"
+        style={{ fontSize: 'var(--text-bg-word)', opacity: 0.04 }}
+      >
+        Projects
+      </span>
+
+      <div className="relative max-w-6xl mx-auto px-6">
 
         {/* Label */}
         <div
@@ -102,7 +113,7 @@ export default function Work() {
           }`}
         >
           <span
-            className="text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
+            className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
             style={{ borderColor: 'var(--border-pill)' }}
           >
             ✦ Work
@@ -112,12 +123,23 @@ export default function Work() {
         {/* Heading */}
         <h2
           ref={headingRef}
-          className={`text-3xl font-regular tracking-tight leading-none text-fg-1 mb-16 transition-all duration-700 ${
+          className={`font-regular tracking-tight leading-none text-fg-1 mb-4 transition-all duration-700 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
+          style={{ fontSize: 'var(--text-3xl)' }}
         >
           Selected projects.
         </h2>
+
+        {/* Subtitle */}
+        <p
+          ref={subtitleRef}
+          className={`text-md text-fg-2 mb-16 max-w-xl transition-all duration-700 delay-100 ${
+            subtitleVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          Systems built for real markets — from data ingestion to live execution.
+        </p>
 
         {/* Project list */}
         <div className="border-t" style={{ borderColor: 'var(--border)' }}>
@@ -126,17 +148,18 @@ export default function Work() {
           ))}
         </div>
 
-        <div className='mt-12'>
-            <a 
-                href="#contact"
-                className='text-sm text-fg-1 inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300'
-                style={{borderColor: 'var(--border-pill)'}}
-            >
-                see all works ↗
-            </a>
+        {/* CTA */}
+        <div className="mt-12 flex justify-end">
+          <a
+            href="#contact"
+            className="text-sm text-fg-1 inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300"
+            style={{ borderColor: 'var(--border-pill)' }}
+          >
+            see all works ↗
+          </a>
         </div>
+
       </div>
-      
     </section>
   )
 }
