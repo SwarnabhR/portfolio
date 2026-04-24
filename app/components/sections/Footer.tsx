@@ -15,7 +15,7 @@ export default function Footer() {
         <ul className="flex items-center flex-wrap justify-center gap-5">
           {[
             { label: 'GitHub',   href: 'https://github.com/SwarnabhR', external: true  },
-            { label: 'LinkedIn', href: '#',                             external: false },
+            { label: 'Discord',  href: '#',                             external: false },
             { label: 'Twitter',  href: '#',                             external: false },
           ].map(({ label, href, external }) => (
             <li key={label}>

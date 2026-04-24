@@ -35,10 +35,10 @@
   --border: #e5e5e5;
 
   /* ── Raw palette (confirmed from Framer source) ─────────── */
-  --color-black:   #0a0a0c;   /* confirmed page bg */
-  --color-black-2: #060606;   /* hero + darkest sections */
-  --color-black-3: #14171d;   /* alt dark sections */
-  --color-black-4: #1a1a1a;   /* card surfaces */
+  --color-black:   #050506;   /* deeper page bg */
+  --color-black-2: #020202;   /* hero + darkest sections */
+  --color-black-3: #0b0d14;   /* alt dark sections */
+  --color-black-4: #111111;   /* card surfaces */
   --color-white:   #ffffff;
 
   /* Alpha whites — used for text and borders */
@@ -70,10 +70,10 @@
      This means if you ever change the bg colour,
      you change it here once — not in 30 component files.
   */
-  --bg:      var(--color-black);    /* #0a0a0c */
-  --bg-hero: var(--color-black-2);  /* #060606 */
-  --bg-2:    var(--color-black-3);  /* #14171d */
-  --bg-card: var(--color-black-4);  /* #1a1a1a */
+  --bg:      var(--color-black);
+  --bg-hero: var(--color-black-2);
+  --bg-2:    var(--color-black-3);
+  --bg-card: var(--color-black-4);
 
   /* Text — three levels of visual hierarchy */
   --fg-1: var(--color-white);       /* headings, primary */

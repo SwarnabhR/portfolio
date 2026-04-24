@@ -23,14 +23,12 @@ const SOCIALS = [
     ),
   },
   {
-    label: 'LinkedIn',
+    label: 'Discord',
     href: '#',
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="14" cy="14" r="13.25" stroke="currentColor" strokeWidth="0.75" strokeOpacity="0.5"/>
-        <path d="M10.5 11.5H8.5V19.5H10.5V11.5Z" fill="currentColor"/>
-        <circle cx="9.5" cy="9.5" r="1" fill="currentColor"/>
-        <path d="M19.5 14.5C19.5 13.12 18.38 12 17 12C15.62 12 14.5 13.12 14.5 14.5V19.5H12.5V11.5H14.5V12.5C15.05 11.87 15.98 11.5 17 11.5C19.49 11.5 21.5 13.51 21.5 16V19.5H19.5V14.5Z" fill="currentColor"/>
+        <path d="M18.8 9.35C17.82 8.9 16.78 8.58 15.69 8.43C15.55 8.68 15.4 9.02 15.29 9.29C14.13 9.12 12.98 9.12 11.84 9.29C11.73 9.02 11.57 8.68 11.44 8.43C10.34 8.58 9.3 8.9 8.33 9.35C6.36 12.26 5.83 15.1 6.1 17.91C7.41 18.87 8.69 19.45 9.94 19.83C10.25 19.41 10.52 18.96 10.76 18.49C10.31 18.32 9.89 18.11 9.48 17.86C9.59 17.78 9.69 17.7 9.79 17.62C12.26 18.75 14.94 18.75 17.38 17.62C17.48 17.7 17.59 17.78 17.69 17.86C17.29 18.11 16.86 18.32 16.41 18.49C16.65 18.96 16.92 19.41 17.23 19.83C18.49 19.45 19.76 18.87 21.08 17.91C21.39 14.65 20.55 11.84 18.8 9.35ZM11.4 16.19C10.66 16.19 10.05 15.51 10.05 14.68C10.05 13.84 10.65 13.17 11.4 13.17C12.15 13.17 12.77 13.85 12.75 14.68C12.75 15.51 12.15 16.19 11.4 16.19ZM15.75 16.19C15.01 16.19 14.4 15.51 14.4 14.68C14.4 13.84 15 13.17 15.75 13.17C16.5 13.17 17.12 13.85 17.1 14.68C17.1 15.51 16.5 16.19 15.75 16.19Z" fill="currentColor"/>
       </svg>
     ),
   },
@@ -49,6 +47,7 @@ const SOCIALS = [
 export default function Navbar() {
   const [scrolled, setScrolled]   = useState(false)
   const [menuOpen, setMenuOpen]   = useState(false)
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const activeSection             = useActiveSection()
 
   /* scroll detection */
@@ -140,39 +139,48 @@ export default function Navbar() {
         <nav className="flex-1 flex flex-col justify-center">
           {NAV_LINKS.map(({ label, href }, i) => {
             const isActive = activeSection === href.replace('#', '')
+            const isHovered = hoveredItem === label
             return (
               <Link
                 key={label}
                 href={href}
-                onClick={close}
-                className="w-full flex items-center justify-center gap-4 py-3 select-none"
+                onClick={() => {
+                  setHoveredItem(null)
+                  close()
+                }}
+                onMouseEnter={() => setHoveredItem(label)}
+                onMouseLeave={() => setHoveredItem(null)}
+                className="group relative w-full flex items-center justify-center gap-4 py-3 select-none overflow-hidden"
                 style={{
                   borderBottom: '1px solid rgba(255,255,255,0.06)',
+                  background: isHovered ? '#fff' : 'transparent',
                   opacity: menuOpen ? 1 : 0,
                   transform: menuOpen ? 'translateY(0)' : 'translateY(16px)',
-                  transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLElement
-                  el.querySelector('.nav-label')!.setAttribute('style', 'color: var(--fg-1); font-size: clamp(48px, 7vw, 72px); font-weight: 300; letter-spacing: -0.03em; transition: color 0.2s ease;')
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLElement
-                  const color = isActive ? 'var(--fg-1)' : 'var(--fg-2)'
-                  el.querySelector('.nav-label')!.setAttribute('style', `color: ${color}; font-size: clamp(48px, 7vw, 72px); font-weight: 300; letter-spacing: -0.03em; transition: color 0.2s ease;`)
+                  transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms, background 0.45s cubic-bezier(0.22,1,0.36,1)`,
                 }}
               >
-                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', minWidth: 24 }}>
+                <MenuMarquee label={label} visible={isHovered} />
+                <span
+                  className="relative z-10"
+                  style={{
+                    fontSize: 10,
+                    color: isHovered ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.25)',
+                    minWidth: 24,
+                    opacity: isHovered ? 0 : 1,
+                    transition: 'color 0.35s ease, opacity 0.24s ease',
+                  }}
+                >
                   0{i + 1}
                 </span>
                 <span
-                  className="nav-label"
+                  className="relative z-10"
                   style={{
                     fontSize: 'clamp(48px, 7vw, 72px)',
                     fontWeight: 300,
                     letterSpacing: '-0.03em',
-                    color: isActive ? 'var(--fg-1)' : 'var(--fg-2)',
-                    transition: 'color 0.2s ease',
+                    color: isHovered ? '#08080a' : isActive ? 'var(--fg-1)' : 'var(--fg-2)',
+                    opacity: isHovered ? 0 : 1,
+                    transition: 'color 0.35s ease, opacity 0.24s ease',
                   }}
                 >
                   {label}
@@ -199,6 +207,74 @@ export default function Navbar() {
           ))}
         </div>
       </div>
+    </>
+  )
+}
+
+function MenuMarquee({ label, visible }: { label: string; visible: boolean }) {
+  const items = Array.from({ length: 12 })
+
+  return (
+    <>
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'translateY(0)' : 'translateY(6px)',
+          transition: 'opacity 0.32s cubic-bezier(0.22,1,0.36,1), transform 0.42s cubic-bezier(0.22,1,0.36,1)',
+          mixBlendMode: 'normal',
+        }}
+      >
+        <div
+          className="menu-marquee-track"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 54,
+            height: '100%',
+            width: 'max-content',
+            animation: 'menuMarquee 24s linear infinite',
+            animationPlayState: visible ? 'running' : 'paused',
+            willChange: 'transform',
+          }}
+        >
+          {items.map((_, index) => (
+            <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 54, flexShrink: 0 }}>
+              <span
+                style={{
+                  color: '#08080a',
+                  fontSize: 'clamp(40px, 5vw, 58px)',
+                  fontWeight: 300,
+                  letterSpacing: '-0.04em',
+                  lineHeight: 1,
+                  whiteSpace: 'nowrap',
+                  textTransform: 'lowercase',
+                }}
+              >
+                {label}
+              </span>
+              <span
+                style={{
+                  width: 'clamp(150px, 13vw, 250px)',
+                  height: '76px',
+                  display: 'block',
+                  background: index % 2 === 0
+                    ? 'linear-gradient(135deg,#ff3b1f 0%,#ff595e 35%,#9b0f4d 70%,#05020a 100%)'
+                    : 'linear-gradient(135deg,#06100a 0%,#00345c 35%,#3b0a62 72%,#f04b23 100%)',
+                  filter: 'saturate(1.25) contrast(1.08)',
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      <style>{`
+        @keyframes menuMarquee {
+          from { transform: translate3d(-50%, 0, 0); }
+          to { transform: translate3d(0, 0, 0); }
+        }
+      `}</style>
     </>
   )
 }

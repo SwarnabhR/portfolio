@@ -176,12 +176,12 @@ export default function Hero() {
       {/* ── Decorative bg word ───────────────────────────────── */}
       <span
         aria-hidden="true"
-        className="pointer-events-none select-none absolute bottom-0 left-0 font-light leading-none tracking-tight text-fg-1 whitespace-nowrap"
+        className="pointer-events-none select-none absolute bottom-0 right-0 font-light leading-none tracking-tight text-fg-1 whitespace-nowrap"
         style={{
           fontSize: 'var(--text-bg-word)',
           opacity: bgWordOpacity,
           transform: `scale(${bgWordScale})`,
-          transformOrigin: 'left bottom',
+          transformOrigin: 'right bottom',
           transition: 'none',
         }}
       >
