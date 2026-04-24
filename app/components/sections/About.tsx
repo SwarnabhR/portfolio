@@ -43,17 +43,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-16 md:py-32 overflow-hidden"
-      style={{
-        background: `
-          linear-gradient(to bottom,
-            transparent 0%,
-            rgba(0,0,0,0.2) 70%,
-            rgba(0,0,0,0.8) 100%
-          ),
-          var(--bg)
-        `
-      }}
+      className="relative bg-bg py-16 md:py-32 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-8 md:gap-16 items-center">
 
