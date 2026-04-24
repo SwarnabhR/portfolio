@@ -6,13 +6,13 @@ export default function Footer() {
       className="border-t"
       style={{ borderColor: 'var(--border)' }}
     >
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-4 py-4">
+      <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 py-5">
 
         <p className="text-xs text-fg-3">
           © {year} S. Roy · All rights reserved
         </p>
 
-        <ul className="flex items-center gap-6">
+        <ul className="flex items-center flex-wrap justify-center gap-5">
           {[
             { label: 'GitHub',   href: 'https://github.com/SwarnabhR', external: true  },
             { label: 'LinkedIn', href: '#',                             external: false },

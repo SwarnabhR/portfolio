@@ -2,6 +2,18 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    setMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+  return mobile
+}
+
 const CARDS = [
   {
     date: '08.2024',
@@ -31,10 +43,22 @@ const CARDS = [
 
 const THRESHOLDS = [0.18, 0.42, 0.66]
 
+const POSITIONS_DESKTOP = [
+  'translate(-110%, -30%)',
+  'translate(-40%,   20%)',
+  'translate(-55%,  -80%)',
+]
+const POSITIONS_MOBILE = [
+  'translate(-100%, -20%)',
+  'translate(-30%,   18%)',
+  'translate(-50%,  -72%)',
+]
+
 export default function Testimonials() {
   const [landed, setLanded] = useState([false, false, false])
   const [progress, setProgress] = useState(0)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     function onScroll() {
@@ -134,14 +158,12 @@ export default function Testimonials() {
         `}</style>
 
         {/* Card floor */}
-        <div style={{ position: 'relative', width: 340, height: 260, zIndex: 2 }}>
+        <div style={{ position: 'relative', width: isMobile ? 280 : 340, height: isMobile ? 220 : 260, zIndex: 2 }}>
           {CARDS.map((card, i) => {
             const isLanded = landed[i]
-            const POSITIONS = [
-              'translate(-110%, -30%)',
-              'translate(-40%,   20%)',
-              'translate(-55%,  -80%)',
-            ]
+            const POSITIONS = isMobile ? POSITIONS_MOBILE : POSITIONS_DESKTOP
+            const cardW = isMobile ? 170 : 230
+            const cardPad = isMobile ? '12px 14px' : '16px 18px'
 
             return (
               <div
@@ -149,9 +171,9 @@ export default function Testimonials() {
                 className={`tcard-${i}`}
                 style={{
                   position: 'absolute',
-                  width: 230,
+                  width: cardW,
                   background: '#fff',
-                  padding: '16px 18px',
+                  padding: cardPad,
                   borderRadius: 1,
                   boxShadow: isLanded
                     ? `0 12px 50px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3), 0 0 40px ${card.glow}`
@@ -177,14 +199,14 @@ export default function Testimonials() {
                   el.style.zIndex = ''
                 }}
               >
-                <div style={{ fontSize: 10, color: 'rgba(0,0,0,0.3)', textAlign: 'right', marginBottom: 10 }}>
+                <div style={{ fontSize: isMobile ? 9 : 10, color: 'rgba(0,0,0,0.3)', textAlign: 'right', marginBottom: 8 }}>
                   {card.date}
                 </div>
-                <div style={{ fontSize: 11.5, color: '#111', lineHeight: 1.55, marginBottom: 12 }}>
+                <div style={{ fontSize: isMobile ? 10 : 11.5, color: '#111', lineHeight: 1.55, marginBottom: 10 }}>
                   {card.quote}
                 </div>
-                <div style={{ fontSize: 12, fontWeight: 600, color: '#111' }}>{card.name}</div>
-                <div style={{ fontSize: 11, color: 'rgba(0,0,0,0.4)' }}>{card.role}</div>
+                <div style={{ fontSize: isMobile ? 10 : 12, fontWeight: 600, color: '#111' }}>{card.name}</div>
+                <div style={{ fontSize: isMobile ? 9 : 11, color: 'rgba(0,0,0,0.4)' }}>{card.role}</div>
               </div>
             )
           })}

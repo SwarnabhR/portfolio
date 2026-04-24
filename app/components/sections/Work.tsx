@@ -44,7 +44,7 @@ function ProjectRow({ project, index }: { project: typeof PROJECTS[0]; index: nu
   return (
     <div
       ref={ref}
-      className={`group border-b py-8 grid md:grid-cols-[80px_1fr_auto] gap-6 items-start transition-all duration-700 ${
+      className={`group border-b py-8 grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-4 md:gap-6 items-start transition-all duration-700 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
       }`}
       style={{
@@ -53,7 +53,7 @@ function ProjectRow({ project, index }: { project: typeof PROJECTS[0]; index: nu
       }}
     >
       {/* Index */}
-      <span className="text-sm text-fg-3 font-light pt-1">{project.index}</span>
+      <span className="hidden md:block text-sm text-fg-3 font-light pt-1">{project.index}</span>
 
       {/* Main */}
       <div className="flex flex-col gap-3">
@@ -80,7 +80,7 @@ function ProjectRow({ project, index }: { project: typeof PROJECTS[0]; index: nu
       </div>
 
       {/* Status */}
-      <span className="text-xs tracking-wider uppercase text-fg-3 pt-1 whitespace-nowrap">
+      <span className="hidden md:block text-xs tracking-wider uppercase text-fg-3 pt-1 whitespace-nowrap">
         {project.status}
       </span>
     </div>

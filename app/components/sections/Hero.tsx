@@ -82,6 +82,7 @@ export default function Hero() {
       <div
         ref={negCursorRef}
         aria-hidden="true"
+        className="hero-neg-cursor"
         style={{
           position: 'absolute', top: 0, left: 0,
           width: 48, height: 48,
@@ -250,6 +251,9 @@ export default function Hero() {
 
       {/* ── Keyframes — transform + border-radius only ───────── */}
       <style>{`
+        @media (hover: none), (pointer: coarse) {
+          .hero-neg-cursor { display: none !important; }
+        }
         @keyframes hBlob1 {
           0%,100% { transform: translate(0,0)       rotate(0deg)   scale(1);    border-radius: 62% 38% 74% 26% / 52% 44% 56% 48%; }
           33%      { transform: translate(-44px,60px) rotate(13deg)  scale(1.06); border-radius: 42% 58% 55% 45% / 65% 35% 65% 35%; }
