@@ -2,7 +2,7 @@
 
 import About from "./components/sections/About";
 import Contact from "./components/sections/Contact";
-import Footer from "./components/sections/Footer";
+import { Analytics } from '@vercel/analytics/next';
 import Hero from "./components/sections/Hero";
 import Services from "./components/sections/Services";
 import Work from "./components/sections/Work";
@@ -15,6 +15,7 @@ export default function Home() {
       <Work></Work>
       <Services></Services>
       <Contact></Contact>
+      <Analytics />
     </>
   )
 }
