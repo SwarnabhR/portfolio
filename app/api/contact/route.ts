@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from 'next-sanity'
 import { Resend } from 'resend'
-import { apiVersion, dataset, projectId } from '../../../sanity/env'
-
 const ipHits = new Map<string, { count: number; reset: number }>()
 const LIMIT = 3
 const WINDOW_MS = 60 * 60 * 1000
@@ -20,9 +18,9 @@ function checkRateLimit(ip: string): boolean {
 }
 
 const writeClient = createClient({
-  projectId,
-  dataset,
-  apiVersion,
+  projectId: 'dch96v4a',
+  dataset: 'production',
+  apiVersion: '2026-04-25',
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,
 })
