@@ -57,12 +57,14 @@ export default function Contact() {
           100% { left: 110%; }
         }
         @keyframes cBlob1 {
-          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); }
-          50% { transform: translate(5vw, -5vw) rotate(10deg) scale(1.05); }
+          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 40% 60% 34% 66% / 58% 42% 62% 38%; }
+          33%      { transform: translate(40px, -60px) rotate(15deg) scale(1.1); border-radius: 60% 40% 52% 48% / 40% 60% 40% 60%; }
+          66%      { transform: translate(-30px, -40px) rotate(-10deg) scale(0.95); border-radius: 42% 58% 55% 45% / 65% 35% 65% 35%; }
         }
         @keyframes cBlob2 {
-          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); }
-          50% { transform: translate(-5vw, -4vw) rotate(-10deg) scale(1.05); }
+          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 62% 38% 74% 26% / 52% 44% 56% 48%; }
+          33%      { transform: translate(-50px, 40px) rotate(-15deg) scale(1.05); border-radius: 48% 52% 66% 34% / 44% 56% 44% 56%; }
+          66%      { transform: translate(20px, -30px) rotate(10deg) scale(1.1); border-radius: 65% 35% 44% 56% / 56% 44% 66% 34%; }
         }
       `}</style>
 
@@ -71,25 +73,25 @@ export default function Contact() {
         aria-hidden="true"
         style={{
           position: 'absolute', inset: 0, overflow: 'hidden',
-          isolation: 'isolate', zIndex: 0, pointerEvents: 'none'
+          isolation: 'isolate', zIndex: 0, pointerEvents: 'none',
+          maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%)'
         }}
       >
         <div style={{ position: 'absolute', inset: 0, filter: 'blur(100px)' }}>
           {/* Magenta/Pink Blob */}
           <div style={{
-            position: 'absolute', width: '80vw', height: '80vw',
+            position: 'absolute', width: 'max(80vw, 800px)', height: 'max(80vw, 800px)',
             bottom: '-30%', left: '-10%',
             background: 'radial-gradient(ellipse at 50% 50%, rgba(200, 20, 80, 0.45) 0%, rgba(120, 10, 40, 0.2) 50%, transparent 70%)',
-            borderRadius: '40% 60% 34% 66% / 58% 42% 62% 38%',
-            willChange: 'transform', animation: 'cBlob1 20s ease-in-out infinite',
+            willChange: 'transform, border-radius', animation: 'cBlob1 12s ease-in-out infinite',
           }} />
           {/* Orange/Yellow Blob */}
           <div style={{
-            position: 'absolute', width: '70vw', height: '70vw',
+            position: 'absolute', width: 'max(70vw, 700px)', height: 'max(70vw, 700px)',
             bottom: '-20%', right: '-10%',
             background: 'radial-gradient(ellipse at 50% 50%, rgba(230, 90, 0, 0.35) 0%, rgba(150, 40, 0, 0.15) 50%, transparent 70%)',
-            borderRadius: '62% 38% 74% 26% / 52% 44% 56% 48%',
-            willChange: 'transform', animation: 'cBlob2 25s ease-in-out infinite',
+            willChange: 'transform, border-radius', animation: 'cBlob2 14s ease-in-out infinite',
           }} />
         </div>
       </div>

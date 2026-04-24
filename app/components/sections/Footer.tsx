@@ -16,7 +16,6 @@ export default function Footer() {
           {[
             { label: 'GitHub',   href: 'https://github.com/SwarnabhR', external: true  },
             { label: 'Discord',  href: '#',                             external: false },
-            { label: 'Twitter',  href: '#',                             external: false },
           ].map(({ label, href, external }) => (
             <li key={label}>
               <a
@@ -29,9 +28,6 @@ export default function Footer() {
               </a>
             </li>
           ))}
-          <li>
-            <span className="text-xs text-fg-3">✦ Next.js</span>
-          </li>
         </ul>
 
       </div>

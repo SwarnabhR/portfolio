@@ -32,16 +32,6 @@ const SOCIALS = [
       </svg>
     ),
   },
-  {
-    label: 'Twitter / X',
-    href: '#',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="14" cy="14" r="13.25" stroke="currentColor" strokeWidth="0.75" strokeOpacity="0.5"/>
-        <path d="M20 9L15.5 14.2L20.5 20H17.5L14 15.8L10.5 20H7.5L12.3 14.5L7.5 9H10.5L13.8 12.9L17 9H20Z" fill="currentColor"/>
-      </svg>
-    ),
-  },
 ]
 
 export default function Navbar() {
