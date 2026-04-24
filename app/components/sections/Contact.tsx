@@ -69,22 +69,6 @@ export default function Contact() {
         `
       }}
     >
-      <style>{`
-        @keyframes runGlow {
-          0%   { left: -60%; }
-          100% { left: 110%; }
-        }
-        @keyframes cBlob1 {
-          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 40% 60% 34% 66% / 58% 42% 62% 38%; }
-          33%      { transform: translate(40px, -60px) rotate(15deg) scale(1.1); border-radius: 60% 40% 52% 48% / 40% 60% 40% 60%; }
-          66%      { transform: translate(-30px, -40px) rotate(-10deg) scale(0.95); border-radius: 42% 58% 55% 45% / 65% 35% 65% 35%; }
-        }
-        @keyframes cBlob2 {
-          0%, 100% { transform: translate(0,0) rotate(0deg) scale(1); border-radius: 62% 38% 74% 26% / 52% 44% 56% 48%; }
-          33%      { transform: translate(-50px, 40px) rotate(-15deg) scale(1.05); border-radius: 48% 52% 66% 34% / 44% 56% 44% 56%; }
-          66%      { transform: translate(20px, -30px) rotate(10deg) scale(1.1); border-radius: 65% 35% 44% 56% / 56% 44% 66% 34%; }
-        }
-      `}</style>
 
       {/* GPU Blobs Background */}
       <div

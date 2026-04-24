@@ -46,16 +46,16 @@ export async function GET() {
       },
     })
 
-    const cache = { 'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60' }
+    const cache = { 'Cache-Control': 'no-store' }
 
     if (response.status === 204) {
-      return NextResponse.json({ isPlaying: false }, { headers: cache })
+      return NextResponse.json({ debug: '204 - nothing playing' }, { headers: cache })
     }
 
     const data = await response.json()
 
     if (!data.item) {
-      return NextResponse.json({ isPlaying: false }, { headers: cache })
+      return NextResponse.json({ debug: 'no item', raw: data }, { headers: cache })
     }
 
     return NextResponse.json({
