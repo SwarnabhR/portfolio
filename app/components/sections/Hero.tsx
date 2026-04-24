@@ -256,14 +256,12 @@ export default function Hero() {
         </h1>
 
         {/* Two-col sub layout */}
-        <div className="flex flex-wrap justify-between items-end gap-4 sm:gap-6" style={{ marginTop: 'clamp(1rem, 3vw, 2rem)' }}>
+        <div className="flex flex-col-reverse items-start sm:flex-row justify-between sm:items-end gap-4 sm:gap-6" style={{ marginTop: 'clamp(1rem, 3vw, 2rem)' }}>
           <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 340}}>
             building algorithmic trading systems, backtesting platforms, and ml pipelines
             that connect fast news, quantitative math, and market reactions across asset classes.
           </p>
-          <div>
-            <CtaLink href="#contact">contact me ↗</CtaLink>
-          </div>
+          <CtaLink href="#contact">contact me ↗</CtaLink>
         </div>
       </div>
 
