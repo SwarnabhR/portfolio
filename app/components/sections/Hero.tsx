@@ -74,7 +74,7 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex flex-col justify-end overflow-hidden px-4 sm:px-6 pb-12 sm:pb-16"
+      className="relative min-h-[100dvh] flex flex-col justify-end overflow-hidden px-4 sm:px-6 pb-12 sm:pb-16"
       style={{
         background: `
           linear-gradient(to bottom,
@@ -247,7 +247,7 @@ export default function Hero() {
 
         {/* Heading */}
         <h1
-          className="font-regular tracking-tight leading-none text-fg-1 mb-8"
+          className="font-regular tracking-tight leading-none text-fg-1 mb-4 sm:mb-8"
           style={{ fontSize: 'clamp(38px, 9vw, 100px)' }}
         >
           Quant dev.
@@ -256,12 +256,12 @@ export default function Hero() {
         </h1>
 
         {/* Two-col sub layout */}
-        <div className="flex flex-wrap justify-between items-end gap-6" style={{ marginTop: '2rem' }}>
+        <div className="flex flex-wrap justify-between items-end gap-4 sm:gap-6" style={{ marginTop: 'clamp(1rem, 3vw, 2rem)' }}>
           <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 340}}>
             building algorithmic trading systems, backtesting platforms, and ml pipelines
             that connect fast news, quantitative math, and market reactions across asset classes.
           </p>
-          <div style={{ marginBottom: 'clamp(2rem, 8vw, 6rem)' }}>
+          <div>
             <CtaLink href="#contact">contact me ↗</CtaLink>
           </div>
         </div>
