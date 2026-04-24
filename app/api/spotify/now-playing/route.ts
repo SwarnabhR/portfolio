@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server'
 
-const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID
+const CLIENT_ID     = process.env.SPOTIFY_CLIENT_ID
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET
 const REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN
 
-async function getAccessToken() {
-  const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
+let cachedToken: string | null = null
+let tokenExpiresAt = 0
 
+async function getAccessToken() {
+  if (cachedToken && Date.now() < tokenExpiresAt) return cachedToken
+
+  const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
   const response = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
@@ -20,7 +24,9 @@ async function getAccessToken() {
   })
 
   const data = await response.json()
-  return data.access_token
+  cachedToken    = data.access_token
+  tokenExpiresAt = Date.now() + (data.expires_in - 60) * 1000
+  return cachedToken
 }
 
 export async function GET() {
@@ -40,15 +46,16 @@ export async function GET() {
       },
     })
 
+    const cache = { 'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60' }
+
     if (response.status === 204) {
-      // Not playing anything
-      return NextResponse.json({ isPlaying: false })
+      return NextResponse.json({ isPlaying: false }, { headers: cache })
     }
 
     const data = await response.json()
 
     if (!data.item) {
-      return NextResponse.json({ isPlaying: false })
+      return NextResponse.json({ isPlaying: false }, { headers: cache })
     }
 
     return NextResponse.json({
@@ -60,7 +67,7 @@ export async function GET() {
       url: data.item.external_urls.spotify,
       duration: data.item.duration_ms,
       progress: data.progress_ms,
-    })
+    }, { headers: cache })
   } catch (error) {
     console.error('Spotify API error:', error)
     return NextResponse.json(
