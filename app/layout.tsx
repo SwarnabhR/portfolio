@@ -18,6 +18,8 @@
 import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
 import './globals.css';
+import Navbar from './components/ui/Navbar';
+import CustomCursor from './components/ui/CustomCursor';
 
 // ============================================================
 // FONT LOADING
@@ -133,11 +135,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={manrope.variable} suppressHydrationWarning>
       <body>
-        {/* <CustomCursor /> */}
-
-        {/* <Navbar /> */}
-        
-        {children}
+        <CustomCursor />
+        <Navbar />
+        <main>{children}</main>
 
         {/* <Footer /> */}
       </body>

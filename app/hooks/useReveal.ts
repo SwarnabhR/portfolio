@@ -45,4 +45,6 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
             observer.disconnect()
         }
     }, [threshold, triggerOnce])
+
+    return { ref, isVisible }
 }

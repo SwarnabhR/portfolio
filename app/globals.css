@@ -30,6 +30,10 @@
    ============================================================ */
 :root {
 
+  --background: #ffffff;
+  --foreground: #111111;
+  --border: #e5e5e5;
+
   /* ── Raw palette (confirmed from Framer source) ─────────── */
   --color-black:   #0a0a0c;   /* confirmed page bg */
   --color-black-2: #060606;   /* hero + darkest sections */
