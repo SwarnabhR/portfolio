@@ -133,7 +133,7 @@ function ServiceRow({
 
       <p
         className="font-light text-right hidden md:block"
-        style={{ fontSize: 12, color: 'rgba(255,255,255,0.38)', maxWidth: 280, lineHeight: 1.6 }}
+        style={{ fontSize: 'var(--text-sm)', color: 'rgba(255,255,255,0.38)', maxWidth: 280, lineHeight: 1.6 }}
       >
         {service.description}
       </p>
@@ -173,7 +173,7 @@ export default function Services() {
         />
         <span style={{
           position: 'absolute', bottom: 8, left: 10,
-          fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
+          fontSize: 'var(--text-xs)', letterSpacing: '0.1em', textTransform: 'uppercase',
           color: 'rgba(255,255,255,0.6)',
         }}>
           {active?.title.split(' ')[0]}
@@ -210,7 +210,7 @@ export default function Services() {
           className={`font-light tracking-tight text-fg-1 mb-10 transition-all duration-700 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ fontSize: 22, letterSpacing: '-0.02em', maxWidth: 380 }}
+          style={{ fontSize: 'var(--text-lg)', letterSpacing: '-0.02em', maxWidth: 380 }}
         >
           A range of quant services made to grow your edge.
         </h2>

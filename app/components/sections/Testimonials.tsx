@@ -127,7 +127,7 @@ export default function Testimonials() {
             position: 'absolute', top: 32, left: '50%',
             transform: 'translateX(-50%)',
             display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: 11, fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase',
+            fontSize: 'var(--text-xs)', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.4)',
             border: '1px solid rgba(255,255,255,0.12)', borderRadius: 999,
             padding: '6px 14px', zIndex: 10, whiteSpace: 'nowrap',
@@ -141,7 +141,7 @@ export default function Testimonials() {
           style={{
             position: 'absolute', bottom: 28, left: '50%',
             transform: 'translateX(-50%)',
-            fontSize: 10, fontWeight: 300, letterSpacing: '0.15em',
+            fontSize: 'var(--text-xs)', fontWeight: 300, letterSpacing: '0.15em',
             textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)',
             zIndex: 10, whiteSpace: 'nowrap',
             animation: 'fadeHint 2s ease-in-out infinite alternate',
@@ -199,14 +199,14 @@ export default function Testimonials() {
                   el.style.zIndex = ''
                 }}
               >
-                <div style={{ fontSize: isMobile ? 9 : 10, color: 'rgba(0,0,0,0.3)', textAlign: 'right', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'rgba(0,0,0,0.3)', textAlign: 'right', marginBottom: 8 }}>
                   {card.date}
                 </div>
-                <div style={{ fontSize: isMobile ? 10 : 11.5, color: '#111', lineHeight: 1.55, marginBottom: 10 }}>
+                <div style={{ fontSize: 'var(--text-sm)', color: '#111', lineHeight: 1.55, marginBottom: 10 }}>
                   {card.quote}
                 </div>
-                <div style={{ fontSize: isMobile ? 10 : 12, fontWeight: 600, color: '#111' }}>{card.name}</div>
-                <div style={{ fontSize: isMobile ? 9 : 11, color: 'rgba(0,0,0,0.4)' }}>{card.role}</div>
+                <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#111' }}>{card.name}</div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'rgba(0,0,0,0.4)' }}>{card.role}</div>
               </div>
             )
           })}

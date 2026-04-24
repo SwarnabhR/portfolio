@@ -37,7 +37,7 @@ export default function Contact() {
     return {
       width: '100%', background: 'transparent', border: 'none',
       borderBottom: `0.5px solid ${focused ? 'rgba(194,24,91,0.5)' : 'var(--color-border-gray)'}`,
-      color: '#fff', fontFamily: 'inherit', fontSize: 20, fontWeight: 300,
+      color: '#fff', fontFamily: 'inherit', fontSize: 'var(--text-md)', fontWeight: 300,
       padding: '10px 0', outline: 'none', resize: 'none' as const,
       opacity: dimmed ? 0.3 : 1,
       filter: dimmed ? 'blur(0.4px)' : 'none',
@@ -174,7 +174,7 @@ export default function Contact() {
             formVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <p style={{ fontSize: 20, fontWeight: 300, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.3, marginBottom: 8 }}>
+          <p style={{ fontSize: 'var(--text-md)', fontWeight: 300, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.3, marginBottom: 8 }}>
             Share your idea and I&apos;ll reply within 1–2 business days.
           </p>
 
@@ -194,7 +194,7 @@ export default function Contact() {
               >
                 <label
                   style={{
-                    fontSize: 12, fontWeight: 300, display: 'block', marginBottom: 6,
+                    fontSize: 'var(--text-sm)', fontWeight: 300, display: 'block', marginBottom: 6,
                     color: focused ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.35)',
                     transition: 'color 0.2s',
                   }}
@@ -246,7 +246,7 @@ export default function Contact() {
             className="self-end disabled:opacity-40"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.6)',
+              fontSize: 'var(--text-sm)', fontWeight: 300, color: 'rgba(255,255,255,0.6)',
               background: 'transparent', border: 'none',
               borderBottom: '0.5px solid rgba(255,255,255,0.22)',
               padding: '4px 0', cursor: 'none', letterSpacing: '0.08em',

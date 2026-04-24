@@ -38,11 +38,11 @@ export default function SpotifyNowPlaying() {
     return () => clearInterval(interval)
   }, [])
 
-  if (loading) return <div style={{ fontSize: '12px', color: '#fff', backgroundColor: '#222', padding: '8px', width: '100%' }}>Loading...</div>
-  if (error) return <div style={{ fontSize: '12px', color: '#fff', backgroundColor: '#222', padding: '8px', width: '100%' }}>Not authorized</div>
+  if (loading) return <div style={{ fontSize: 'var(--text-sm)', color: '#fff', backgroundColor: '#222', padding: '8px', width: '100%' }}>Loading...</div>
+  if (error) return <div style={{ fontSize: 'var(--text-sm)', color: '#fff', backgroundColor: '#222', padding: '8px', width: '100%' }}>Not authorized</div>
 
   if (!data?.isPlaying) {
-    return <div style={{ fontSize: '12px', color: '#fff', backgroundColor: '#222', padding: '8px', width: '100%' }}>Not playing anything</div>
+    return <div style={{ fontSize: 'var(--text-sm)', color: '#fff', backgroundColor: '#222', padding: '8px', width: '100%' }}>Not playing anything</div>
   }
 
   return (
@@ -69,10 +69,10 @@ export default function SpotifyNowPlaying() {
         />
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: '14px', fontWeight: 500, color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <div style={{ fontSize: 'var(--text-sm)', fontWeight: 500, color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {data.title}
         </div>
-        <div style={{ fontSize: '12px', color: '#aaa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <div style={{ fontSize: 'var(--text-sm)', color: '#aaa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {data.artist}
         </div>
       </div>

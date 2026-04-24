@@ -243,13 +243,14 @@ export default function Hero() {
         </h1>
 
         {/* Two-col sub layout */}
-        <div className="flex flex-wrap justify-between items-end gap-6">
-          <p className="font-light leading-relaxed" style={{ fontSize: 15, color: 'rgba(255,255,255,0.48)', maxWidth: 340 }}>
-            Building algorithmic trading systems, backtesting platforms,
-            and ML pipelines that connect fast news, quantitative math,
-            and market reactions across asset classes.
+        <div className="flex flex-wrap justify-between items-end gap-6" style={{ marginTop: '2rem' }}>
+          <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 340}}>
+            Building algorithmic trading systems, backtesting platforms, and ML pipelines
+            that connect fast news, quantitative math, and market reactions across asset classes.
           </p>
-          <CtaLink href="#contact">contact me ↗</CtaLink>
+          <div style={{ marginBottom: '6rem' }}>
+            <CtaLink href="#contact">contact me ↗</CtaLink>
+          </div>
         </div>
       </div>
 

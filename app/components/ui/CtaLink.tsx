@@ -15,7 +15,7 @@ export default function CtaLink({ href, children, external, className = '', styl
     display: 'inline-flex',
     alignItems: 'center',
     gap: 6,
-    fontSize: 13,
+    fontSize: 'var(--text-sm)',
     fontWeight: 300,
     color: 'rgba(255,255,255,0.85)',
     border: '0.5px solid rgba(255,255,255,0.18)',

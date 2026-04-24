@@ -63,7 +63,7 @@ function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
         </div>
         <span
           style={{
-            fontSize: 16,
+            fontSize: 'var(--text-base)',
             color: 'rgba(255,255,255,0.35)',
             flexShrink: 0,
             display: 'inline-block',
@@ -84,7 +84,7 @@ function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
       >
         <p
           className="font-light leading-relaxed pb-5"
-          style={{ fontSize: 13, color: 'var(--fg-2)', paddingLeft: 28, maxWidth: 640 }}
+          style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', paddingLeft: 28, maxWidth: 640 }}
         >
           {faq.a}
         </p>

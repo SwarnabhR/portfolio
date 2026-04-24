@@ -91,11 +91,28 @@ export default function Navbar() {
           transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
         }}
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between w-full">
           <Link href="/" aria-label="S. Roy — Home" className="flex items-center gap-3 text-fg-1 opacity-80 hover:opacity-100 transition-opacity duration-300">
             <LogoSVG />
             <span className="text-md font-regular tracking-tight leading-none">S. Roy</span>
           </Link>
+
+          {/* Desktop social icons */}
+          <div className="hidden md:flex items-center gap-4">
+            {SOCIALS.map(({ label, href, icon }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                target={href.startsWith('http') ? '_blank' : undefined}
+                rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="transition-opacity duration-200 opacity-40 hover:opacity-100"
+                style={{ color: 'var(--fg-1)' }}
+              >
+                {icon}
+              </a>
+            ))}
+          </div>
 
           <button
             onClick={() => setMenuOpen(true)}
@@ -135,8 +152,8 @@ export default function Navbar() {
           <button
             onClick={close}
             aria-label="Close menu"
-            className="text-2xl leading-none transition-colors duration-200"
-            style={{ color: 'var(--fg-2)' }}
+            className="leading-none transition-colors duration-200"
+            style={{ color: 'var(--fg-2)', fontSize: '48px' }}
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--fg-1)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--fg-2)')}
           >
@@ -145,7 +162,7 @@ export default function Navbar() {
         </div>
 
         {/* Nav links — full-width, bordered rows */}
-        <nav className="flex-1 flex flex-col justify-center">
+        <nav className="flex-1 flex flex-col justify-center min-h-0">
           {NAV_LINKS.map(({ label, href, soon }, i) => {
             const isHovered = hoveredItem === label && !soon
             return (
@@ -173,7 +190,7 @@ export default function Navbar() {
                 <span
                   className="relative z-10"
                   style={{
-                    fontSize: 10,
+                    fontSize: 'var(--text-xs)',
                     color: isHovered ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.25)',
                     minWidth: 24,
                     opacity: isHovered ? 0 : 1,
@@ -199,7 +216,7 @@ export default function Navbar() {
                   <span
                     className="relative z-10"
                     style={{
-                      fontSize: 9, fontWeight: 500, letterSpacing: '0.12em',
+                      fontSize: 'var(--text-xs)', fontWeight: 500, letterSpacing: '0.12em',
                       textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
                       border: '1px solid rgba(255,255,255,0.15)', borderRadius: 999,
                       padding: '3px 8px',
@@ -214,7 +231,7 @@ export default function Navbar() {
         </nav>
 
         {/* Social icons — bottom right */}
-        <div className="flex items-center justify-end gap-4 px-6 pb-8 max-w-6xl mx-auto w-full">
+        <div className="flex items-center justify-end gap-4 px-6 pb-8 w-full" style={{ position: 'relative', zIndex: 10 }}>
           {SOCIALS.map(({ label, href, icon }) => (
             <a
               key={label}

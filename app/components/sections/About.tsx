@@ -110,7 +110,7 @@ export default function About() {
                       width: 34, height: 34,
                       background: isHov ? `${accent}14` : 'rgba(255,255,255,0.07)',
                       border: '1px solid rgba(255,255,255,0.12)',
-                      fontSize: 11, fontWeight: 500,
+                      fontSize: 'var(--text-xs)', fontWeight: 500,
                       color: isHov ? accent : 'rgba(255,255,255,0.5)',
                       transition: 'color 0.5s, background 0.5s',
                     }}
@@ -140,7 +140,7 @@ export default function About() {
                       width: 34, height: 34,
                       background: isHov ? `${accent}14` : 'rgba(255,255,255,0.07)',
                       border: '1px solid rgba(255,255,255,0.12)',
-                      fontSize: 11, fontWeight: 500,
+                      fontSize: 'var(--text-xs)', fontWeight: 500,
                       color: isHov ? accent : 'rgba(255,255,255,0.5)',
                       transition: 'color 0.5s, background 0.5s',
                     }}
