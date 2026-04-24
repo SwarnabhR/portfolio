@@ -3,9 +3,16 @@
 import { useState } from 'react'
 import { useReveal } from '@/hooks/useReveal'
 
+const FIELDS = [
+  { name: 'name',    label: 'Name',    type: 'text',  placeholder: 'Jane Smith'       },
+  { name: 'email',   label: 'Email',   type: 'email', placeholder: 'jane@example.com' },
+  { name: 'message', label: 'Message', type: 'area',  placeholder: 'Leave a message'  },
+]
+
 export default function Contact() {
-  const [form,   setForm  ] = useState({ name: '', email: '', message: '' })
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [form,        setForm       ] = useState({ name: '', email: '', message: '' })
+  const [status,      setStatus     ] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [activeField, setActiveField] = useState<string | null>(null)
 
   const { ref: badgeRef,   isVisible: badgeVisible   } = useReveal()
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
@@ -19,18 +26,45 @@ export default function Contact() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setStatus('sending')
-    // Wire to Resend / Formspree later
     await new Promise(r => setTimeout(r, 1200))
     setStatus('sent')
+  }
+
+  function inputStyle(key: string): React.CSSProperties {
+    const focused = activeField === key
+    const dimmed  = !!activeField && !focused && !form[key as keyof typeof form]
+    return {
+      width: '100%',
+      background: 'transparent',
+      border: 'none',
+      borderBottom: `0.5px solid ${focused ? 'rgba(120,0,200,0.5)' : 'var(--color-border-gray)'}`,
+      color: '#fff',
+      fontFamily: 'inherit',
+      fontSize: 20,
+      fontWeight: 300,
+      padding: '10px 0',
+      outline: 'none',
+      resize: 'none' as const,
+      opacity: dimmed ? 0.3 : 1,
+      filter: dimmed ? 'blur(0.4px)' : 'none',
+      transition: 'border-color 0.3s, opacity 0.25s, filter 0.25s',
+    }
   }
 
   return (
     <section
       id="contact"
-      className="relative py-32 overflow-hidden"
+      className="relative overflow-hidden"
       style={{ background: `var(--gradient-contact), var(--bg)` }}
     >
-      <div className="max-w-6xl mx-auto px-6">
+      <style>{`
+        @keyframes glowRun {
+          0%   { left: -60%; }
+          100% { left: 110%; }
+        }
+      `}</style>
+
+      <div className="max-w-6xl mx-auto px-6 pt-24 pb-0">
 
         {/* Availability badge */}
         <div
@@ -43,10 +77,7 @@ export default function Contact() {
             className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-1 border rounded-full px-4 py-1.5"
             style={{ borderColor: 'var(--border-pill)' }}
           >
-            <span
-              className="inline-block w-1.5 h-1.5 rounded-full bg-fg-1"
-              style={{ boxShadow: '0 0 6px currentColor' }}
-            />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-fg-1" />
             Available for new projects
           </span>
         </div>
@@ -54,118 +85,136 @@ export default function Contact() {
         {/* Giant headline — full width */}
         <h2
           ref={headingRef}
-          className={`font-regular tracking-tight leading-none text-fg-1 mb-16 transition-all duration-700 delay-100 ${
+          className={`font-regular tracking-tight leading-none text-fg-1 mb-0 transition-all duration-700 delay-100 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
           style={{ fontSize: 'clamp(64px, 10vw, 140px)' }}
         >
           Let&apos;s talk.
         </h2>
+      </div>
 
-        {/* 2-col split */}
-        <div className="grid md:grid-cols-[2fr_3px_3fr] gap-0 items-start">
+      {/* 2-col split — flush, no outer padding bottom */}
+      <div className="flex flex-col md:flex-row" style={{ minHeight: 500 }}>
 
-          {/* Left — 40% · bio + CTA + identity chip */}
-          <div
-            ref={leftRef}
-            className={`pr-12 flex flex-col gap-8 transition-all duration-700 ${
-              leftVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <p className="text-md text-fg-2 leading-relaxed max-w-xs">
+        {/* Left — 40% */}
+        <div
+          ref={leftRef}
+          className={`md:w-2/5 px-6 md:pl-6 md:pr-12 pt-12 pb-10 flex flex-col justify-between transition-all duration-700 ${
+            leftVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+          style={{ maxWidth: '100%' }}
+        >
+          <div className="flex flex-col gap-8">
+            <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 300 }}>
               Open to quant research roles, algorithmic trading projects,
-              and ML engineering collaborations. Reply within 1–2 business days.
+              and ML engineering collaborations.
             </p>
 
             <a
               href="mailto:swarnabh.work@gmail.com"
-              className="text-sm text-fg-1 self-start inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300"
-              style={{ borderColor: 'var(--border-pill)' }}
+              className="text-sm self-start inline-flex items-center gap-1 border-b pb-0.5 transition-colors duration-300"
+              style={{ color: 'rgba(255,255,255,0.7)', borderColor: 'rgba(255,255,255,0.22)' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
             >
               book a call ↗
             </a>
-
-            {/* Identity chip */}
-            <div className="flex items-center gap-4 mt-auto pt-8 border-t" style={{ borderColor: 'var(--border)' }}>
-              <span
-                className="inline-flex items-center justify-center shrink-0 rounded-full text-fg-1 text-xs tracking-wider font-regular"
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  border: '1px solid var(--border-pill)',
-                }}
-              >
-                SR
-              </span>
-              <div className="flex flex-col gap-0.5">
-                <span className="text-sm text-fg-1 leading-none">S. Roy</span>
-                <span className="text-xs text-fg-3 tracking-wide">Quant Developer</span>
-              </div>
-            </div>
           </div>
 
-          {/* Vertical rule */}
-          <div className="hidden md:block h-full w-px self-stretch" style={{ background: 'var(--border)' }} />
-
-          {/* Right — 60% · form */}
-          <form
-            ref={formRef}
-            onSubmit={handleSubmit}
-            className={`pl-12 flex flex-col gap-8 transition-all duration-700 delay-150 ${
-              formVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
+          {/* Identity chip */}
+          <div
+            className="flex items-center gap-4 pt-8 border-t mt-8"
+            style={{ borderColor: 'var(--border)' }}
           >
-            <p className="text-sm text-fg-3">
-              Share your idea and I&apos;ll reply within 1–2 business days.
-            </p>
+            <span
+              className="inline-flex items-center justify-center shrink-0 rounded-full text-fg-1 text-xs tracking-wider font-regular"
+              style={{ width: 44, height: 44, border: '1px solid var(--border-pill)' }}
+            >
+              SR
+            </span>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm text-fg-1 leading-none">S. Roy</span>
+              <span className="text-xs text-fg-3 tracking-wide">Quant Developer</span>
+            </div>
+          </div>
+        </div>
 
-            {[
-              { name: 'name',    label: 'Name',    type: 'text',  placeholder: 'Jane Smith'           },
-              { name: 'email',   label: 'Email',   type: 'email', placeholder: 'jane@example.com'     },
-            ].map(({ name, label, type, placeholder }) => (
-              <div key={name} className="flex flex-col gap-2">
-                <label className="text-xs tracking-wider uppercase text-fg-3">{label}</label>
+        {/* Vertical rule */}
+        <div className="hidden md:block w-px self-stretch" style={{ background: 'var(--border)' }} />
+
+        {/* Right — 60% · form */}
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className={`flex-1 px-6 md:pl-12 pt-12 pb-10 flex flex-col gap-6 transition-all duration-700 delay-150 ${
+            formVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
+          <p style={{ fontSize: 20, fontWeight: 300, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.3, marginBottom: 8 }}>
+            Share your idea and I&apos;ll reply within 1–2 business days.
+          </p>
+
+          {FIELDS.map(({ name, label, type, placeholder }) => (
+            <div key={name} style={{ position: 'relative' }}>
+              <label
+                style={{ fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.35)', display: 'block', marginBottom: 6 }}
+              >
+                {label}
+              </label>
+
+              {type === 'area' ? (
+                <textarea
+                  name={name}
+                  placeholder={placeholder}
+                  value={form[name as keyof typeof form]}
+                  rows={4}
+                  onFocus={() => setActiveField(name)}
+                  onBlur={() => setActiveField(null)}
+                  onChange={handleChange}
+                  required
+                  style={inputStyle(name)}
+                />
+              ) : (
                 <input
                   type={type}
                   name={name}
                   placeholder={placeholder}
                   value={form[name as keyof typeof form]}
+                  onFocus={() => setActiveField(name)}
+                  onBlur={() => setActiveField(null)}
                   onChange={handleChange}
                   required
-                  className="bg-transparent border-b py-3 text-md text-fg-1 placeholder:text-fg-3 focus:outline-none focus:border-fg-2 transition-colors duration-300"
-                  style={{ borderColor: 'var(--border-input)' }}
+                  style={inputStyle(name)}
                 />
+              )}
+
+              {/* Glow sweep on focus */}
+              <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 1, overflow: 'hidden', pointerEvents: 'none' }}>
+                <div style={{
+                  position: 'absolute', top: 0, left: '-60%',
+                  width: '60%', height: '100%',
+                  background: 'linear-gradient(90deg, transparent, rgba(120,0,200,0.7) 40%, rgba(255,255,255,0.6) 50%, rgba(160,0,40,0.6) 60%, transparent)',
+                  animation: activeField === name ? 'glowRun 1.4s ease-in-out infinite' : 'none',
+                }} />
               </div>
-            ))}
-
-            <div className="flex flex-col gap-2">
-              <label className="text-xs tracking-wider uppercase text-fg-3">Message</label>
-              <textarea
-                name="message"
-                placeholder="Leave a message"
-                value={form.message}
-                onChange={handleChange}
-                required
-                rows={4}
-                className="bg-transparent border-b py-3 text-md text-fg-1 placeholder:text-fg-3 focus:outline-none focus:border-fg-2 transition-colors duration-300 resize-none"
-                style={{ borderColor: 'var(--border-input)' }}
-              />
             </div>
+          ))}
 
-            <button
-              type="submit"
-              disabled={status === 'sending' || status === 'sent'}
-              className="self-end text-sm text-fg-1 inline-flex items-center gap-1 border-b pb-0.5 hover:text-fg-2 transition-colors duration-300 disabled:opacity-40"
-              style={{ borderColor: 'var(--border-pill)' }}
-            >
-              {status === 'idle'    && 'send message ↗'}
-              {status === 'sending' && 'sending…'}
-              {status === 'sent'    && 'message sent ✓'}
-              {status === 'error'   && 'try again ↗'}
-            </button>
-          </form>
-
-        </div>
+          <button
+            type="submit"
+            disabled={status === 'sending' || status === 'sent'}
+            className="self-end text-sm inline-flex items-center gap-1 border-b pb-0.5 transition-colors duration-300 disabled:opacity-40"
+            style={{ color: 'rgba(255,255,255,0.6)', borderColor: 'rgba(255,255,255,0.22)' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
+          >
+            {status === 'idle'    && 'send message ↗'}
+            {status === 'sending' && 'sending…'}
+            {status === 'sent'    && 'message sent ✓'}
+            {status === 'error'   && 'try again ↗'}
+          </button>
+        </form>
       </div>
     </section>
   )

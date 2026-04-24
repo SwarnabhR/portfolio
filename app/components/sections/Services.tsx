@@ -7,101 +7,118 @@ const SERVICES = [
   {
     index: '01',
     title: 'Algorithmic Strategy Development',
-    description:
-      'Design and implementation of systematic trading strategies. From signal research to live execution — RSI, VWAP, momentum, mean-reversion.',
+    description: 'Signal research to live execution — RSI, VWAP, momentum, mean-reversion on NSE/BSE.',
   },
   {
     index: '02',
     title: 'Backtesting & Research',
-    description:
-      'Rigorous historical testing with walk-forward validation, Sharpe/Sortino analysis, drawdown profiling, and transaction cost modelling.',
+    description: 'Walk-forward validation, Sharpe/Sortino analysis, drawdown profiling, cost modelling.',
   },
   {
     index: '03',
     title: 'Data Pipeline Engineering',
-    description:
-      'Real-time and historical market data ingestion, storage, and transformation. TimescaleDB, QuestDB, KiteConnect, WebSocket feeds.',
+    description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, KiteConnect + WebSocket feeds.',
   },
   {
     index: '04',
     title: 'ML for Finance',
-    description:
-      'Feature engineering from OHLCV data, predictive model development, and deployment for classification and regression on equity signals.',
+    description: 'Feature engineering from OHLCV, predictive models for classification and regression.',
   },
 ]
 
 function ServiceRow({
   service,
   index,
+  anyHover,
+  onEnter,
+  onLeave,
 }: {
-  service: (typeof SERVICES)[0]
+  service: typeof SERVICES[0]
   index: number
+  anyHover: boolean
+  onEnter: () => void
+  onLeave: () => void
 }) {
   const [hovered, setHovered] = useState(false)
   const { ref, isVisible } = useReveal()
 
+  const dimmed = anyHover && !hovered
+
   return (
     <div
       ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="border-b py-8 grid grid-cols-[48px_1fr_auto] gap-6 items-start group"
+      onMouseEnter={() => { setHovered(true); onEnter() }}
+      onMouseLeave={() => { setHovered(false); onLeave() }}
+      className="flex justify-between items-center gap-6 border-b py-5"
       style={{
         borderColor: 'var(--border)',
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-        transition: `opacity 0.6s ease ${index * 80}ms, transform 0.6s ease ${index * 80}ms`,
+        cursor: 'default',
+        opacity: dimmed ? 0.25 : isVisible ? 1 : 0,
+        transform: isVisible
+          ? hovered ? 'translateX(-6px)' : 'translateX(0)'
+          : 'translateY(20px)',
+        transition: `opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${isVisible ? 0 : index * 80}ms`,
       }}
     >
-      {/* Index */}
-      <span className="text-xs text-fg-3 pt-1 tracking-wider">{service.index}</span>
-
-      {/* Title + reveal description */}
-      <div className="flex flex-col gap-0 overflow-hidden">
-        <h3
-          className="text-fg-1 font-regular tracking-tight transition-colors duration-300 group-hover:text-fg-2"
-          style={{ fontSize: 'var(--text-xl)' }}
+      {/* Index + title */}
+      <div className="flex items-baseline gap-3">
+        <span
+          className="text-xs font-regular tracking-wider transition-colors duration-300"
+          style={{ color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)' }}
+        >
+          {service.index}
+        </span>
+        <span
+          className="font-light tracking-tight transition-colors duration-300"
+          style={{
+            fontSize: 'clamp(18px, 3vw, 28px)',
+            color: hovered ? 'var(--fg-1)' : 'rgba(255,255,255,0.88)',
+            letterSpacing: '-0.02em',
+          }}
         >
           {service.title}
-        </h3>
-
-        {/* Description — slides down on hover */}
-        <div
-          className="overflow-hidden transition-all duration-500"
-          style={{ maxHeight: hovered ? '80px' : '0px' }}
-        >
-          <p className="text-base text-fg-2 leading-relaxed pt-3">
-            {service.description}
-          </p>
-        </div>
+        </span>
       </div>
 
-      {/* Arrow — slides in on hover */}
-      <span
-        className="text-fg-3 pt-1 transition-all duration-300"
+      {/* Description — always visible, right-aligned */}
+      <p
+        className="font-light text-right hidden md:block"
         style={{
-          opacity: hovered ? 1 : 0,
-          transform: hovered ? 'translateX(0)' : 'translateX(-6px)',
+          fontSize: 13,
+          color: 'rgba(255,255,255,0.4)',
+          maxWidth: 300,
+          lineHeight: 1.6,
         }}
       >
-        ↗
-      </span>
+        {service.description}
+      </p>
     </div>
   )
 }
 
 export default function Services() {
-  const { ref: labelRef, isVisible: labelVisible } = useReveal()
+  const [hoverAny, setHoverAny] = useState(false)
+  const { ref: labelRef,   isVisible: labelVisible   } = useReveal()
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 
   return (
-    <section id="services" className="bg-bg py-32">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="services" className="relative bg-bg py-20 overflow-hidden">
+
+      {/* bg word — bottom right */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute bottom-0 right-0 font-light leading-none tracking-tight text-fg-1 whitespace-nowrap"
+        style={{ fontSize: 'var(--text-bg-word)', opacity: 0.022 }}
+      >
+        Services
+      </span>
+
+      <div className="relative max-w-6xl mx-auto px-6">
 
         {/* Label */}
         <div
           ref={labelRef}
-          className={`mb-8 transition-all duration-500 ${
+          className={`mb-6 transition-all duration-500 ${
             labelVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
@@ -116,18 +133,29 @@ export default function Services() {
         {/* Heading */}
         <h2
           ref={headingRef}
-          className={`font-regular tracking-tight leading-none text-fg-1 mb-16 transition-all duration-700 ${
+          className={`font-light tracking-tight text-fg-1 mb-10 transition-all duration-700 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ fontSize: 'var(--text-xl)' }}
+          style={{ fontSize: 22, letterSpacing: '-0.02em', maxWidth: 380 }}
         >
-          What I help with.
+          A range of quant services made to grow your edge.
         </h2>
 
         {/* Rows */}
-        <div className="border-t" style={{ borderColor: 'var(--border)' }}>
+        <div
+          className="border-t"
+          style={{ borderColor: 'var(--border)' }}
+          onMouseLeave={() => setHoverAny(false)}
+        >
           {SERVICES.map((service, i) => (
-            <ServiceRow key={service.index} service={service} index={i} />
+            <ServiceRow
+              key={service.index}
+              service={service}
+              index={i}
+              anyHover={hoverAny}
+              onEnter={() => setHoverAny(true)}
+              onLeave={() => {}}
+            />
           ))}
         </div>
 

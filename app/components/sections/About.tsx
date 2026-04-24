@@ -14,10 +14,12 @@ function StatBadge({ value }: { value: string }) {
     <span
       className="inline-flex items-center justify-center shrink-0 rounded-full text-fg-1 font-regular tracking-tight"
       style={{
-        width: '52px',
-        height: '52px',
-        border: '1px solid var(--border-pill)',
-        fontSize: 'var(--text-md)',
+        width: 34,
+        height: 34,
+        background: 'rgba(255,255,255,0.08)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        fontSize: 11,
+        fontWeight: 500,
         lineHeight: 1,
       }}
     >
@@ -126,7 +128,9 @@ export default function About() {
               <span
                 className="text-fg-1 font-regular tracking-tight flex-1"
                 style={{
-                  fontSize: 'var(--text-lg)',
+                  fontSize: 'clamp(32px, 5vw, 52px)',
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1.15,
                   textAlign: badge === 'left' ? 'left' : 'right',
                 }}
               >

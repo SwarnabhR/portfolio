@@ -136,33 +136,50 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Centered nav links */}
-        <nav className="flex-1 flex items-center justify-center">
-          <ul className="flex flex-col items-center gap-2">
-            {NAV_LINKS.map(({ label, href }, i) => {
-              const isActive = activeSection === href.replace('#', '')
-              return (
-                <li key={label}>
-                  <Link
-                    href={href}
-                    onClick={close}
-                    className="block font-light tracking-tight leading-none transition-all duration-300 select-none"
-                    style={{
-                      fontSize: 'clamp(48px, 7vw, 72px)',
-                      color: isActive ? 'var(--fg-1)' : 'var(--fg-2)',
-                      opacity: menuOpen ? 1 : 0,
-                      transform: menuOpen ? 'translateY(0)' : 'translateY(12px)',
-                      transition: `opacity 0.5s ease ${i * 60}ms, transform 0.5s ease ${i * 60}ms, color 0.2s ease`,
-                    }}
-                    onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.color = 'var(--fg-1)' }}
-                    onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.color = 'var(--fg-2)' }}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
+        {/* Nav links — full-width, bordered rows */}
+        <nav className="flex-1 flex flex-col justify-center">
+          {NAV_LINKS.map(({ label, href }, i) => {
+            const isActive = activeSection === href.replace('#', '')
+            return (
+              <Link
+                key={label}
+                href={href}
+                onClick={close}
+                className="w-full flex items-center justify-center gap-4 py-3 select-none"
+                style={{
+                  borderBottom: '1px solid rgba(255,255,255,0.06)',
+                  opacity: menuOpen ? 1 : 0,
+                  transform: menuOpen ? 'translateY(0)' : 'translateY(16px)',
+                  transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLElement
+                  el.querySelector('.nav-label')!.setAttribute('style', 'color: var(--fg-1); font-size: clamp(48px, 7vw, 72px); font-weight: 300; letter-spacing: -0.03em; transition: color 0.2s ease;')
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLElement
+                  const color = isActive ? 'var(--fg-1)' : 'var(--fg-2)'
+                  el.querySelector('.nav-label')!.setAttribute('style', `color: ${color}; font-size: clamp(48px, 7vw, 72px); font-weight: 300; letter-spacing: -0.03em; transition: color 0.2s ease;`)
+                }}
+              >
+                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', minWidth: 24 }}>
+                  0{i + 1}
+                </span>
+                <span
+                  className="nav-label"
+                  style={{
+                    fontSize: 'clamp(48px, 7vw, 72px)',
+                    fontWeight: 300,
+                    letterSpacing: '-0.03em',
+                    color: isActive ? 'var(--fg-1)' : 'var(--fg-2)',
+                    transition: 'color 0.2s ease',
+                  }}
+                >
+                  {label}
+                </span>
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Social icons — bottom right */}
