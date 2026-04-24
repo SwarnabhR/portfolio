@@ -24,7 +24,17 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative bg-bg py-32 overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{
+        background: `
+          linear-gradient(to bottom,
+            transparent 0%,
+            rgba(0,0,0,0.2) 70%,
+            rgba(0,0,0,0.8) 100%
+          ),
+          var(--bg)
+        `
+      }}
     >
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
 
@@ -72,7 +82,6 @@ export default function About() {
 
             <div className="flex gap-4 pt-4 flex-wrap">
               <CtaLink href="#contact">book a call ↗</CtaLink>
-              <CtaLink href="/cv.pdf">download cv ↗</CtaLink>
             </div>
           </div>
         </div>

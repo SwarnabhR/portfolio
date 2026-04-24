@@ -75,7 +75,17 @@ export default function Hero() {
     <section
       ref={heroRef}
       className="relative min-h-screen flex flex-col justify-end overflow-hidden"
-      style={{ background: 'var(--bg-hero)', padding: '0 24px 60px' }}
+      style={{
+        background: `
+          linear-gradient(to bottom,
+            transparent 0%,
+            rgba(0,0,0,0.2) 70%,
+            rgba(0,0,0,0.8) 100%
+          ),
+          var(--bg-hero)
+        `,
+        padding: '0 24px 60px'
+      }}
     >
 
       {/* ── Negative-inversion cursor ────────────────────────── */}

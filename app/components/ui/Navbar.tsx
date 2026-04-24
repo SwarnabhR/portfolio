@@ -24,7 +24,7 @@ const SOCIALS = [
   },
   {
     label: 'Discord',
-    href: '#',
+    href: 'https://discord.com/users/1391443169832341595',
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="14" cy="14" r="13.25" stroke="currentColor" strokeWidth="0.75" strokeOpacity="0.5"/>
@@ -116,15 +116,15 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen(true)}
-            className="flex flex-col items-stretch gap-[5px] transition-colors duration-300 group text-center"
+            className="flex flex-col items-stretch gap-1.25 transition-colors duration-300 group text-center"
             style={{ color: 'var(--fg-2)' }}
             aria-label="Open menu"
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--fg-1)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--fg-2)')}
           >
-            <span className="w-full h-[1px] bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-[1px]" />
+            <span className="w-full h-px bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-px" />
             <span className="text-md tracking-widest uppercase leading-none">menu</span>
-            <span className="w-full h-[1px] bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:translate-y-[1px]" />
+            <span className="w-full h-px bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:translate-y-px" />
           </button>
         </div>
       </header>

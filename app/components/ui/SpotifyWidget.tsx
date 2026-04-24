@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 interface NowPlayingData {
   isPlaying: boolean
@@ -14,6 +15,7 @@ interface NowPlayingData {
 export default function SpotifyWidget() {
   const [data, setData] = useState<NowPlayingData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
     const fetchNowPlaying = async () => {
@@ -34,6 +36,22 @@ export default function SpotifyWidget() {
     return () => clearInterval(interval)
   }, [])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const contactSection = document.getElementById('contact')
+      if (!contactSection) {
+        setIsVisible(true)
+        return
+      }
+      const rect = contactSection.getBoundingClientRect()
+      setIsVisible(rect.top > window.innerHeight * 0.5)
+    }
+
+    handleScroll() // Initialize on mount
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   if (loading || !data?.isPlaying) return null
 
   return (
@@ -41,13 +59,16 @@ export default function SpotifyWidget() {
       href={data.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-8 right-8 z-30 flex gap-4 p-4 bg-black-4 rounded hover:opacity-90 transition max-w-sm"
+      className="fixed bottom-8 right-8 z-30 flex gap-4 p-4 bg-black-4 rounded hover:opacity-90 transition-opacity duration-500 max-w-sm"
+      style={{ opacity: isVisible ? 1 : 0, pointerEvents: isVisible ? 'auto' : 'none' }}
     >
       {data.image && (
-        <img
+        <Image
           src={data.image}
-          alt={data.album}
-          className="w-16 h-16 rounded flex-shrink-0"
+          alt={data.album || 'Album artwork'}
+          width={64}
+          height={64}
+          className="rounded shrink-0"
         />
       )}
       <div className="flex-1 min-w-0">

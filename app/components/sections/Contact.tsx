@@ -48,8 +48,18 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden pb-24 md:pb-32"
-      style={{ background: `var(--gradient-contact), var(--bg)` }}
+      className="relative overflow-hidden min-h-dvh pb-0"
+      style={{
+        background: `
+          linear-gradient(to bottom,
+            transparent 0%,
+            rgba(0,0,0,0.2) 70%,
+            rgba(0,0,0,0.8) 100%
+          ),
+          var(--gradient-contact),
+          var(--bg)
+        `
+      }}
     >
       <style>{`
         @keyframes runGlow {
@@ -127,7 +137,7 @@ export default function Contact() {
       </div>
 
       {/* 2-col split */}
-      <div className="relative z-10 flex flex-col md:flex-row max-w-6xl mx-auto" style={{ minHeight: 500 }}>
+      <div className="relative z-10 flex flex-col md:flex-row max-w-6xl mx-auto flex-1">
 
         {/* Left — 40% */}
         <div
