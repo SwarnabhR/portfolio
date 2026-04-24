@@ -79,7 +79,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: {
     template: '%s — S. Roy',
-    default: 'S. Roy — Quant Developer & Designer',
+    default: 'S. Roy',
   },
   description:
     'Portfolio of S. Roy (oxy) — quantitative research, fast-news analysis, algorithmic trading, deep learning, and ML engineering.',

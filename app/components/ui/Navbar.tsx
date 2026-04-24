@@ -110,13 +110,15 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen(true)}
-            className="text-xs tracking-wider uppercase transition-colors duration-300"
+            className="flex flex-col items-stretch gap-[5px] transition-colors duration-300 group text-center"
             style={{ color: 'var(--fg-2)' }}
             aria-label="Open menu"
             onMouseEnter={e => (e.currentTarget.style.color = 'var(--fg-1)')}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--fg-2)')}
           >
-            menu
+            <span className="w-full h-[1px] bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-[1px]" />
+            <span className="text-md tracking-widest uppercase leading-none">menu</span>
+            <span className="w-full h-[1px] bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:translate-y-[1px]" />
           </button>
         </div>
       </header>
