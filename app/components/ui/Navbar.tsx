@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useActiveSection } from '../../hooks/useActiveSection'
 
 const NAV_LINKS = [
   { label: 'home',     href: '/',         soon: false },
@@ -40,7 +39,6 @@ export default function Navbar() {
   const [hidden, setHidden]       = useState(false)
   const [menuOpen, setMenuOpen]   = useState(false)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
-  const activeSection             = useActiveSection()
 
   /* scroll detection */
   useEffect(() => {

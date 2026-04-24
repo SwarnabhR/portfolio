@@ -16,7 +16,9 @@ No test suite is configured.
 
 ## Architecture
 
-Single-page portfolio (`app/page.tsx`) rendered via Next.js 16 App Router. All sections compose in order: Hero → About → Work → Services → Contact. The root layout (`app/layout.tsx`) wraps every page with `CustomCursor`, `Navbar`, `SmoothScroll` (Lenis), `Footer`, and `@vercel/analytics`.
+Single-page portfolio (`app/page.tsx`) rendered via Next.js 16 App Router. All sections compose in order: Hero → About → Work → Testimonials → Services → FAQ → Contact. The root layout (`app/layout.tsx`) wraps every page with `CustomCursor`, `Navbar`, `SmoothScroll` (Lenis), `Footer`, and `@vercel/analytics`.
+
+A fixed full-screen GIF (`app/5a934e84...gif`) is layered at `z-index: 9999` with `mix-blend-screen` and `opacity: 0.02` in the layout body to produce a subtle film-grain effect. Do not place any element above this z-index unless it is intentionally above the grain overlay (e.g., modal/dialog).
 
 **Stack:** Next.js 16 · React 19 · Tailwind v4 · TypeScript · Lenis (smooth scroll)
 
