@@ -1,0 +1,146 @@
+'use client'
+
+import { useState } from 'react'
+import { useReveal } from '@/hooks/useReveal'
+
+const FAQS = [
+  {
+    num: '01',
+    q: 'What kind of projects do you take on?',
+    a: 'Algorithmic strategy development, backtesting infrastructure, real-time data pipelines, and ML models for equities. I work best on projects where rigour matters — where a 10bps edge or a sub-second latency gain is worth engineering properly.',
+  },
+  {
+    num: '02',
+    q: 'What markets and instruments do you specialise in?',
+    a: 'Primarily NSE and BSE equities and derivatives. My live work covers tick-data ingestion via KiteConnect, OHLCV time-series storage, and strategy simulation across Indian markets. I can adapt tooling to other exchanges given API access.',
+  },
+  {
+    num: '03',
+    q: 'What does a typical engagement look like?',
+    a: 'Usually a scoped research sprint: define the hypothesis, validate on historical data, stress-test edge cases, then hand off production-ready code with documentation. I reply within 1–2 business days and keep communication async-friendly.',
+  },
+  {
+    num: '04',
+    q: 'Are you open to research collaborations or academic work?',
+    a: 'Yes — I have experience taking work through to publication (VeriGuard was accepted on first submission). If you have a dataset and a research question at the intersection of ML and finance, I am interested.',
+  },
+]
+
+function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
+  const [open, setOpen] = useState(false)
+  const { ref, isVisible } = useReveal()
+
+  return (
+    <div
+      ref={ref}
+      className="border-b"
+      style={{
+        borderColor: 'var(--border)',
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+        transition: `opacity 0.6s ease ${index * 80}ms, transform 0.6s ease ${index * 80}ms`,
+      }}
+    >
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex justify-between items-center gap-4 py-5 text-left"
+        style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
+      >
+        <div className="flex items-baseline gap-3">
+          <span className="text-xs tracking-wider" style={{ color: 'var(--fg-3)' }}>
+            {faq.num}
+          </span>
+          <span
+            className="font-light tracking-tight transition-colors duration-300"
+            style={{
+              fontSize: 'clamp(15px, 2.2vw, 19px)',
+              color: open ? 'var(--fg-1)' : 'rgba(255,255,255,0.80)',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {faq.q}
+          </span>
+        </div>
+        <span
+          style={{
+            fontSize: 16,
+            color: 'rgba(255,255,255,0.35)',
+            flexShrink: 0,
+            display: 'inline-block',
+            transform: open ? 'rotate(0deg)' : 'rotate(180deg)',
+            transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1)',
+          }}
+        >
+          ↑
+        </span>
+      </button>
+
+      <div
+        style={{
+          overflow: 'hidden',
+          maxHeight: open ? 200 : 0,
+          transition: 'max-height 0.45s cubic-bezier(0.22,1,0.36,1)',
+        }}
+      >
+        <p
+          className="font-light leading-relaxed pb-5"
+          style={{ fontSize: 13, color: 'var(--fg-2)', paddingLeft: 28, maxWidth: 640 }}
+        >
+          {faq.a}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export default function FAQ() {
+  const { ref: labelRef,   isVisible: labelVisible   } = useReveal()
+  const { ref: headingRef, isVisible: headingVisible } = useReveal()
+
+  return (
+    <section className="relative bg-bg py-24 overflow-hidden">
+
+      <span
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute bottom-0 left-0 font-light leading-none tracking-tight text-fg-1 whitespace-nowrap"
+        style={{ fontSize: 'var(--text-bg-word)', opacity: 0.025 }}
+      >
+        Questions
+      </span>
+
+      <div className="relative max-w-6xl mx-auto px-6">
+
+        <div
+          ref={labelRef}
+          className={`mb-6 transition-all duration-500 ${
+            labelVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          <span
+            className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
+            style={{ borderColor: 'var(--border-pill)' }}
+          >
+            ✦ FAQ
+          </span>
+        </div>
+
+        <h2
+          ref={headingRef}
+          className={`font-light tracking-tight text-fg-1 mb-10 transition-all duration-700 ${
+            headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+          style={{ fontSize: 'clamp(28px, 4vw, 44px)', letterSpacing: '-0.02em' }}
+        >
+          Common questions.
+        </h2>
+
+        <div className="border-t" style={{ borderColor: 'var(--border)' }}>
+          {FAQS.map((faq, i) => (
+            <FaqRow key={faq.num} faq={faq} index={i} />
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )
+}
