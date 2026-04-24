@@ -3,6 +3,8 @@
 import { useRef, useEffect, useState } from 'react'
 import { useScrollY } from '@/hooks/useScrollY'
 import CtaLink from '@/components/ui/CtaLink'
+import Image from 'next/image'
+import effectGif from '../../5a934e84f67d2a61a118ec95b1d6cb74.gif'
 
 function useNegativeCursor(heroRef: React.RefObject<HTMLElement | null>) {
   const blobRef = useRef<HTMLDivElement>(null)
@@ -159,6 +161,21 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* ── GIF Blending Effect ──────────────────────────────── */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none mix-blend-screen"
+        style={{ opacity: 0.02, zIndex: 1 }}
+      >
+        <Image
+          src={effectGif}
+          alt="background effect"
+          fill
+          unoptimized
+          className="object-cover"
+        />
+      </div>
+
       {/* ── Grid crosshatch — fades on scroll ───────────────── */}
       <div
         aria-hidden="true"
@@ -170,6 +187,7 @@ export default function Hero() {
             linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)
           `,
           backgroundSize: '60px 60px',
+          zIndex: 1,
         }}
       />
 
