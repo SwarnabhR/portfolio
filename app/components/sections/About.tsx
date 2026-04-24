@@ -43,7 +43,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-32 overflow-hidden"
+      className="relative py-16 md:py-32 overflow-hidden"
       style={{
         background: `
           linear-gradient(to bottom,
@@ -55,7 +55,7 @@ export default function About() {
         `
       }}
     >
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-8 md:gap-16 items-center">
 
         {/* Left — bio */}
         <div>

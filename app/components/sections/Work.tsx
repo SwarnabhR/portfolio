@@ -93,7 +93,7 @@ export default function Work() {
   const { ref: subtitleRef, isVisible: subtitleVisible } = useReveal()
 
   return (
-    <section id="work" className="relative bg-bg py-32 overflow-hidden">
+    <section id="work" className="relative bg-bg py-16 md:py-32 overflow-hidden">
 
       {/* Decorative background word */}
       <span

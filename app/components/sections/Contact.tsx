@@ -91,14 +91,14 @@ export default function Contact() {
         <div style={{ position: 'absolute', inset: 0, filter: 'blur(100px)' }}>
           {/* Magenta/Pink Blob */}
           <div style={{
-            position: 'absolute', width: 'max(80vw, 800px)', height: 'max(80vw, 800px)',
+            position: 'absolute', width: 'clamp(300px, 80vw, 800px)', height: 'clamp(300px, 80vw, 800px)',
             bottom: '-30%', left: '-10%',
             background: 'radial-gradient(ellipse at 50% 50%, rgba(200, 20, 80, 0.45) 0%, rgba(120, 10, 40, 0.2) 50%, transparent 70%)',
             willChange: 'transform, border-radius', animation: 'cBlob1 12s ease-in-out infinite',
           }} />
           {/* Orange/Yellow Blob */}
           <div style={{
-            position: 'absolute', width: 'max(70vw, 700px)', height: 'max(70vw, 700px)',
+            position: 'absolute', width: 'clamp(260px, 70vw, 700px)', height: 'clamp(260px, 70vw, 700px)',
             bottom: '-20%', right: '-10%',
             background: 'radial-gradient(ellipse at 50% 50%, rgba(230, 90, 0, 0.35) 0%, rgba(150, 40, 0, 0.15) 50%, transparent 70%)',
             willChange: 'transform, border-radius', animation: 'cBlob2 14s ease-in-out infinite',

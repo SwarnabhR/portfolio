@@ -148,7 +148,7 @@ export default function Services() {
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 
   return (
-    <section id="services" className="relative bg-bg py-24 overflow-hidden">
+    <section id="services" className="relative bg-bg py-16 md:py-24 overflow-hidden">
 
       {/* Velocity-aware image cursor */}
       <div
