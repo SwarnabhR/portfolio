@@ -46,13 +46,28 @@ const SOCIALS = [
 
 export default function Navbar() {
   const [scrolled, setScrolled]   = useState(false)
+  const [hidden, setHidden]       = useState(false)
   const [menuOpen, setMenuOpen]   = useState(false)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const activeSection             = useActiveSection()
 
   /* scroll detection */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    let lastScrollY = window.scrollY
+    const onScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrolled(currentScrollY > 40)
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        // scrolling down and past 80px -> hide
+        setHidden(true)
+      } else if (currentScrollY < lastScrollY) {
+        // scrolling up -> show
+        setHidden(false)
+      }
+      
+      lastScrollY = currentScrollY
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -84,6 +99,7 @@ export default function Navbar() {
         style={{
           background: scrolled ? 'rgba(10,10,12,0.75)' : 'transparent',
           borderColor: scrolled ? 'var(--border)' : 'transparent',
+          transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
         }}
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">

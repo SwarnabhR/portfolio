@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react"
 export default function CustomCursor() {
     const [isVisible, setIsVisible] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
+    const [isTextHovered, setIsTextHovered] = useState(false)
     const dotRef = useRef<HTMLDivElement>(null)
     const ringRef = useRef<HTMLDivElement>(null)
     const mousePos = useRef({ x: 0, y: 0 })
@@ -17,13 +18,16 @@ export default function CustomCursor() {
         const onMouseMove = (e: MouseEvent) => {
             mousePos.current = { x: e.clientX, y: e.clientY }
             if (dotRef.current) {
-                dotRef.current.style.transform = `translate3d(${e.clientX - 3}px, ${e.clientY - 3}px, 0)`
+                dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`
             }
         }
         const onMouseOver = (e: MouseEvent) => {
             const target = e.target as HTMLElement
             const clickable = target.closest('a, button, [role="button"], input, textarea, select, label')
             setIsHovered(!!clickable)
+            
+            const textEl = target.closest('p, h1, h2, h3, h4, h5, h6, span, li, blockquote, dt, dd, strong, em')
+            setIsTextHovered(!!textEl && !clickable)
         }
 
         const onMouseEnter = () => setIsVisible(true)
@@ -36,7 +40,7 @@ export default function CustomCursor() {
             ringPos.current.y += (mousePos.current.y - ringPos.current.y) * speed
 
             if (ringRef.current) {
-                ringRef.current.style.transform = `translate(${ringPos.current.x - 16}px, ${ringPos.current.y - 16}px)`
+                ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%)`
             }
             rafId.current = requestAnimationFrame(animate)
 
@@ -69,11 +73,11 @@ export default function CustomCursor() {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                background: 'var(--fg-1)',
+                background: (isTextHovered || isHovered) ? 'transparent' : 'var(--fg-1)',
                 pointerEvents: 'none',
                 zIndex: 9999,
                 opacity: isVisible ? 1 : 0,
-                transition: 'opacity 0.3s ease',
+                transition: 'opacity 0.3s ease, background 0.3s ease',
                 willChange: 'transform',
             }}
         />
@@ -84,14 +88,16 @@ export default function CustomCursor() {
                 position: 'fixed',
                 top: 0,
                 left: 0,
-                width: isHovered ? '48px' : '32px',
-                height: isHovered ? '48px' : '32px',
+                width: isHovered ? '64px' : isTextHovered ? '80px' : '32px',
+                height: isHovered ? '64px' : isTextHovered ? '80px' : '32px',
                 borderRadius: '50%',
-                border: '1px solid rgba(255, 255, 255, 0.5)',
+                border: (isTextHovered || isHovered) ? 'none' : '1px solid rgba(255, 255, 255, 0.5)',
+                background: (isTextHovered || isHovered) ? 'white' : 'transparent',
+                mixBlendMode: (isTextHovered || isHovered) ? 'difference' : 'normal',
                 pointerEvents: 'none',
                 zIndex: 9998,
                 opacity: isVisible ? 1 : 0,
-                transition: 'opacity 0.3s ease, width 0.3s ease, height 0.3s ease',
+                transition: 'opacity 0.3s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease, border 0.3s ease',
                 willChange: 'transform',
             }}
         />

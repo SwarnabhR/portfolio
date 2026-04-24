@@ -208,7 +208,7 @@ export default function Hero() {
         }}
       >
         {/* Glass panel — backdrop-filter only on this small area */}
-        <div
+        {/* <div
           aria-hidden="true"
           style={{
             position: 'absolute',
@@ -222,7 +222,7 @@ export default function Hero() {
             maskImage: 'linear-gradient(to top, black 30%, rgba(0,0,0,0.7) 65%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to top, black 30%, rgba(0,0,0,0.7) 65%, transparent 100%)',
           }}
-        />
+        /> */}
 
         {/* Availability */}
         <div className="text-xs font-light tracking-wide mb-6" style={{ color: 'rgba(255,255,255,0.45)' }}>
