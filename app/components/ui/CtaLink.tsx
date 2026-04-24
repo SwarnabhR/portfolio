@@ -64,46 +64,16 @@ export default function CtaLink({ href, children, external, className = '', styl
 
   if (isExternal) {
     return (
-      <>
-        <CtaStyles />
-        <a href={href} target="_blank" rel="noopener noreferrer"
-          className={`cta-link ${className}`} style={sharedStyle} {...rest}>
-          {inner}
-        </a>
-      </>
+      <a href={href} target="_blank" rel="noopener noreferrer"
+        className={`cta-link ${className}`} style={sharedStyle} {...rest}>
+        {inner}
+      </a>
     )
   }
 
   return (
-    <>
-      <CtaStyles />
-      <Link href={href} className={`cta-link ${className}`} style={sharedStyle} {...rest}>
-        {inner}
-      </Link>
-    </>
-  )
-}
-
-function CtaStyles() {
-  return (
-    <style>{`
-      @keyframes ctaGlow {
-        0%   { left: -80%; }
-        100% { left: 120%; }
-      }
-      .cta-link:hover {
-        color: #fff !important;
-        border-color: rgba(160,60,255,0.45) !important;
-        box-shadow:
-          0 0 18px rgba(80,0,160,0.35),
-          0 0 40px rgba(120,0,30,0.20),
-          inset 0 0 12px rgba(60,0,100,0.15) !important;
-      }
-      .cta-link:hover .cta-bg   { opacity: 1; }
-      .cta-link:hover .cta-glow {
-        opacity: 1;
-        animation: ctaGlow 1.6s ease-in-out infinite;
-      }
-    `}</style>
+    <Link href={href} className={`cta-link ${className}`} style={sharedStyle} {...rest}>
+      {inner}
+    </Link>
   )
 }

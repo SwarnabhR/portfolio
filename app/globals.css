@@ -396,6 +396,24 @@ input, textarea, select {
   color: inherit;
 }
 
+@keyframes ctaGlow {
+  0%   { left: -80%; }
+  100% { left: 120%; }
+}
+.cta-link:hover {
+  color: #fff !important;
+  border-color: rgba(160,60,255,0.45) !important;
+  box-shadow:
+    0 0 18px rgba(80,0,160,0.35),
+    0 0 40px rgba(120,0,30,0.20),
+    inset 0 0 12px rgba(60,0,100,0.15) !important;
+}
+.cta-link:hover .cta-bg   { opacity: 1; }
+.cta-link:hover .cta-glow {
+  opacity: 1;
+  animation: ctaGlow 1.6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration:        0.01ms !important;

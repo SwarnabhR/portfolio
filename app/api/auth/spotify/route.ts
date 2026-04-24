@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
   const clientId = process.env.SPOTIFY_CLIENT_ID
-  const redirectUri = `${req.nextUrl.origin}/api/auth/spotify/callback`
+  const redirectUri = process.env.NODE_ENV === 'production'
+    ? `${req.nextUrl.origin}/api/auth/spotify/callback`
+    : 'http://127.0.0.1:3000/api/auth/spotify/callback'
   const scope = 'user-read-currently-playing'
 
   const params = new URLSearchParams({

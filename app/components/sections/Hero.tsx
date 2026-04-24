@@ -59,13 +59,14 @@ export default function Hero() {
   const heroRef = useRef<HTMLElement>(null)
   const scrollY = useScrollY()
   const [heroH, setHeroH] = useState(700)
+  const [isTouch] = useState(() => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)
   const negCursorRef = useNegativeCursor(heroRef)
 
   useEffect(() => {
     if (heroRef.current) setHeroH(heroRef.current.offsetHeight)
   }, [])
 
-  const prog           = Math.min(scrollY / (heroH * 0.65), 1)
+  const prog           = isTouch ? 0 : Math.min(scrollY / (heroH * 0.65), 1)
   const contentOpacity = Math.max(1 - prog * 1.4, 0)
   const contentY       = prog * -50
   const bgWordOpacity  = 0.03 + prog * 0.14
