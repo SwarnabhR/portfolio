@@ -16,6 +16,10 @@ export default function CustomCursor() {
 
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
+            setIsVisible(prev => {
+                if (!prev) return true
+                return prev
+            })
             mousePos.current = { x: e.clientX, y: e.clientY }
             if (dotRef.current) {
                 dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`
@@ -43,21 +47,20 @@ export default function CustomCursor() {
                 ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%)`
             }
             rafId.current = requestAnimationFrame(animate)
+        }
+        rafId.current = requestAnimationFrame(animate)
 
-            }
-            rafId.current = requestAnimationFrame(animate)
+        document.addEventListener('mousemove', onMouseMove)
+        document.addEventListener('mouseover', onMouseOver)
+        document.documentElement.addEventListener('mouseenter', onMouseEnter)
+        document.documentElement.addEventListener('mouseleave', onMouseLeave)
 
-            document.addEventListener('mousemove', onMouseMove)
-            document.addEventListener('mouseover', onMouseOver)
-            document.addEventListener('mouseenter', onMouseEnter)
-            document.addEventListener('mouseleave', onMouseLeave)
-
-            return () => {
-                cancelAnimationFrame(rafId.current)
-                document.removeEventListener('mousemove', onMouseMove)
-                document.removeEventListener('mouseover', onMouseOver)
-                document.removeEventListener('mouseenter', onMouseEnter)
-                document.removeEventListener('mouseleave', onMouseLeave)
+        return () => {
+            cancelAnimationFrame(rafId.current)
+            document.removeEventListener('mousemove', onMouseMove)
+            document.removeEventListener('mouseover', onMouseOver)
+            document.documentElement.removeEventListener('mouseenter', onMouseEnter)
+            document.documentElement.removeEventListener('mouseleave', onMouseLeave)
         }
     }, [])
 
