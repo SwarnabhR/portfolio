@@ -106,6 +106,17 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'S. Roy' }],
   creator: 'S. Roy',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/logo-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/logo-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: ['/icon.svg'],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   // Open Graph — controls appearance when shared on
   // LinkedIn, Twitter/X, WhatsApp, Slack etc.
   openGraph: {
@@ -149,9 +160,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'S. Roy',
+    alternateName: 'oxy',
+    jobTitle: 'Quant Developer',
+    logo: '/logo-512.png',
+    image: '/logo-512.png',
+  }
+
   return (
     <html lang="en" className={manrope.variable} suppressHydrationWarning>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <CustomCursor />
         <Navbar />
         <SmoothScroll>

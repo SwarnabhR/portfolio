@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="88" fill="#08080A"/>
+  <rect x="64" y="64" width="384" height="384" stroke="#F7F2EA" stroke-width="12" stroke-opacity="0.42"/>
+  <path
+    d="M114 160Q114 112 162 112H242Q290 112 290 160Q290 208 242 208H178Q130 208 130 256Q130 304 178 304H274Q322 304 322 352Q322 400 274 400H194Q146 400 146 352"
+    stroke="#F7F2EA"
+    stroke-width="24"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path d="M354 112V400" stroke="#F7F2EA" stroke-width="24" stroke-linecap="round"/>
+  <path
+    d="M354 112Q450 112 450 208Q450 304 354 304L450 400"
+    stroke="#F7F2EA"
+    stroke-width="24"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
