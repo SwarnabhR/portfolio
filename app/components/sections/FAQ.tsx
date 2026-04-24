@@ -6,22 +6,22 @@ import { useReveal } from '@/hooks/useReveal'
 const FAQS = [
   {
     num: '01',
-    q: 'What kind of projects do you take on?',
+    q: 'what kind of projects do you take on?',
     a: 'Algorithmic strategy development, backtesting infrastructure, real-time data pipelines, and ML models for equities, cryptocurrencies, forex, and commodities. I work best on projects where rigour matters — where a 10bps edge or a sub-second latency gain is worth engineering properly.',
   },
   {
     num: '02',
-    q: 'What markets and instruments do you specialise in?',
+    q: 'what markets and instruments do you specialise in?',
     a: 'I handle Indian and international equities, including NSE/BSE, NYSE, SSE, and LSE, along with cryptocurrencies, forex, and commodity futures such as gold and oil. My work covers tick-data ingestion, OHLCV time-series storage, and strategy simulation across markets, depending on data/API access.',
   },
   {
     num: '03',
-    q: 'How do you approach research and analysis?',
+    q: 'how do you approach research and analysis?',
     a: 'I combine fast news, deep learning, quantitative mathematics, and interpretable models to explain market reactions. The thesis is that everything is linked: rates, indices, equities, crypto, forex, commodities, and news all feed into each other, so I look for dependencies rather than isolated signals.',
   },
   {
     num: '04',
-    q: 'Are you open to research collaborations or academic work?',
+    q: 'are you open to research collaborations or academic work?',
     a: 'Yes — I have experience taking work through to publication (VeriGuard was accepted on first submission). If you have a dataset and a research question at the intersection of ML and finance, I am interested.',
   },
 ]
@@ -117,7 +117,7 @@ export default function FAQ() {
           }`}
         >
           <span
-            className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
+            className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-1 border rounded-full px-4 py-1.5"
             style={{ borderColor: 'var(--border-pill)' }}
           >
             ✦ FAQ
@@ -126,15 +126,15 @@ export default function FAQ() {
 
         <h2
           ref={headingRef}
-          className={`font-light tracking-tight text-fg-1 mb-10 transition-all duration-700 ${
+          className={`font-light tracking-tight text-fg-1 mb-16 transition-all duration-700 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
           style={{ fontSize: 'clamp(28px, 4vw, 44px)', letterSpacing: '-0.02em' }}
         >
-          Common questions.
+          common questions.
         </h2>
 
-        <div className="border-t" style={{ borderColor: 'var(--border)' }}>
+        <div className="pt-8">
           {FAQS.map((faq, i) => (
             <FaqRow key={faq.num} faq={faq} index={i} />
           ))}

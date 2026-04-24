@@ -6,35 +6,35 @@ import CtaLink from '@/components/ui/CtaLink'
 const PROJECTS = [
   {
     index: '01',
-    title: 'S. Roy & Co. Backtesting Platform',
+    title: 's. roy & co. backtesting platform',
     tags: ['Python', 'QuestDB', 'Streamlit'],
     description:
-      'End-to-end backtesting engine for NSE/BSE, NYSE, SSE, and LSE equities, with extensible research flows for crypto, forex, and commodity futures. Ingests real-time OHLCV data, runs strategy simulations, and outputs risk-adjusted performance metrics.',
-    status: 'In Progress',
+      'end-to-end backtesting engine for nse/bse, nyse, sse, and lse equities, with extensible research flows for crypto, forex, and commodity futures. ingests real-time ohlcv data, runs strategy simulations, and outputs risk-adjusted performance metrics.',
+    status: 'in progress',
   },
   {
     index: '02',
-    title: 'Real-Time Market Data Pipeline',
+    title: 'real-time market data pipeline',
     tags: ['KiteConnect', 'TimescaleDB', 'Docker'],
     description:
-      'High-frequency tick and fast-news ingestion system for studying how information propagates through linked markets with sub-second latency.',
-    status: 'Live',
+      'high-frequency tick and fast-news ingestion system for studying how information propagates through linked markets with sub-second latency.',
+    status: 'live',
   },
   {
     index: '03',
-    title: 'VeriGuard — Deepfake Detection',
+    title: 'veriguard — deepfake detection',
     tags: ['XceptionNet', 'PyTorch', 'CV'],
     description:
-      'Deep learning model for detecting AI-generated and deepfake images using XceptionNet architecture. Published as a research paper.',
-    status: 'Published',
+      'deep learning model for detecting ai-generated and deepfake images using xceptionnet architecture. published as a research paper.',
+    status: 'published',
   },
   {
     index: '04',
-    title: 'Technical Analysis Screener',
+    title: 'technical analysis screener',
     tags: ['Python', 'RSI', 'VWAP', 'MACD'],
     description:
-      'Automated screening system applying RSI, EMA, VWAP, Pivot Points, and MACD filters across equities, crypto, forex, and commodities to surface high-probability setups.',
-    status: 'Live',
+      'automated screening system applying rsi, ema, vwap, pivot points, and macd filters across equities, crypto, forex, and commodities to surface high-probability setups.',
+    status: 'live',
   },
 ]
 
@@ -114,7 +114,7 @@ export default function Work() {
           }`}
         >
           <span
-            className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-2 border rounded-full px-4 py-1.5"
+            className="inline-flex items-center gap-2 text-xs tracking-wider uppercase text-fg-1 border rounded-full px-4 py-1.5"
             style={{ borderColor: 'var(--border-pill)' }}
           >
             ✦ Work
@@ -129,7 +129,7 @@ export default function Work() {
           }`}
           style={{ fontSize: 'var(--text-3xl)' }}
         >
-          Selected projects.
+          selected projects.
         </h2>
 
         {/* Subtitle */}
@@ -139,11 +139,11 @@ export default function Work() {
             subtitleVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
-          Systems built for real markets — fast news, linked reactions, and cross-asset execution.
+          systems built for real markets — fast news, linked reactions, and cross-asset execution.
         </p>
 
         {/* Project list */}
-        <div className="border-t" style={{ borderColor: 'var(--border)' }}>
+        <div className="pt-8">
           {PROJECTS.map((project, i) => (
             <ProjectRow key={project.index} project={project} index={i} />
           ))}

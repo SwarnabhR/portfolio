@@ -5,10 +5,10 @@ import { useReveal } from '@/hooks/useReveal'
 import CtaLink from '@/components/ui/CtaLink'
 
 const STATS = [
-  { value: '3',  label: 'Internships',    badge: 'right' },
-  { value: '1',  label: 'Research paper', badge: 'left'  },
-  { value: '2+', label: 'Years in quant', badge: 'right' },
-  { value: '∞',  label: 'Commits',        badge: 'left'  },
+  { value: '3',  label: 'internships',    badge: 'right' },
+  { value: '1',  label: 'research paper', badge: 'left'  },
+  { value: '2+', label: 'years in quant', badge: 'right' },
+  { value: '∞',  label: 'commits',        badge: 'left'  },
 ]
 
 const ACCENTS = ['#a060ff', '#cc2244', '#4488cc', '#8844aa']
@@ -61,7 +61,7 @@ export default function About() {
             }`}
             style={{ fontSize: 'var(--text-xl)' }}
           >
-            Architecting systems at the intersection of math and global liquidity.
+            architecting systems at the intersection of math and global liquidity.
           </h2>
 
           <div
@@ -71,13 +71,13 @@ export default function About() {
             }`}
           >
             <p className="text-base text-fg-2 leading-relaxed">
-              As a CS graduate based in Bengaluru, I engineer institutional-grade quantitative trading architectures. My expertise bridges high-performance computing and advanced market microstructure, focusing on the entire lifecycle of strategy development—from high-fidelity Limit Order Book (LOB) ingestion to rigorous, bias-free backtesting frameworks.
+              as a cs graduate based in bengaluru, i engineer institutional-grade quantitative trading architectures. my expertise bridges high-performance computing and advanced market microstructure, focusing on the entire lifecycle of strategy development—from high-fidelity limit order book (lob) ingestion to rigorous, bias-free backtesting frameworks.
             </p>
             <p className="text-base text-fg-2 leading-relaxed">
-              I currently develop multi-asset research and execution pipelines encompassing global equities (NSE/BSE, NYSE, SSE, LSE), crypto, forex, and commodity derivatives like gold and oil. My systems go beyond raw tick feeds, accounting for slippage, latency, and market impact through sophisticated Transaction Cost Analysis (TCA).
+              i currently develop multi-asset research and execution pipelines encompassing global equities (nse/bse, nyse, sse, lse), crypto, forex, and commodity derivatives like gold and oil. my systems go beyond raw tick feeds, accounting for slippage, latency, and market impact through sophisticated transaction cost analysis (tca).
             </p>
             <p className="text-base text-fg-2 leading-relaxed">
-              Financial markets are highly non-linear, coupled systems. My research synthesizes high-velocity alternative data, deep learning topologies, and quantitative mathematics to map these dependency networks. Instead of isolating discrete signals, I engineer explainable, regime-aware models that capture exactly how macroeconomic shocks propagate across global exchanges.
+              financial markets are highly non-linear, coupled systems. my research synthesizes high-velocity alternative data, deep learning topologies, and quantitative mathematics to map these dependency networks. instead of isolating discrete signals, i engineer explainable, regime-aware models that capture exactly how macroeconomic shocks propagate across global exchanges.
             </p>
 
             <div className="flex gap-4 pt-4 flex-wrap">

@@ -6,25 +6,25 @@ import { useReveal } from '@/hooks/useReveal'
 const SERVICES = [
   {
     index: '01',
-    title: 'Algorithmic Strategy Development',
+    title: 'algorithmic strategy development',
     description: 'Signal research to live execution — RSI, VWAP, momentum, and mean-reversion across equities, crypto, forex, and commodities.',
     gradient: 'linear-gradient(135deg,#100408,#2a0c00,#180020)',
   },
   {
     index: '02',
-    title: 'Backtesting & Research',
+    title: 'backtesting & research',
     description: 'Fast-news analysis, cross-asset dependency research, walk-forward validation, and cost modelling.',
     gradient: 'linear-gradient(135deg,#06080f,#000e28,#0a0020)',
   },
   {
     index: '03',
-    title: 'Data Pipeline Engineering',
+    title: 'data pipeline engineering',
     description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, exchange APIs, and WebSocket feeds.',
     gradient: 'linear-gradient(135deg,#06100a,#001808,#000f08)',
   },
   {
     index: '04',
-    title: 'ML for Finance',
+    title: 'ml for finance',
     description: 'Deep learning and interpretable models that explain reactions across linked markets.',
     gradient: 'linear-gradient(135deg,#100e04,#181200,#110600)',
   },
@@ -132,8 +132,8 @@ function ServiceRow({
       </div>
 
       <p
-        className="font-light text-right hidden md:block"
-        style={{ fontSize: 'var(--text-sm)', color: 'rgba(255,255,255,0.38)', maxWidth: 280, lineHeight: 1.6 }}
+        className="font-light text-right hidden md:block text-fg-2"
+        style={{ fontSize: 'var(--text-sm)', maxWidth: 280, lineHeight: 1.6 }}
       >
         {service.description}
       </p>
@@ -148,7 +148,7 @@ export default function Services() {
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 
   return (
-    <section id="services" className="relative bg-bg py-20 overflow-hidden">
+    <section id="services" className="relative bg-bg py-24 overflow-hidden">
 
       {/* Velocity-aware image cursor */}
       <div
@@ -207,17 +207,16 @@ export default function Services() {
 
         <h2
           ref={headingRef}
-          className={`font-light tracking-tight text-fg-1 mb-10 transition-all duration-700 ${
+          className={`font-light tracking-tight text-fg-1 mb-16 transition-all duration-700 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ fontSize: 'var(--text-lg)', letterSpacing: '-0.02em', maxWidth: 380 }}
+          style={{ fontSize: 'clamp(24px, 5vw, 40px)', letterSpacing: '-0.02em', maxWidth: 480 }}
         >
-          A range of quant services made to grow your edge.
+          a range of quant services made to grow your edge.
         </h2>
 
         <div
-          className="border-t"
-          style={{ borderColor: 'var(--border)' }}
+          className="pt-8"
           onMouseLeave={() => { setHoverAny(false); setActive(null) }}
         >
           {SERVICES.map((service, i) => (
