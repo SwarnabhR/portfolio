@@ -24,7 +24,7 @@ export default function SpotifyWidget() {
         if (!response.ok) { setLoading(false); return }
         const data = await response.json()
         setData(data)
-      } catch (err) {
+      } catch {
         // silently ignore network errors (e.g. credentials not configured)
       } finally {
         setLoading(false)

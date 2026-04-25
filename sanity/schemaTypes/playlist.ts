@@ -51,9 +51,19 @@ export const playlist = defineType({
       hidden: ({ parent }) => parent?.platform !== 'spotify',
     }),
     defineField({
+      name: 'trackCount',
+      title: 'Track / Video Count',
+      type: 'string',
+      placeholder: '18 videos',
+    }),
+    defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
       type: 'image',
+      options: { hotspot: true },
+      fields: [
+        defineField({ name: 'alt', title: 'Alt text', type: 'string' }),
+      ],
     }),
     defineField({
       name: 'category',
