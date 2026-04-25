@@ -1,3 +1,5 @@
+import VisitorCount from '@/components/ui/VisitorCount'
+
 const year = new Date().getFullYear()
 
 export default function Footer() {
@@ -12,10 +14,12 @@ export default function Footer() {
           © {year} S. Roy · All rights reserved
         </p>
 
+        <VisitorCount />
+
         <ul className="flex items-center flex-wrap justify-center gap-5">
           {[
-            { label: 'GitHub',   href: 'https://github.com/SwarnabhR', external: true  },
-            { label: 'Discord',  href: 'https://discord.com/users/1391443169832341595', external: true  },
+            { label: 'GitHub',  href: 'https://github.com/SwarnabhR', external: true },
+            { label: 'Discord', href: 'https://discord.com/users/1391443169832341595', external: true },
           ].map(({ label, href, external }) => (
             <li key={label}>
               <a
