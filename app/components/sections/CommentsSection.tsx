@@ -467,13 +467,14 @@ export default function CommentsSection() {
               ) : (
                 <button
                   onClick={() => setShowAdminInput(true)}
+                  title="admin"
                   style={{
-                    fontSize: 10, color: 'rgba(255,255,255,0.08)',
+                    fontSize: 14, color: 'rgba(255,255,255,0.15)',
                     background: 'none', border: 'none', cursor: 'pointer',
-                    transition: 'color 0.2s',
+                    transition: 'color 0.2s', padding: '4px 8px',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.08)')}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.15)')}
                 >·</button>
               )}
             </div>
