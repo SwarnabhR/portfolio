@@ -22,21 +22,10 @@ function initials(name: string) {
 }
 
 function CommentRow({
-  comment,
-  index,
-  dimmed,
-  isAdmin,
-  onEnter,
-  onLeave,
-  onDelete,
+  comment, index, dimmed, isAdmin, onEnter, onLeave, onDelete,
 }: {
-  comment: Comment
-  index: number
-  dimmed: boolean
-  isAdmin: boolean
-  onEnter: () => void
-  onLeave: () => void
-  onDelete: (id: string) => void
+  comment: Comment; index: number; dimmed: boolean
+  isAdmin: boolean; onEnter: () => void; onLeave: () => void; onDelete: (id: string) => void
 }) {
   const { ref, isVisible } = useReveal<HTMLDivElement>()
   const [hovered, setHovered] = useState(false)
@@ -45,28 +34,27 @@ function CommentRow({
   return (
     <div
       ref={ref}
+      className="comment-row"
       onMouseEnter={() => { setHovered(true); onEnter() }}
       onMouseLeave={() => { setHovered(false); onLeave() }}
       style={{
         display: 'grid',
-        gridTemplateColumns: '48px 36px 1fr auto auto',
-        gap: '20px',
+        gridTemplateColumns: '36px 36px 1fr auto auto',
+        gap: '16px',
         alignItems: 'start',
         padding: '20px 0',
         borderBottom: '1px solid var(--border)',
         cursor: 'default',
         opacity: !isVisible ? 0 : dimmed ? 0.25 : 1,
         filter: dimmed ? 'blur(3px)' : 'none',
-        transform: !isVisible
-          ? 'translateY(16px)'
-          : hovered ? 'translateX(-6px)' : 'translateX(0)',
+        transform: !isVisible ? 'translateY(16px)' : hovered ? 'translateX(-4px)' : 'translateX(0)',
         transition: `opacity 0.5s ease ${index * 60}ms, filter 0.25s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1)`,
       }}
     >
       {/* Index */}
-      <span style={{
+      <span className="comment-index" style={{
         fontFamily: 'var(--font-mono, ui-monospace)',
-        fontSize: 'var(--text-sm)',
+        fontSize: 'var(--text-xs)',
         color: 'var(--fg-3)',
         paddingTop: 2,
         letterSpacing: '0.04em',
@@ -75,36 +63,31 @@ function CommentRow({
       </span>
 
       {/* Avatar */}
-      <span style={{
+      <span className="comment-avatar" style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         width: 32, height: 32, borderRadius: '50%',
         border: '1px solid var(--border-pill)',
         fontSize: 'var(--text-xs)', color: 'var(--fg-3)',
-        fontWeight: 400, letterSpacing: '0.06em',
-        flexShrink: 0,
+        fontWeight: 400, letterSpacing: '0.06em', flexShrink: 0,
       }}>
         {initials(comment.name)}
       </span>
 
       {/* Main content */}
       <div style={{ minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
-          <span style={{
-            fontSize: 'clamp(15px, 2vw, 18px)',
-            fontWeight: 400,
-            letterSpacing: '-0.02em',
-            color: 'var(--fg-1)',
-          }}>
-            {comment.name}
-          </span>
-        </div>
-        <p style={{
+        <span style={{
+          fontSize: 'clamp(14px, 2vw, 17px)',
+          fontWeight: 400, letterSpacing: '-0.02em',
+          color: 'var(--fg-1)', display: 'block', marginBottom: 6,
+        }}>
+          {comment.name}
+        </span>
+        <p className="comment-message" style={{
           fontSize: 'var(--text-sm)', fontWeight: 300,
           color: 'var(--fg-2)', lineHeight: 1.6,
-          marginTop: 6,
-          maxHeight: hovered ? 200 : 44,
+          maxHeight: hovered ? 300 : 44,
           overflow: 'hidden',
-          transition: 'max-height 0.4s ease, opacity 0.3s ease',
+          transition: 'max-height 0.4s ease',
           opacity: hovered ? 1 : 0.75,
           wordBreak: 'break-word',
         }}>
@@ -115,24 +98,24 @@ function CommentRow({
       {/* Date */}
       <span style={{
         fontFamily: 'var(--font-mono, ui-monospace)',
-        fontSize: 'var(--text-xs)',
+        fontSize: 11,
         color: 'var(--fg-3)',
-        letterSpacing: '0.06em',
+        letterSpacing: '0.05em',
         textTransform: 'uppercase',
         whiteSpace: 'nowrap',
-        paddingTop: 4,
+        paddingTop: 3,
       }}>
         {timeAgo(comment.createdAt)}
       </span>
 
       {/* Arrow / delete */}
-      <div style={{ paddingTop: 4, textAlign: 'right', minWidth: 40 }}>
+      <div style={{ paddingTop: 3, textAlign: 'right', minWidth: 32 }}>
         {isAdmin ? (
           <button
             onClick={() => { setDeleting(true); onDelete(comment._id) }}
             disabled={deleting}
             style={{
-              fontSize: 'var(--text-xs)', letterSpacing: '0.08em',
+              fontSize: 11, letterSpacing: '0.08em',
               textTransform: 'uppercase', color: 'rgba(194,24,91,0.45)',
               background: 'none', border: 'none', cursor: 'pointer',
               fontFamily: 'inherit', transition: 'color 0.2s',
@@ -146,8 +129,7 @@ function CommentRow({
         ) : (
           <span style={{
             color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)',
-            fontSize: 14,
-            transition: 'color 0.3s, transform 0.3s',
+            fontSize: 14, transition: 'color 0.3s',
             display: 'inline-block',
             transform: hovered ? 'translate(2px,-2px)' : 'translate(0,0)',
           }}>↗</span>
@@ -231,7 +213,6 @@ export default function CommentsSection() {
   return (
     <section id="notes" style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Decorative bg word */}
       <span aria-hidden="true" style={{
         position: 'absolute', bottom: '-0.05em', right: '-0.02em',
         fontSize: 'var(--text-bg-word)', fontWeight: 300,
@@ -242,13 +223,13 @@ export default function CommentsSection() {
         Comments
       </span>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px 96px', position: 'relative', zIndex: 1 }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 20px 80px', position: 'relative', zIndex: 1 }}>
 
         {/* Header */}
         <div
           ref={headRef}
           style={{
-            marginBottom: 56,
+            marginBottom: 48,
             opacity: headVisible ? 1 : 0,
             transform: headVisible ? 'translateY(0)' : 'translateY(16px)',
             transition: 'opacity 0.6s ease, transform 0.6s ease',
@@ -259,13 +240,13 @@ export default function CommentsSection() {
             fontSize: 'var(--text-xs)', letterSpacing: '0.10em',
             textTransform: 'uppercase', color: 'var(--fg-1)',
             border: '1px solid var(--border-pill)', borderRadius: 999,
-            padding: '6px 14px', marginBottom: 24,
+            padding: '6px 14px', marginBottom: 20,
             background: 'rgba(255,255,255,0.02)',
           }}>
             ✦ Comments
           </div>
           <h2 style={{
-            fontSize: 'clamp(32px, 5vw, 64px)',
+            fontSize: 'clamp(28px, 5vw, 64px)',
             fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1,
             color: 'var(--fg-1)',
           }}>
@@ -274,13 +255,13 @@ export default function CommentsSection() {
         </div>
 
         {/* Column headers */}
-        <div style={{
+        <div className="comment-headers" style={{
           display: 'grid',
-          gridTemplateColumns: '48px 36px 1fr auto auto',
-          gap: '20px',
+          gridTemplateColumns: '36px 36px 1fr auto auto',
+          gap: '16px',
           padding: '10px 0',
           borderBottom: '1px solid var(--border)',
-          fontSize: 'var(--text-xs)', letterSpacing: '0.10em',
+          fontSize: 11, letterSpacing: '0.10em',
           textTransform: 'uppercase', color: 'var(--fg-3)',
         }}>
           <span>#</span>
@@ -291,9 +272,7 @@ export default function CommentsSection() {
         </div>
 
         {/* Comment list */}
-        <div style={{ marginBottom: 64 }}
-          onMouseLeave={() => setHoveredId(null)}
-        >
+        <div style={{ marginBottom: 56 }} onMouseLeave={() => setHoveredId(null)}>
           {loading ? (
             <p style={{ padding: '32px 0', color: 'var(--fg-3)', fontSize: 'var(--text-sm)' }}>loading…</p>
           ) : comments.length === 0 ? (
@@ -303,9 +282,7 @@ export default function CommentsSection() {
           ) : (
             comments.map((c, i) => (
               <CommentRow
-                key={c._id}
-                comment={c}
-                index={i}
+                key={c._id} comment={c} index={i}
                 dimmed={anyHover && hoveredId !== c._id}
                 isAdmin={isAdmin}
                 onEnter={() => setHoveredId(c._id)}
@@ -317,18 +294,19 @@ export default function CommentsSection() {
         </div>
 
         {/* Form */}
-        <div style={{
-          borderTop: '1px solid var(--border)',
-          paddingTop: 48,
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 48,
-        }}
+        <div
           className="comment-form-grid"
+          style={{
+            borderTop: '1px solid var(--border)',
+            paddingTop: 40,
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 48,
+          }}
         >
           <div>
             <p style={{
-              fontSize: 'clamp(18px, 2.5vw, 28px)',
+              fontSize: 'clamp(16px, 2.5vw, 26px)',
               fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1.2,
               color: 'var(--fg-1)', marginBottom: 8,
             }}>
@@ -339,8 +317,7 @@ export default function CommentsSection() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            {/* Name */}
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 14px',
@@ -351,8 +328,7 @@ export default function CommentsSection() {
             }}>
               <span style={{ color: 'var(--fg-3)', fontSize: 13 }}>✦</span>
               <input
-                type="text"
-                placeholder="your name"
+                type="text" placeholder="your name"
                 value={form.name}
                 onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                 onFocus={() => setFocusedField('name')}
@@ -361,12 +337,11 @@ export default function CommentsSection() {
                 style={{
                   flex: 1, background: 'none', border: 'none', outline: 'none',
                   color: 'var(--fg-1)', fontSize: 'var(--text-base)', fontWeight: 300,
-                  fontFamily: 'inherit',
+                  fontFamily: 'inherit', minWidth: 0,
                 }}
               />
             </div>
 
-            {/* Message */}
             <div style={{
               display: 'flex', alignItems: 'flex-start', gap: 10,
               padding: '10px 14px',
@@ -386,15 +361,14 @@ export default function CommentsSection() {
                 style={{
                   flex: 1, background: 'none', border: 'none', outline: 'none',
                   color: 'var(--fg-1)', fontSize: 'var(--text-base)', fontWeight: 300,
-                  fontFamily: 'inherit', resize: 'none',
+                  fontFamily: 'inherit', resize: 'none', minWidth: 0,
                 }}
               />
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <button
-                type="submit"
-                disabled={submitting}
+                type="submit" disabled={submitting}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   fontSize: 'var(--text-xs)', letterSpacing: '0.10em',
@@ -408,10 +382,9 @@ export default function CommentsSection() {
                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--fg-1)'; e.currentTarget.style.borderColor = 'rgba(160,60,255,0.45)' }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'var(--fg-2)'; e.currentTarget.style.borderColor = 'var(--border-cta)' }}
               >
-                {submitting ? 'posting…' : submitStatus === 'sent' ? 'posted ✓' : submitStatus === 'error' ? 'try again' : 'post comment ↗'}
+                {submitting ? 'posting…' : submitStatus === 'sent' ? 'posted ✓' : submitStatus === 'error' ? 'try again' : 'post ↗'}
               </button>
 
-              {/* Admin */}
               {isAdmin ? (
                 <button
                   onClick={() => { setIsAdmin(false); setAdminPassword('') }}
@@ -419,22 +392,19 @@ export default function CommentsSection() {
                     fontSize: 'var(--text-xs)', letterSpacing: '0.08em',
                     color: 'rgba(194,24,91,0.5)', background: 'none',
                     border: 'none', cursor: 'pointer', fontFamily: 'inherit',
-                    transition: 'color 0.2s',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(194,24,91,0.85)')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(194,24,91,0.5)')}
-                >
-                  exit admin
-                </button>
+                >exit admin</button>
               ) : showAdminInput ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <input
                     ref={adminInputRef}
-                    type="password"
-                    placeholder="password"
+                    type="password" placeholder="password"
                     value={adminPassword}
                     onChange={e => { setAdminPassword(e.target.value); setAdminError(false) }}
-                    onKeyDown={e => { if (e.key === 'Enter') handleAdminLogin(); if (e.key === 'Escape') { setShowAdminInput(false); setAdminPassword('') } }}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') handleAdminLogin()
+                      if (e.key === 'Escape') { setShowAdminInput(false); setAdminPassword('') }
+                    }}
                     autoFocus
                     style={{
                       background: 'rgba(255,255,255,0.02)',
@@ -442,27 +412,11 @@ export default function CommentsSection() {
                       borderRadius: 3, outline: 'none',
                       color: 'var(--fg-1)', fontSize: 'var(--text-xs)',
                       fontFamily: 'ui-monospace, monospace',
-                      padding: '6px 10px', width: 120,
-                      letterSpacing: '0.06em',
+                      padding: '6px 10px', width: 100,
                     }}
                   />
-                  <button
-                    onClick={handleAdminLogin}
-                    style={{
-                      fontSize: 'var(--text-xs)', letterSpacing: '0.08em',
-                      textTransform: 'uppercase', color: 'var(--fg-3)',
-                      background: 'none', border: 'none', cursor: 'pointer',
-                      fontFamily: 'inherit',
-                    }}
-                  >ok</button>
-                  <button
-                    onClick={() => { setShowAdminInput(false); setAdminPassword(''); setAdminError(false) }}
-                    style={{
-                      fontSize: 'var(--text-xs)', color: 'var(--fg-3)',
-                      background: 'none', border: 'none', cursor: 'pointer',
-                      fontFamily: 'inherit',
-                    }}
-                  >✕</button>
+                  <button onClick={handleAdminLogin} style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>ok</button>
+                  <button onClick={() => { setShowAdminInput(false); setAdminPassword(''); setAdminError(false) }} style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>✕</button>
                 </div>
               ) : (
                 <button
@@ -483,11 +437,33 @@ export default function CommentsSection() {
       </div>
 
       <style>{`
-        @media (max-width: 720px) {
-          .comment-form-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+        /* Mobile comment rows: hide index + avatar, simplify grid */
+        @media (max-width: 600px) {
+          .comment-row {
+            grid-template-columns: 1fr auto auto !important;
+            gap: 12px !important;
+          }
+          .comment-index { display: none !important; }
+          .comment-avatar { display: none !important; }
+          .comment-message {
+            max-height: none !important;
+            opacity: 1 !important;
+          }
+          .comment-headers {
+            grid-template-columns: 1fr auto auto !important;
+            gap: 12px !important;
+          }
+          .comment-headers > span:nth-child(1),
+          .comment-headers > span:nth-child(2) {
+            display: none !important;
+          }
         }
-        @media (max-width: 560px) {
-          .comment-form-grid > div:first-child { display: none; }
+        /* Form: stack on mobile */
+        @media (max-width: 680px) {
+          .comment-form-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
         }
       `}</style>
     </section>
