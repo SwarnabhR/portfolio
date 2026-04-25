@@ -122,7 +122,7 @@ export default function Contact() {
           className={`font-regular tracking-tight leading-none text-fg-1 mb-0 transition-all duration-700 delay-100 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ fontSize: 'clamp(64px, 10vw, 140px)' }}
+          style={{ fontSize: 'clamp(48px, 10vw, 140px)' }}
         >
           Let&apos;s talk.
         </h2>
@@ -139,7 +139,7 @@ export default function Contact() {
           }`}
         >
           <div className="flex flex-col gap-8">
-            <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 300 }}>
+            <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 'min(300px, 100%)' }}>
               open for quant research roles, algorithmic trading projects,
               and ml engineering collaborations across global equities,
               crypto, forex, and commodities, especially where fast news
@@ -245,13 +245,13 @@ export default function Contact() {
           <button
             type="submit"
             disabled={status === 'sending' || status === 'sent'}
-            className="self-end disabled:opacity-40"
+            className="self-start sm:self-end disabled:opacity-40"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               fontSize: 'var(--text-sm)', fontWeight: 300, color: 'rgba(255,255,255,0.6)',
               background: 'transparent', border: 'none',
               borderBottom: '0.5px solid rgba(255,255,255,0.22)',
-              padding: '4px 0', cursor: 'none', letterSpacing: '0.08em',
+              padding: '4px 0', cursor: 'pointer', letterSpacing: '0.08em',
               marginTop: 8, transition: 'color 0.4s ease, border-color 0.4s ease',
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.85)' }}

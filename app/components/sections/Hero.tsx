@@ -258,7 +258,7 @@ export default function Hero() {
 
         {/* Two-col sub layout */}
         <div className="flex flex-col-reverse items-start sm:flex-row justify-between sm:items-end gap-4 sm:gap-6" style={{ marginTop: 'clamp(1rem, 3vw, 2rem)' }}>
-          <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 340}}>
+          <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 'min(340px, 100%)' }}>
             building algorithmic trading systems, backtesting platforms, and ml pipelines
             that connect fast news, quantitative math, and market reactions across asset classes.
           </p>
