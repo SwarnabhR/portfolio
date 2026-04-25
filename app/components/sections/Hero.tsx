@@ -74,6 +74,7 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       ref={heroRef}
       className="relative min-h-[100dvh] flex flex-col justify-end overflow-hidden px-4 sm:px-6 pb-12 sm:pb-16"
       style={{

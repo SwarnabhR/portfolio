@@ -43,6 +43,7 @@ function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
     >
       <button
         onClick={() => setOpen(o => !o)}
+        onMouseEnter={() => setOpen(true)}
         className="w-full flex justify-between items-center gap-4 py-5 text-left"
         style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
       >
@@ -98,7 +99,7 @@ export default function FAQ() {
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 
   return (
-    <section className="relative bg-bg py-24 overflow-hidden">
+    <section id="faq" className="relative bg-bg py-24 overflow-hidden">
 
       <span
         aria-hidden="true"

@@ -1,308 +1,53 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { useReveal } from '@/hooks/useReveal'
-import {
-  siPython, siTypescript, siC, siCplusplus, siRust, siMysql,
-  siFastapi, siCelery, siApachekafka, siRedis,
-  siClickhouse, siPostgresql, siDocker, siKubernetes, siApacheairflow, siLinux,
-  siPytorch, siNvidia, siOpencv, siWebassembly,
-  siNextdotjs, siReact, siStreamlit,
-  siSolidity, siEthereum,
-} from 'simple-icons'
 
-type SimpleIcon = { path: string; hex: string }
-
-const ICON_MAP: Record<string, SimpleIcon> = {
-  'Python':      siPython,
-  'TypeScript':  siTypescript,
-  'C':           siC,
-  'C++':         siCplusplus,
-  'Rust':        siRust,
-  'SQL':         siMysql,
-  'FastAPI':     siFastapi,
-  'Celery':      siCelery,
-  'Kafka':       siApachekafka,
-  'Redis':       siRedis,
-  'ClickHouse':  siClickhouse,
-  'PostgreSQL':  siPostgresql,
-  'Docker':      siDocker,
-  'Kubernetes':  siKubernetes,
-  'Airflow':     siApacheairflow,
-  'Linux':       siLinux,
-  'PyTorch':     siPytorch,
-  'CUDA':        siNvidia,
-  'OpenCV':      siOpencv,
-  'WASM':        siWebassembly,
-  'Next.js':     siNextdotjs,
-  'React':       siReact,
-  'Streamlit':   siStreamlit,
-  'Solidity':    siSolidity,
-  'EVM':         siEthereum,
-}
-
-const EXPERIENCE = [
+const HIGHLIGHTS = [
   {
     period: '2024 – present',
     role: 'quantitative research',
     type: 'research',
-    description: 'Cross-asset signal research — fast-news propagation, linked market reactions, and walk-forward validation across equities and derivatives.',
   },
   {
     period: '2023 – 2024',
     role: 'algorithmic trading engineering',
     type: 'engineering',
-    description: 'End-to-end systematic execution infrastructure: tick ingestion, order routing, and position management across multiple asset classes.',
   },
   {
     period: '2023',
-    role: 'ml research',
+    role: 'ml research — deepfake detection',
     type: 'research',
-    description: 'Computer vision research in deepfake detection using XceptionNet architecture. Findings published as a peer-reviewed paper.',
   },
 ]
 
-const PROJECTS = [
-  {
-    index: '01',
-    title: 's. roy & co. backtesting platform',
-    tags: ['Python', 'QuestDB', 'Streamlit'],
-    description:
-      'end-to-end backtesting engine for nse/bse, nyse, sse, and lse equities — extensible to crypto, forex, and commodity futures. ingests real-time ohlcv data and outputs risk-adjusted performance metrics.',
-    status: 'in progress',
-    dot: '#f59e0b',
-    href: null,
-  },
-  {
-    index: '02',
-    title: 'real-time market data pipeline',
-    tags: ['TimescaleDB', 'Docker', 'Kafka'],
-    description:
-      'high-frequency tick and fast-news ingestion system studying how information propagates through linked markets with sub-second latency.',
-    status: 'live',
-    dot: '#22c55e',
-    href: null,
-  },
-  {
-    index: '03',
-    title: 'veriguard — deepfake detection',
-    tags: ['XceptionNet', 'PyTorch', 'CUDA'],
-    description:
-      'deep learning model detecting ai-generated and deepfake images using xceptionnet architecture. published as a peer-reviewed research paper.',
-    status: 'published',
-    dot: '#a78bfa',
-    href: null,
-  },
-  {
-    index: '04',
-    title: 'technical analysis screener',
-    tags: ['Python', 'FastAPI', 'PostgreSQL'],
-    description:
-      'automated screening system filtering equities, crypto, forex, and commodities to surface high-probability setups across timeframes.',
-    status: 'live',
-    dot: '#22c55e',
-    href: null,
-  },
-]
+const STACK_PREVIEW = ['Python', 'Rust', 'C++', 'PyTorch', 'Kafka', 'ClickHouse', 'Kubernetes', 'CUDA']
 
-const STACK = [
-  { category: 'Languages',       items: ['Python', 'TypeScript', 'C', 'C++', 'Rust', 'SQL'] },
-  { category: 'Backend & Async', items: ['FastAPI', 'Celery', 'Kafka', 'Redis', 'gRPC'] },
-  { category: 'Data & Infra',    items: ['QuestDB', 'TimescaleDB', 'ClickHouse', 'PostgreSQL', 'Docker', 'Kubernetes', 'Airflow', 'Linux'] },
-  { category: 'ML / GPU',        items: ['PyTorch', 'CUDA', 'OpenCV', 'WASM'] },
-  { category: 'Web & Viz',       items: ['Next.js', 'React', 'Streamlit'] },
-  { category: 'Blockchain',      items: ['Solidity', 'EVM'] },
-]
-
-function SubHeading({ children }: { children: React.ReactNode }) {
+function HighlightRow({ entry, index }: { entry: typeof HIGHLIGHTS[0]; index: number }) {
   const { ref, isVisible } = useReveal()
   return (
     <div
       ref={ref}
-      className={`flex items-center gap-4 mb-8 transition-all duration-500 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-      }`}
-    >
-      <span
-        className="text-xs tracking-[0.15em] uppercase shrink-0"
-        style={{ color: 'var(--fg-3)' }}
-      >
-        {children}
-      </span>
-      <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
-    </div>
-  )
-}
-
-function ExperienceRow({ entry, index }: { entry: typeof EXPERIENCE[0]; index: number }) {
-  const { ref, isVisible } = useReveal()
-  return (
-    <div
-      ref={ref}
-      className={`grid grid-cols-1 md:grid-cols-[160px_1fr_100px] gap-4 border-b py-7 transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-      }`}
-      style={{ borderColor: 'var(--border)', transitionDelay: `${index * 80}ms` }}
-    >
-      <span
-        className="text-xs tracking-wider pt-0.5 font-light"
-        style={{ color: 'var(--fg-3)' }}
-      >
-        {entry.period}
-      </span>
-
-      <div className="flex flex-col gap-2">
-        <h3
-          className="font-light tracking-tight"
-          style={{ fontSize: 'clamp(15px, 2.5vw, 22px)', color: 'var(--fg-1)', letterSpacing: '-0.02em' }}
-        >
-          {entry.role}
-        </h3>
-        <p
-          className="font-light leading-relaxed"
-          style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)' }}
-        >
-          {entry.description}
-        </p>
-      </div>
-
-      <div className="hidden md:flex justify-end pt-0.5">
-        <span
-          className="text-xs tracking-[0.12em] uppercase border rounded-full px-3 py-1 h-fit"
-          style={{ color: 'var(--fg-3)', borderColor: 'var(--border-pill)' }}
-        >
-          {entry.type}
-        </span>
-      </div>
-    </div>
-  )
-}
-
-function ProjectRow({ project, index }: { project: typeof PROJECTS[0]; index: number }) {
-  const { ref, isVisible } = useReveal()
-  const [hovered, setHovered] = useState(false)
-
-  const rowClass = `group grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-4 md:gap-6 border-b py-8 items-start transition-all duration-700 ${
-    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-  }`
-  const rowStyle = { borderColor: 'var(--border)', transitionDelay: `${index * 100}ms` }
-
-  const inner = (
-    <>
-      <span className="hidden md:block text-sm font-light pt-1" style={{ color: 'var(--fg-3)' }}>
-        {project.index}
-      </span>
-
-      <div className="flex flex-col gap-3">
-        <h3 className="font-light tracking-tight" style={{ fontSize: 'var(--text-xl)', color: 'var(--fg-1)', letterSpacing: '-0.02em' }}>
-          {project.title}
-        </h3>
-        <p className="leading-relaxed max-w-2xl font-light" style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)' }}>
-          {project.description}
-        </p>
-        <div className="flex flex-wrap gap-2 mt-1">
-          {project.tags.map(tag => (
-            <span key={tag} className="text-xs tracking-wider uppercase rounded-full px-3 py-1 border" style={{ color: 'var(--fg-3)', borderColor: 'var(--border-pill)' }}>
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="hidden md:flex items-center gap-3 pt-1 whitespace-nowrap">
-        <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: project.dot }} />
-          <span className="text-xs tracking-wider uppercase" style={{ color: 'var(--fg-3)' }}>{project.status}</span>
-        </div>
-        {project.href ? (
-          <span style={{ color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)', transition: 'color 0.3s, transform 0.3s', display: 'inline-block', transform: hovered ? 'translate(2px,-2px)' : 'translate(0,0)', fontSize: 14 }}>↗</span>
-        ) : (
-          <span className="text-xs uppercase border rounded-full px-2 py-0.5" style={{ color: 'var(--fg-3)', borderColor: 'var(--border)', opacity: hovered ? 1 : 0, transition: 'opacity 0.25s ease', letterSpacing: '0.1em', fontSize: 10 }}>soon</span>
-        )}
-      </div>
-    </>
-  )
-
-  if (project.href) {
-    return (
-      <Link href={project.href} target="_blank" rel="noopener noreferrer"
-        className={rowClass} style={{ ...rowStyle, cursor: 'pointer', textDecoration: 'none', display: 'grid' }}
-        onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      >
-        {inner}
-      </Link>
-    )
-  }
-
-  return (
-    <div ref={ref} className={rowClass} style={rowStyle}
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-    >
-      {inner}
-    </div>
-  )
-}
-
-function StackPill({ item }: { item: string }) {
-  const [hovered, setHovered] = useState(false)
-  const icon = ICON_MAP[item]
-
-  return (
-    <span
-      className="inline-flex items-center text-xs tracking-wide border rounded-full px-3 py-1.5 transition-colors duration-200 cursor-default select-none"
+      className="grid grid-cols-[1fr_auto] items-baseline border-b py-4 transition-all duration-600"
       style={{
-        color: 'var(--fg-2)',
-        borderColor: hovered ? 'rgba(255,255,255,0.25)' : 'var(--border)',
+        borderColor: 'var(--border)',
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(14px)',
+        transitionDelay: `${index * 70}ms`,
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
-      {icon && (
-        <span
-          aria-hidden="true"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            overflow: 'hidden',
-            width: hovered ? 14 : 0,
-            opacity: hovered ? 1 : 0,
-            marginRight: hovered ? 6 : 0,
-            flexShrink: 0,
-            transition: 'width 0.25s cubic-bezier(0.22,1,0.36,1), opacity 0.2s ease, margin-right 0.25s ease',
-          }}
-        >
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true">
-            <path d={icon.path} />
-          </svg>
+      <div className="flex items-baseline gap-4">
+        <span className="text-xs tracking-wider font-light shrink-0" style={{ color: 'var(--fg-3)' }}>
+          {entry.period}
         </span>
-      )}
-      {item}
-    </span>
-  )
-}
-
-function StackGroup({ group, index }: { group: typeof STACK[0]; index: number }) {
-  const { ref, isVisible } = useReveal()
-  return (
-    <div
-      ref={ref}
-      className={`flex flex-col gap-3 transition-all duration-600 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-      }`}
-      style={{ transitionDelay: `${index * 60}ms` }}
-    >
-      <span
-        className="text-xs tracking-[0.15em] uppercase"
-        style={{ color: 'var(--fg-3)' }}
-      >
-        {group.category}
-      </span>
-      <div className="flex flex-wrap gap-2">
-        {group.items.map(item => (
-          <StackPill key={item} item={item} />
-        ))}
+        <span className="font-light tracking-tight" style={{ fontSize: 'clamp(14px, 2vw, 18px)', color: 'var(--fg-1)', letterSpacing: '-0.01em' }}>
+          {entry.role}
+        </span>
       </div>
+      <span className="hidden sm:block text-xs tracking-[0.12em] uppercase border rounded-full px-3 py-1 ml-6 shrink-0"
+        style={{ color: 'var(--fg-3)', borderColor: 'var(--border-pill)' }}>
+        {entry.type}
+      </span>
     </div>
   )
 }
@@ -310,15 +55,16 @@ function StackGroup({ group, index }: { group: typeof STACK[0]; index: number })
 export default function Work() {
   const { ref: labelRef,   isVisible: labelVisible   } = useReveal()
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
+  const { ref: stackRef,   isVisible: stackVisible   } = useReveal()
+  const { ref: ctaRef,     isVisible: ctaVisible     } = useReveal()
 
   return (
-    <section id="work" className="relative bg-bg py-16 md:py-32 overflow-hidden">
+    <section id="work" className="relative bg-bg py-16 md:py-28 overflow-hidden">
 
-      {/* Decorative bg word */}
       <span
         aria-hidden="true"
-        className="pointer-events-none select-none absolute bottom-8 left-0 font-light leading-none tracking-tight whitespace-nowrap"
-        style={{ fontSize: 'var(--text-bg-word)', opacity: 0.04, color: 'var(--fg-1)' }}
+        className="pointer-events-none select-none absolute bottom-4 left-0 font-light leading-none tracking-tight whitespace-nowrap"
+        style={{ fontSize: 'var(--text-bg-word)', opacity: 0.03, color: 'var(--fg-1)' }}
       >
         Work
       </span>
@@ -340,39 +86,85 @@ export default function Work() {
           </span>
         </div>
 
-        {/* Heading */}
-        <h2
+        {/* Heading + subtext */}
+        <div
           ref={headingRef}
-          className={`font-light tracking-tight leading-none mb-16 transition-all duration-700 ${
+          className={`mb-12 transition-all duration-700 ${
             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ fontSize: 'var(--text-3xl)', color: 'var(--fg-1)', letterSpacing: '-0.02em' }}
         >
-          experience & craft.
-        </h2>
+          <h2
+            className="font-light tracking-tight leading-none mb-4"
+            style={{ fontSize: 'var(--text-3xl)', color: 'var(--fg-1)', letterSpacing: '-0.02em' }}
+          >
+            experience & craft.
+          </h2>
+          <p className="font-light max-w-xl" style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)', lineHeight: 1.7 }}>
+            quant research, systematic trading infrastructure, and applied ml — built for rigour, not demos.
+          </p>
+        </div>
 
-        {/* ── Experience ──────────────────────── */}
-        <SubHeading>Experience</SubHeading>
-        <div className="mb-20">
-          {EXPERIENCE.map((entry, i) => (
-            <ExperienceRow key={i} entry={entry} index={i} />
+        {/* Experience highlights */}
+        <div className="mb-10">
+          {HIGHLIGHTS.map((entry, i) => (
+            <HighlightRow key={i} entry={entry} index={i} />
           ))}
         </div>
 
-        {/* ── Projects ────────────────────────── */}
-        <SubHeading>Projects</SubHeading>
-        <div className="mb-20">
-          {PROJECTS.map((project, i) => (
-            <ProjectRow key={project.index} project={project} index={i} />
+        {/* Stack preview pills */}
+        <div
+          ref={stackRef}
+          className={`flex flex-wrap gap-2 mb-12 transition-all duration-600 ${
+            stackVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          {STACK_PREVIEW.map(item => (
+            <span
+              key={item}
+              className="text-xs tracking-wide border rounded-full px-3 py-1.5"
+              style={{ color: 'var(--fg-3)', borderColor: 'var(--border)' }}
+            >
+              {item}
+            </span>
           ))}
+          <span
+            className="text-xs tracking-wide border rounded-full px-3 py-1.5"
+            style={{ color: 'var(--fg-3)', borderColor: 'var(--border)', opacity: 0.5 }}
+          >
+            +21 more
+          </span>
         </div>
 
-        {/* ── Stack ───────────────────────────── */}
-        <SubHeading>Stack</SubHeading>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {STACK.map((group, i) => (
-            <StackGroup key={group.category} group={group} index={i} />
-          ))}
+        {/* CTA */}
+        <div
+          ref={ctaRef}
+          className={`transition-all duration-500 ${
+            ctaVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          <Link
+            href="/work"
+            className="inline-flex items-center gap-3 group"
+            style={{ textDecoration: 'none' }}
+          >
+            <span
+              className="text-sm tracking-wider uppercase font-light transition-colors duration-300"
+              style={{ color: 'var(--fg-2)', letterSpacing: '0.12em' }}
+            >
+              view full work
+            </span>
+            <span
+              className="inline-flex items-center justify-center border rounded-full transition-all duration-300"
+              style={{
+                width: 36, height: 36,
+                borderColor: 'var(--border-pill)',
+                color: 'var(--fg-2)',
+                fontSize: 16,
+              }}
+            >
+              ↗
+            </span>
+          </Link>
         </div>
 
       </div>

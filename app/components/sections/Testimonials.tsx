@@ -78,7 +78,7 @@ export default function Testimonials() {
   }, [])
 
   return (
-    <div ref={sectionRef} style={{ height: '280vh', position: 'relative' }}>
+    <div id="testimonials" ref={sectionRef} style={{ height: '280vh', position: 'relative' }}>
       <div
         style={{
           position: 'sticky', top: 0, height: '100vh',
@@ -172,11 +172,12 @@ export default function Testimonials() {
                 style={{
                   position: 'absolute',
                   width: cardW,
-                  background: '#fff',
+                  background: 'var(--bg-card)',
+                  border: `1px solid rgba(255,255,255,0.10)`,
                   padding: cardPad,
-                  borderRadius: 1,
+                  borderRadius: 4,
                   boxShadow: isLanded
-                    ? `0 12px 50px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3), 0 0 40px ${card.glow}`
+                    ? `0 16px 60px rgba(0,0,0,0.7), 0 0 40px ${card.glow}`
                     : '0 12px 50px rgba(0,0,0,0.5)',
                   top: '50%', left: '50%',
                   opacity: isLanded ? 1 : 0,
@@ -185,28 +186,33 @@ export default function Testimonials() {
                     : 'translate(-50%, -50%) translateY(-120px) rotate(0deg) scale(0.88)',
                   transition: 'transform 0.85s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease, box-shadow 0.5s ease',
                   cursor: 'default',
+                  backdropFilter: 'blur(12px)',
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLElement
                   el.style.transform = `${POSITIONS[i]} rotate(${card.rotation}deg) translateY(-8px)`
-                  el.style.boxShadow = `0 20px 60px rgba(0,0,0,0.6), 0 0 30px ${card.glow}`
+                  el.style.boxShadow = `0 24px 70px rgba(0,0,0,0.8), 0 0 50px ${card.glow}`
+                  el.style.borderColor = 'rgba(255,255,255,0.18)'
                   el.style.zIndex = '10'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLElement
                   el.style.transform = `${POSITIONS[i]} rotate(${card.rotation}deg)`
-                  el.style.boxShadow = `0 12px 50px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3), 0 0 40px ${card.glow}`
+                  el.style.boxShadow = `0 16px 60px rgba(0,0,0,0.7), 0 0 40px ${card.glow}`
+                  el.style.borderColor = 'rgba(255,255,255,0.10)'
                   el.style.zIndex = ''
                 }}
               >
-                <div style={{ fontSize: 'var(--text-xs)', color: 'rgba(0,0,0,0.3)', textAlign: 'right', marginBottom: 8 }}>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', textAlign: 'right', marginBottom: 10, letterSpacing: '0.06em' }}>
                   {card.date}
                 </div>
-                <div style={{ fontSize: 'var(--text-sm)', color: '#111', lineHeight: 1.55, marginBottom: 10 }}>
+                <div style={{ fontSize: isMobile ? 11 : 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.6, marginBottom: 14, fontWeight: 300 }}>
                   {card.quote}
                 </div>
-                <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#111' }}>{card.name}</div>
-                <div style={{ fontSize: 'var(--text-xs)', color: 'rgba(0,0,0,0.4)' }}>{card.role}</div>
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 10 }}>
+                  <div style={{ fontSize: 'var(--text-sm)', fontWeight: 400, color: 'var(--fg-1)', letterSpacing: '-0.01em' }}>{card.name}</div>
+                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', letterSpacing: '0.06em', marginTop: 2 }}>{card.role}</div>
+                </div>
               </div>
             )
           })}

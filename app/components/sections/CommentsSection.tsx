@@ -229,7 +229,7 @@ export default function CommentsSection() {
   const anyHover = hoveredId !== null
 
   return (
-    <section style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
+    <section id="notes" style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
 
       {/* Decorative bg word */}
       <span aria-hidden="true" style={{

@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 const NAV_LINKS = [
-  { label: 'home',     href: '/',         soon: false },
-  { label: 'work',     href: '/work',     soon: false },
-  { label: 'blog',     href: '/blog',     soon: false },
-  { label: 'gallery',  href: '/gallery',  soon: false },
-  { label: 'playlist', href: '/playlist', soon: false },
+  { label: 'home',       href: '/',           soon: false },
+  { label: 'work',       href: '/work',       soon: false },
+  { label: 'blog',       href: '/blog',       soon: false },
+  { label: 'gallery',    href: '/gallery',    soon: false },
+  { label: 'playlist',   href: '/playlist',   soon: false },
+  { label: 'playground', href: '/playground', soon: true  },
 ]
 
 const SOCIALS = [

@@ -10,10 +10,12 @@ import Services from "./components/sections/Services";
 import Testimonials from "./components/sections/Testimonials";
 import Work from "./components/sections/Work";
 import SpotifyWidget from "./components/ui/SpotifyWidget";
+import SectionNav from "./components/ui/SectionNav";
 
 export default function Home() {
   return (
     <>
+      <SectionNav />
       <SpotifyWidget />
       <Hero />
       <About />
