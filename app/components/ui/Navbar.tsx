@@ -126,11 +126,11 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen(true)}
+            onMouseEnter={e => { setMenuOpen(true); e.currentTarget.style.color = 'var(--fg-1)' }}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--fg-2)')}
             className="flex flex-col items-stretch gap-1.25 transition-colors duration-300 group text-center"
             style={{ color: 'var(--fg-2)' }}
             aria-label="Open menu"
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--fg-1)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--fg-2)')}
           >
             <span className="w-full h-px bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-px" />
             <span className="text-md tracking-widest uppercase leading-none">menu</span>
@@ -155,7 +155,7 @@ export default function Navbar() {
       >
         {/* Overlay top bar */}
         <div className="flex items-center justify-between px-6 py-6 max-w-6xl mx-auto w-full">
-          <Link href="/" onClick={close} aria-label="S. Roy — Home" className="flex items-center gap-3 text-fg-1 opacity-80 hover:opacity-100 transition-opacity duration-300">
+          <Link href="/" onClick={close} onMouseEnter={close} aria-label="S. Roy — Home" className="flex items-center gap-3 text-fg-1 opacity-80 hover:opacity-100 transition-opacity duration-300">
             <LogoSVG />
             <span className="text-md font-regular tracking-tight leading-none">S. Roy</span>
           </Link>

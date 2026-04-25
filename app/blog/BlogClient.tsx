@@ -179,7 +179,7 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
         {/* Heading */}
         <h1
           style={{
-            fontSize: 'clamp(52px, 8vw, 100px)',
+            fontSize: 'clamp(36px, 8vw, 100px)',
             fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1.0,
             color: 'var(--fg-1)', marginBottom: 16,
             opacity: headVisible ? 1 : 0,

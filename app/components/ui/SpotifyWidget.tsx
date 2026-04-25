@@ -59,26 +59,36 @@ export default function SpotifyWidget() {
       href={data.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-8 right-8 z-30 flex gap-4 p-4 bg-black-4 rounded hover:opacity-90 transition-opacity duration-500 max-w-sm"
-      style={{ opacity: isVisible ? 1 : 0, pointerEvents: isVisible ? 'auto' : 'none' }}
+      className="fixed right-6 z-30 flex items-center gap-3 px-3 py-2 hover:opacity-90 transition-opacity duration-500"
+      style={{
+        top: 72,
+        opacity: isVisible ? 1 : 0,
+        pointerEvents: isVisible ? 'auto' : 'none',
+        background: 'rgba(10,10,12,0.7)',
+        backdropFilter: 'blur(12px)',
+        border: '0.5px solid rgba(255,255,255,0.08)',
+        borderRadius: 6,
+        maxWidth: 'min(240px, 44vw)',
+      }}
     >
       {data.image && (
         <Image
           src={data.image}
           alt={data.album || 'Album artwork'}
-          width={64}
-          height={64}
-          className="rounded shrink-0"
+          width={36}
+          height={36}
+          className="hidden sm:block rounded shrink-0"
         />
       )}
       <div className="flex-1 min-w-0">
-        <div className="text-xs text-fg-2 uppercase tracking-wider mb-1">
-          Now Playing
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 2 }}>
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#1db954', flexShrink: 0 }} />
+          <span style={{ fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>now playing</span>
         </div>
-        <div className="text-base font-medium text-white truncate">
+        <div style={{ fontSize: 11, fontWeight: 400, color: 'var(--fg-1)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {data.title}
         </div>
-        <div className="text-sm text-fg-2 truncate">
+        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {data.artist}
         </div>
       </div>

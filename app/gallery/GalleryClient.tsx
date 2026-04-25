@@ -130,7 +130,7 @@ function Lightbox({ items, index, onClose, onPrev, onNext }: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '80px 80px 120px',
+        padding: 'clamp(56px, 8vw, 80px) clamp(16px, 6vw, 80px) clamp(72px, 10vw, 120px)',
       }}
     >
       {/* Close */}
@@ -150,7 +150,7 @@ function Lightbox({ items, index, onClose, onPrev, onNext }: {
       {/* Image */}
       <div
         onClick={e => e.stopPropagation()}
-        style={{ position: 'relative', maxWidth: 'min(80vw, 1100px)', width: '100%' }}
+        style={{ position: 'relative', maxWidth: 'min(92vw, 1100px)', width: '100%' }}
       >
         {item.image?.asset?.url ? (
           <Image
@@ -309,7 +309,7 @@ export default function GalleryClient({ items }: { items: GalleryItem[] }) {
           </div>
 
           <h1 style={{
-            fontSize: 'clamp(52px, 8vw, 100px)',
+            fontSize: 'clamp(36px, 8vw, 100px)',
             fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1.0,
             color: 'var(--fg-1)', marginBottom: 16,
             opacity: headVisible ? 1 : 0,

@@ -117,7 +117,8 @@ function StatsStrip({ stats }: { stats: UserStats }) {
   ]
   return (
     <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '24px 0' }}>
-      <div className="max-w-6xl mx-auto px-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
+      <style>{`@media(max-width:600px){.lfm-stats{grid-template-columns:repeat(2,1fr)!important}}`}</style>
+      <div className="lfm-stats max-w-6xl mx-auto px-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
         {items.map(({ v, l }) => (
           <div key={l}>
             <p style={{ fontSize: 'clamp(18px,2.5vw,28px)', fontWeight: 300, color: 'var(--fg-1)', letterSpacing: '-0.02em', marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v}</p>
@@ -134,6 +135,12 @@ function RecentFeed({ tracks }: { tracks: Track[] }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
   return (
     <div className="max-w-6xl mx-auto px-6" style={{ paddingBottom: 56 }}>
+      <style>{`
+        @media(max-width:600px){
+          .recent-row{grid-template-columns:28px 40px 1fr auto!important;gap:10px!important}
+          .recent-album{display:none!important}
+        }
+      `}</style>
       <div style={{ marginBottom: 20 }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 'var(--text-xs)', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg-2)', border: '1px solid var(--border-pill)', borderRadius: 999, padding: '6px 16px' }}>✦ recently played</span>
       </div>
@@ -141,6 +148,7 @@ function RecentFeed({ tracks }: { tracks: Track[] }) {
         {tracks.map((track, i) => (
           <a key={i} href={track.url} target="_blank" rel="noopener noreferrer"
             onMouseEnter={() => setHoveredIdx(i)}
+            className="recent-row"
             style={{
               display: 'grid', gridTemplateColumns: '36px 48px 1fr auto auto', gap: 16, alignItems: 'center',
               padding: '12px 0', borderBottom: '1px solid rgba(255,255,255,0.04)',
@@ -160,7 +168,7 @@ function RecentFeed({ tracks }: { tracks: Track[] }) {
               </p>
               <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.35)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{track.artist}</p>
             </div>
-            <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160, display: 'block' }}>{track.album}</span>
+            <span className="recent-album" style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 160, display: 'block' }}>{track.album}</span>
             <span style={{ fontFamily: 'monospace', fontSize: 'var(--text-xs)', color: track.nowplaying ? '#c2185b' : 'rgba(255,255,255,0.2)', flexShrink: 0, minWidth: 52, textAlign: 'right' }}>
               {track.nowplaying ? 'now' : track.date ? timeAgo(track.date) : ''}
             </span>
@@ -192,11 +200,14 @@ function TopCardsSection({ items, label, period, onPeriodChange }: {
           <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 'var(--text-sm)' }}>loading…</span>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 1, background: 'rgba(255,255,255,0.04)' }}>
-          {items.map((item, i) => (
-            <TopCard key={i} item={item} />
-          ))}
-        </div>
+        <>
+          <style>{`@media(max-width:480px){.top-cards{grid-template-columns:repeat(2,1fr)!important}}@media(min-width:481px) and (max-width:768px){.top-cards{grid-template-columns:repeat(3,1fr)!important}}`}</style>
+          <div className="top-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 1, background: 'rgba(255,255,255,0.04)' }}>
+            {items.map((item, i) => (
+              <TopCard key={i} item={item} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
@@ -232,25 +243,34 @@ function PlaylistRow({ item, index, dimmed }: { item: PlaylistItem; index: numbe
   const w = item.thumbnail?.asset?.metadata?.dimensions?.width ?? 320
   const h = item.thumbnail?.asset?.metadata?.dimensions?.height ?? 180
   return (
+    <>
+      <style>{`
+        @media(max-width:600px){
+          .pl-row{grid-template-columns:1fr auto!important;gap:12px!important}
+          .pl-index,.pl-thumb,.pl-platform,.pl-count{display:none!important}
+        }
+      `}</style>
     <a ref={ref} href={url ?? '#'} target={url ? '_blank' : undefined} rel={url ? 'noopener noreferrer' : undefined}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      className="pl-row"
       style={{ display: 'grid', gridTemplateColumns: '40px 160px 1fr auto auto 40px', gap: 24, alignItems: 'center', padding: '20px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', textDecoration: 'none', cursor: url ? 'pointer' : 'default', opacity: isVisible ? (dimmed ? 0.28 : 1) : 0, transform: isVisible ? (hovered ? 'translateX(-6px)' : 'translateX(0)') : 'translateY(16px)', transition: `opacity 0.5s ease ${index * 55}ms, transform 0.35s ease` }}
     >
-      <span style={{ fontFamily: 'monospace', fontSize: 'var(--text-sm)', color: 'rgba(255,255,255,0.2)' }}>0{index + 1}</span>
-      <div style={{ width: 160, height: 90, borderRadius: 2, position: 'relative', overflow: 'hidden', flexShrink: 0, background: paletteFor(item.title), transform: hovered ? 'scale(1.02)' : 'scale(1)', transition: 'transform 0.4s ease' }}>
+      <span className="pl-index" style={{ fontFamily: 'monospace', fontSize: 'var(--text-sm)', color: 'rgba(255,255,255,0.2)' }}>0{index + 1}</span>
+      <div className="pl-thumb" style={{ width: 160, height: 90, borderRadius: 2, position: 'relative', overflow: 'hidden', flexShrink: 0, background: paletteFor(item.title), transform: hovered ? 'scale(1.02)' : 'scale(1)', transition: 'transform 0.4s ease' }}>
         {item.thumbnail?.asset?.url && <Image src={item.thumbnail.asset.url} alt={item.thumbnail.alt ?? item.title} width={w} height={h} style={{ width: '100%', height: '100%', objectFit: 'cover' }} sizes="160px" />}
       </div>
       <div style={{ minWidth: 0 }}>
-        <p style={{ fontSize: 'clamp(15px,1.6vw,20px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)', marginBottom: 6, lineHeight: 1.2 }}>{item.title}</p>
+        <p style={{ fontSize: 'clamp(14px,1.6vw,20px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)', marginBottom: 6, lineHeight: 1.2 }}>{item.title}</p>
         {item.description && <p style={{ fontSize: 'var(--text-sm)', fontWeight: 300, color: 'rgba(255,255,255,0.35)', lineHeight: 1.5, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{item.description}</p>}
       </div>
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', flexShrink: 0 }}>
+      <div className="pl-platform" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', flexShrink: 0 }}>
         <span style={{ width: 8, height: 8, borderRadius: '50%', background: PLATFORM_COLOR[item.platform] ?? 'rgba(255,255,255,0.3)' }} />
         {item.platform}
       </div>
-      <span style={{ fontFamily: 'monospace', fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.25)', flexShrink: 0, textAlign: 'right' }}>{item.trackCount ?? ''}</span>
+      <span className="pl-count" style={{ fontFamily: 'monospace', fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.25)', flexShrink: 0, textAlign: 'right' }}>{item.trackCount ?? ''}</span>
       <span style={{ fontSize: 14, textAlign: 'right', flexShrink: 0, color: hovered ? 'rgba(160,96,255,0.9)' : 'rgba(255,255,255,0.2)', transform: hovered ? 'translate(2px,-2px)' : 'none', transition: 'color 0.2s, transform 0.3s' }}>↗</span>
     </a>
+    </>
   )
 }
 
@@ -441,7 +461,7 @@ export default function PlaylistClient({ playlists }: { playlists: PlaylistItem[
         <div style={{ opacity: headVisible ? 1 : 0, transform: headVisible ? 'translateY(0)' : 'translateY(12px)', transition: 'opacity 0.5s ease, transform 0.5s ease', marginBottom: 20 }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 'var(--text-xs)', fontWeight: 400, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg-2)', border: '1px solid var(--border-pill)', borderRadius: 999, padding: '6px 16px' }}>✦ scrobbles</span>
         </div>
-        <h1 style={{ fontSize: 'clamp(52px,8vw,100px)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1.0, color: 'var(--fg-1)', marginBottom: 16, opacity: headVisible ? 1 : 0, transform: headVisible ? 'translateY(0)' : 'translateY(20px)', transition: 'opacity 0.6s ease 60ms, transform 0.6s ease 60ms' }}>
+        <h1 style={{ fontSize: 'clamp(36px,8vw,100px)', fontWeight: 400, letterSpacing: '-0.03em', lineHeight: 1.0, color: 'var(--fg-1)', marginBottom: 16, opacity: headVisible ? 1 : 0, transform: headVisible ? 'translateY(0)' : 'translateY(20px)', transition: 'opacity 0.6s ease 60ms, transform 0.6s ease 60ms' }}>
           listening log.<br /><span style={{ color: 'rgba(255,255,255,0.3)' }}>live from last.fm.</span>
         </h1>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, opacity: headVisible ? 1 : 0, transition: 'opacity 0.6s ease 120ms' }}>

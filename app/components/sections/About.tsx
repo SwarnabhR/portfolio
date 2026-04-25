@@ -134,7 +134,7 @@ export default function About() {
                 <span
                   className="font-regular tracking-tight flex-1"
                   style={{
-                    fontSize: 'clamp(32px, 5vw, 52px)',
+                    fontSize: 'clamp(22px, 5vw, 52px)',
                     letterSpacing: '-0.03em',
                     lineHeight: 1.15,
                     textAlign: badge === 'left' ? 'left' : 'right',

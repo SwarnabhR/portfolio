@@ -104,7 +104,7 @@ function ServiceRow({
       className="flex justify-between items-center gap-6 border-b py-5"
       style={{
         borderColor: 'var(--border)',
-        cursor: 'none',
+        cursor: 'default',
         opacity: dimmed ? 0.25 : isVisible ? 1 : 0,
         transform: isVisible
           ? hovered ? 'translateX(-6px)' : 'translateX(0)'
@@ -122,7 +122,7 @@ function ServiceRow({
         <span
           className="font-light tracking-tight transition-colors duration-300"
           style={{
-            fontSize: 'clamp(18px, 3vw, 28px)',
+            fontSize: 'clamp(15px, 3vw, 28px)',
             letterSpacing: '-0.02em',
             color: hovered ? 'var(--fg-1)' : 'rgba(255,255,255,0.88)',
           }}
