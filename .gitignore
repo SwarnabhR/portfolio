@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 /design-system
+
+# claude code
+.claude/
+
+# build output
+/dist

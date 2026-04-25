@@ -6,7 +6,7 @@ import Link from 'next/link'
 const NAV_LINKS = [
   { label: 'home',     href: '/',         soon: false },
   { label: 'work',     href: '/work',     soon: true },
-  { label: 'blog',     href: '/blog',     soon: true  },
+  { label: 'blog',     href: '/blog',     soon: false },
   { label: 'gallery',  href: '/gallery',  soon: true  },
   { label: 'playlist', href: '/playlist', soon: true  },
 ]

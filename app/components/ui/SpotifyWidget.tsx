@@ -21,11 +21,11 @@ export default function SpotifyWidget() {
     const fetchNowPlaying = async () => {
       try {
         const response = await fetch('/api/spotify/now-playing')
-        if (!response.ok) throw new Error('Failed to fetch')
+        if (!response.ok) { setLoading(false); return }
         const data = await response.json()
         setData(data)
       } catch (err) {
-        console.error('Spotify error:', err)
+        // silently ignore network errors (e.g. credentials not configured)
       } finally {
         setLoading(false)
       }

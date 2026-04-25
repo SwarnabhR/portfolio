@@ -34,12 +34,32 @@ export const blog = defineType({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'tags',
       title: 'Tags',
       type: 'array',
       of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+    }),
+    defineField({
+      name: 'readTime',
+      title: 'Read Time',
+      type: 'string',
+      placeholder: '9 min',
+    }),
+    defineField({
+      name: 'featured',
+      title: 'Featured',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'coverImage',
+      title: 'Cover Image',
+      type: 'image',
+      options: { hotspot: true },
     }),
   ],
   preview: {

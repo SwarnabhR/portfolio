@@ -25,8 +25,6 @@ const writeClient = createClient({
   token: process.env.SANITY_API_TOKEN,
 })
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
@@ -63,6 +61,8 @@ export async function POST(req: NextRequest) {
     })
 
     if (process.env.RESEND_API_KEY) {
+      const { Resend } = await import('resend')
+      const resend = new Resend(process.env.RESEND_API_KEY)
       await resend.emails.send({
         from: 'Portfolio Contact <onboarding@resend.dev>',
         to: process.env.NOTIFY_EMAIL ?? 'workspace.swarnabh@gmail.com',
