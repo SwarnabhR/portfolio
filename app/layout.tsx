@@ -23,6 +23,7 @@ import CustomCursor from './components/ui/CustomCursor';
 import SmoothScroll from './components/providers/SmoothScroll';
 import Footer from './components/sections/Footer';
 import PageTransition from './components/ui/PageTransition';
+import SectionNav from './components/ui/SectionNav';
 import { Analytics } from "@vercel/analytics/next"
 import Image from 'next/image';
 import effectGif from './5a934e84f67d2a61a118ec95b1d6cb74.gif';
@@ -198,6 +199,7 @@ export default function RootLayout({
         />
         <CustomCursor />
         <Navbar />
+        <SectionNav />
         <SmoothScroll>
           <PageTransition>
             <main>{children}</main>
