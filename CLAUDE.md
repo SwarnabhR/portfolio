@@ -44,7 +44,7 @@ A fixed full-screen GIF (`app/5a934e84...gif`) is layered at `z-index: 9999` wit
 
 ### Design system reference
 
-`design-system/` is **inspiration only** — it documents the Nyro Silvan Framer site aesthetic that informed the visual direction of this portfolio. This is *not* a spec to replicate. The actual site belongs to S. Roy (a quant developer), so content, layout, and components should reflect that identity, not the original designer's.
+`design-system/` is **inspiration only** — it documents the Nyro Silvan Framer site aesthetic that informed the visual direction of this portfolio. This is *not* a spec to replicate. The actual site belongs to S. Roy (a quant & ML engineer), so content, layout, and components should reflect that identity, not the original designer's.
 
 Draw from the design system for:
 - Visual atmosphere: dark backgrounds, atmospheric radial gradients, oversized decorative typography, pill labels with `✦` prefix
@@ -53,7 +53,7 @@ Draw from the design system for:
 
 Do **not** copy:
 - Nyro-specific content (Framer dev services, designer bio, testimonials, blog, playlists, gallery pages)
-- Exact layouts — adapt them to what makes sense for a quant developer portfolio
+- Exact layouts — adapt them to what makes sense for a quant & ML engineer portfolio
 - The Wireframes.html structure verbatim — it describes a 7-page designer site; this portfolio is currently a single-page app
 
 Never import from `design-system/` into the app. It is read-only documentation.

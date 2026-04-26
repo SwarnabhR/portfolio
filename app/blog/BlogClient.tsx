@@ -198,7 +198,7 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
           transform: headVisible ? 'translateY(0)' : 'translateY(16px)',
           transition: 'opacity 0.6s ease 120ms, transform 0.6s ease 120ms',
         }}>
-          thoughts on quant research, market microstructure, and ml engineering.
+          thoughts on ml engineering, quant research, and market microstructure.
         </p>
 
         {/* Filter tabs */}

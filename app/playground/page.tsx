@@ -90,7 +90,7 @@ export default function PlaygroundPage() {
             lineHeight: 1.65, marginBottom: 64,
           }}
         >
-          interactive quant tools, live data visualisations, and
+          interactive ml demos, quant tools, live data visualisations, and
           research experiments. built in public.
         </p>
 

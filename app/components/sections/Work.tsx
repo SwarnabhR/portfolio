@@ -6,12 +6,12 @@ import { useReveal } from '@/hooks/useReveal'
 const HIGHLIGHTS = [
   {
     period: '2024 – present',
-    role: 'quantitative research',
+    role: 'quantitative research & ml engineering',
     type: 'research',
   },
   {
     period: '2023 – 2024',
-    role: 'algorithmic trading engineering',
+    role: 'algorithmic trading & ml systems',
     type: 'engineering',
   },
   {
@@ -100,7 +100,7 @@ export default function Work() {
             experience & craft.
           </h2>
           <p className="font-light max-w-xl" style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)', lineHeight: 1.7 }}>
-            quant research, systematic trading infrastructure, and applied ml — built for rigour, not demos.
+            ml engineering, quant research, and systematic trading infrastructure — built for rigour, not demos.
           </p>
         </div>
 

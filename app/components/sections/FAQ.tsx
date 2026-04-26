@@ -8,7 +8,7 @@ type FaqData = { q: string; a: string }
 const DEFAULT_FAQS: FaqData[] = [
   {
     q: 'what kind of projects do you take on?',
-    a: 'Algorithmic strategy development, backtesting infrastructure, real-time data pipelines, and ML models for equities, cryptocurrencies, forex, and commodities. I work best on projects where rigour matters — where a 10bps edge or a sub-second latency gain is worth engineering properly.',
+    a: 'ML model development, inference pipeline engineering, algorithmic strategy development, backtesting infrastructure, and real-time data pipelines for equities, cryptocurrencies, forex, and commodities. I work best on projects where rigour matters — where model accuracy and a 10bps edge are both worth engineering properly.',
   },
   {
     q: 'what markets and instruments do you specialise in?',
@@ -16,7 +16,7 @@ const DEFAULT_FAQS: FaqData[] = [
   },
   {
     q: 'how do you approach research and analysis?',
-    a: 'I combine fast news, deep learning, quantitative mathematics, and interpretable models to explain market reactions. The thesis is that everything is linked: rates, indices, equities, crypto, forex, commodities, and news all feed into each other, so I look for dependencies rather than isolated signals.',
+    a: 'I combine deep learning, machine learning engineering, quantitative mathematics, and fast news analysis to build and explain market reaction models. The thesis is that everything is linked: rates, indices, equities, crypto, forex, commodities, and news all feed into each other, so I train models to capture dependencies rather than isolated signals.',
   },
   {
     q: 'are you open to research collaborations or academic work?',

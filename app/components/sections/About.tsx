@@ -16,11 +16,11 @@ const ACCENTS = ['#ffffff', '#e8e8e8', '#f5f5f5', '#e0e0e0']
 const CONTENT = [
   {
     heading: 'global multi-asset coverage.',
-    body: 'i architect multi-regime execution infrastructure spanning 7+ venues—nse/bse equities, nyse cash markets, crypto perpetuals, g10 forex, and commodity derivatives. the advantage isn\'t depth in a single market; it\'s understanding how they move together. tick-level lob reconciliation across exchanges with heterogeneous microstructure. nanosecond-precision timestamp synchronization. while most traders optimize for one venue, i extract edge from the dependencies between all of them. that\'s institutional-grade execution.'
+    body: 'i architect multi-regime execution infrastructure spanning 7+ venues—nse/bse equities, nyse cash markets, crypto perpetuals, g10 forex, and commodity derivatives. ml-driven signal extraction surfaces cross-asset dependencies that pure statistical approaches miss. tick-level lob reconciliation across exchanges with heterogeneous microstructure. nanosecond-precision timestamp synchronization. the edge isn\'t depth in a single market; it\'s understanding how they move together through learned representations.'
   },
   {
     heading: 'systematic strategy development.',
-    body: 'i\'ve developed and rigorously backtested 20+ quantitative strategies. cross-sectional momentum. mean-reversion with tail hedging. linked-market propagation signals. walk-forward validation, realistic tca modeling, slippage regimes—this is how i distinguish edge from overfitting. the difference between a strategy that works in backtests and one that actually prints is brutal. my models account for regime-dependent alpha decay and market impact elasticity. that\'s the discipline separating serious traders from casual investors.'
+    body: 'i\'ve developed and rigorously backtested 20+ quantitative strategies. cross-sectional momentum. mean-reversion with tail hedging. linked-market propagation signals derived from neural models. walk-forward validation, realistic tca modeling, slippage regimes—this is how i distinguish edge from overfitting. the full ml lifecycle: feature engineering, model training, interpretability analysis, and deployment. regime-dependent alpha decay and market impact elasticity modelled with precision.'
   },
   {
     heading: 'published research.',
@@ -80,7 +80,7 @@ export default function About() {
             }`}
           >
             <p className="text-base text-fg-2 leading-relaxed">
-              {hovered !== null ? CONTENT[hovered].body : 'as a cs graduate based in bengaluru, i engineer institutional-grade quantitative trading architectures. my expertise bridges high-performance computing and advanced market microstructure, focusing on the entire lifecycle of strategy development—from high-fidelity limit order book (lob) ingestion to rigorous, bias-free backtesting frameworks.'}
+              {hovered !== null ? CONTENT[hovered].body : 'as a cs graduate based in bengaluru, i engineer institutional-grade quantitative trading architectures and production ml systems. my expertise bridges deep learning, high-performance computing, and market microstructure—from neural signal research to rigorous, bias-free backtesting and live inference pipelines.'}
             </p>
 
             <div className="flex gap-4 pt-4 flex-wrap">

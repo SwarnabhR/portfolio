@@ -3,10 +3,10 @@ import BlogClient from './BlogClient'
 
 export const metadata = {
   title: 'Blog',
-  description: 'Notes, essays, and case studies on quant research, market microstructure, and ML engineering.',
+  description: 'Notes, essays, and case studies on ML engineering, quant research, and market microstructure.',
   openGraph: {
     title: 'Blog — S. Roy',
-    description: 'Notes, essays, and case studies on quant research, market microstructure, and ML engineering.',
+    description: 'Notes, essays, and case studies on ML engineering, quant research, and market microstructure.',
   },
 }
 

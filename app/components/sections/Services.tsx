@@ -13,10 +13,10 @@ const GRADIENTS = [
 type ServiceData = { index: string; title: string; description: string; gradient: string }
 
 const DEFAULT_SERVICES: ServiceData[] = [
-  { index: '01', title: 'algorithmic strategy development', description: 'Signal research to live execution — RSI, VWAP, momentum, and mean-reversion across equities, crypto, forex, and commodities.', gradient: GRADIENTS[0] },
-  { index: '02', title: 'backtesting & research', description: 'Fast-news analysis, cross-asset dependency research, walk-forward validation, and cost modelling.', gradient: GRADIENTS[1] },
-  { index: '03', title: 'data pipeline engineering', description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, exchange APIs, and WebSocket feeds.', gradient: GRADIENTS[2] },
-  { index: '04', title: 'ml for finance', description: 'Deep learning and interpretable models that explain reactions across linked markets.', gradient: GRADIENTS[3] },
+  { index: '01', title: 'ml model development', description: 'End-to-end model lifecycle — architecture design, training, interpretability, and production deployment for deep learning and classical ML systems.', gradient: GRADIENTS[0] },
+  { index: '02', title: 'algorithmic strategy development', description: 'Signal research to live execution — momentum, mean-reversion, and neural signal models across equities, crypto, forex, and commodities.', gradient: GRADIENTS[1] },
+  { index: '03', title: 'data pipeline & mlops', description: 'Real-time data ingestion, feature stores, model versioning, and inference infrastructure at scale.', gradient: GRADIENTS[2] },
+  { index: '04', title: 'quantitative research', description: 'Fast-news analysis, cross-asset dependency modelling, walk-forward validation, and cost modelling grounded in rigorous statistical methodology.', gradient: GRADIENTS[3] },
 ]
 
 function useImageCursor() {
@@ -207,7 +207,7 @@ export default function Services({ items }: { items?: { title: string; descripti
           }`}
           style={{ fontSize: 'clamp(24px, 5vw, 40px)', letterSpacing: '-0.02em', maxWidth: 480 }}
         >
-          a range of quant services made to grow your edge.
+          quant research and ml engineering — built to give you an edge.
         </h2>
 
         <div

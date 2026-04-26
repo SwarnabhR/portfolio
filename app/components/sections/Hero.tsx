@@ -252,16 +252,16 @@ export default function Hero() {
           className="font-regular tracking-tight leading-none text-fg-1 mb-4 sm:mb-8"
           style={{ fontSize: 'clamp(38px, 9vw, 100px)' }}
         >
-          Quant dev.
+          Quant & ML eng.
           <br />
-          <span style={{ color: 'rgba(255,255,255,0.45)' }}>Systems that trade.</span>
+          <span style={{ color: 'rgba(255,255,255,0.45)' }}>Systems that learn and trade.</span>
         </h1>
 
         {/* Two-col sub layout */}
         <div className="flex flex-col-reverse items-start sm:flex-row justify-between sm:items-end gap-4 sm:gap-6" style={{ marginTop: 'clamp(1rem, 3vw, 2rem)' }}>
           <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 'min(340px, 100%)' }}>
-            building algorithmic trading systems, backtesting platforms, and ml pipelines
-            that connect fast news, quantitative math, and market reactions across asset classes.
+            building ml models, algorithmic trading systems, and inference pipelines
+            that connect deep learning, quantitative math, and market reactions across asset classes.
           </p>
           <CtaLink href="#contact">contact me ↗</CtaLink>
         </div>

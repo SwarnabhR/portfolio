@@ -24,17 +24,17 @@ const STATS = [
 const EXPERIENCE = [
   {
     period: '2024 – present',
-    role: 'quantitative research',
+    role: 'quantitative research & ml engineering',
     type: 'research',
-    description: 'Cross-asset signal research — fast-news propagation, linked market reactions, and walk-forward validation across equities and derivatives. Focus on regime-dependent behavior and information propagation latency.',
-    highlights: ['fast-news alpha', 'cross-asset dependency', 'walk-forward validation'],
+    description: 'Cross-asset signal research and ML model development — deep learning for fast-news propagation, neural dependency models across linked markets, and walk-forward validation. Focus on the full ML lifecycle from feature engineering to production inference.',
+    highlights: ['deep learning signals', 'cross-asset dependency', 'ml model deployment'],
   },
   {
     period: '2023 – 2024',
-    role: 'algorithmic trading engineering',
+    role: 'algorithmic trading & ml systems',
     type: 'engineering',
-    description: 'End-to-end systematic execution infrastructure: real-time tick ingestion, order routing, and position management across equities and derivatives. Built for sub-second latency at scale.',
-    highlights: ['tick ingestion', 'order routing', 'sub-second latency'],
+    description: 'End-to-end systematic execution infrastructure with integrated ML inference: real-time tick ingestion, order routing, position management, and neural signal models across equities and derivatives. Built for sub-second latency at scale.',
+    highlights: ['ml inference', 'order routing', 'sub-second latency'],
   },
   {
     period: '2023',
@@ -322,7 +322,7 @@ export default function WorkPage() {
           </h1>
 
           <p style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)', maxWidth: 480, lineHeight: 1.65, marginBottom: 40, opacity: heroVisible ? 1 : 0, transition: 'all 0.6s ease 120ms', transform: heroVisible ? 'none' : 'translateY(16px)' }}>
-            systems built for real markets — fast news, linked reactions, and cross-asset execution. research at the intersection of ml and quantitative finance.
+            ml engineering and quant research — neural models, inference pipelines, and systematic trading infrastructure built for real markets.
           </p>
 
           {/* Stats */}

@@ -140,10 +140,10 @@ export default function Contact() {
         >
           <div className="flex flex-col gap-8">
             <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 'min(300px, 100%)' }}>
-              open for quant research roles, algorithmic trading projects,
-              and ml engineering collaborations across global equities,
-              crypto, forex, and commodities, especially where fast news
-              and linked market reactions matter.
+              open for ml engineering roles, quant research positions,
+              and research collaborations — model development, trading systems,
+              and inference infrastructure, especially where deep learning
+              and financial markets intersect.
             </p>
             <CtaLink href="mailto:swarnabh.roy@gmail.com" external>
               book a call ↗
@@ -160,7 +160,7 @@ export default function Contact() {
             </span>
             <div className="flex flex-col gap-0.5">
               <span className="text-sm text-fg-1 leading-none">S. Roy</span>
-              <span className="text-xs text-fg-3 tracking-wide">Quant Developer</span>
+              <span className="text-xs text-fg-3 tracking-wide">Quant & ML Engineer</span>
             </div>
           </div>
         </div>
