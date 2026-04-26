@@ -27,7 +27,7 @@ function useImageCursor() {
   const vel = useRef(0)
   const cursorRef = useRef<HTMLDivElement>(null)
   const imgRef    = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState<typeof SERVICES[0] | null>(null)
+  const [active, setActive] = useState<ServiceData | null>(null)
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => { mx.current = e.clientX; my.current = e.clientY }
