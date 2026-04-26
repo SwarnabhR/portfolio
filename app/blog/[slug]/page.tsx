@@ -182,19 +182,23 @@ export default async function BlogPostPage({
 
   return (
     <article style={{ background: 'var(--bg)', minHeight: '100dvh', paddingTop: 80 }}>
+      <style>{`
+        .blog-back-link:hover { color: rgba(255,255,255,0.75) !important; }
+        .blog-next-link:hover { color: var(--fg-1) !important; }
+        .blog-all-link:hover  { color: rgba(255,255,255,0.75) !important; }
+      `}</style>
 
       {/* Back link */}
       <div className="max-w-6xl mx-auto px-6" style={{ paddingTop: 32 }}>
         <Link
           href="/blog"
+          className="blog-back-link"
           style={{
             fontSize: 'var(--text-xs)', fontWeight: 300,
             color: 'rgba(255,255,255,0.35)',
             letterSpacing: '0.06em', textDecoration: 'none',
             transition: 'color 0.2s',
           }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
         >
           ← back to journal
         </Link>
@@ -275,13 +279,12 @@ export default async function BlogPostPage({
             </p>
             <Link
               href={`/blog/${nextPost.slug}`}
+              className="blog-next-link"
               style={{
                 fontSize: 'var(--text-md)', fontWeight: 300,
                 color: 'rgba(255,255,255,0.6)', textDecoration: 'none',
                 transition: 'color 0.2s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fg-1)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
             >
               {nextPost.title} ↗
             </Link>
@@ -289,13 +292,12 @@ export default async function BlogPostPage({
         ) : (
           <Link
             href="/blog"
+            className="blog-all-link"
             style={{
               fontSize: 'var(--text-sm)', fontWeight: 300,
               color: 'rgba(255,255,255,0.35)', textDecoration: 'none',
               transition: 'color 0.2s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
           >
             ← all posts
           </Link>

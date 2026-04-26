@@ -127,6 +127,135 @@ const ICON_MAP: Record<string, SimpleIcon> = {
 
 /* ── Sub-components ───────────────────────────────────────── */
 
+function ExperienceItem({ e, i }: { e: typeof EXPERIENCE[0]; i: number }) {
+  const { ref, isVisible } = useReveal()
+  return (
+    <div ref={ref} className="exp-item" style={{ paddingLeft: 36, paddingBottom: 48, position: 'relative', opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(20px)', transition: `all 0.7s ease ${i * 100}ms` }}>
+      <div style={{ position: 'absolute', left: -5, top: 6, width: 11, height: 11, borderRadius: '50%', border: '1px solid var(--border-pill)', background: 'var(--bg)' }} />
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', marginBottom: 10 }}>
+        <h3 style={{ fontSize: 'clamp(16px, 2.5vw, 26px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)' }}>{e.role}</h3>
+        <span style={{ fontSize: 'var(--text-xs)', letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border-pill)', borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>{e.type}</span>
+        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', letterSpacing: '0.06em', flexShrink: 0 }}>{e.period}</span>
+      </div>
+      <p style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)', lineHeight: 1.7, maxWidth: 680, marginBottom: 14 }}>{e.description}</p>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {e.highlights.map(h => (
+          <span key={h} style={{ fontSize: 10, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 10px' }}>{h}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function EducationItem({ e, i }: { e: typeof EDUCATION[0]; i: number }) {
+  const { ref, isVisible } = useReveal()
+  return (
+    <div ref={ref} className="edu-row" style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: 24, borderBottom: '1px solid var(--border)', paddingBottom: 28, opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(16px)', transition: `all 0.6s ease ${i * 80}ms` }}>
+      <span style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', letterSpacing: '0.06em', paddingTop: 4 }}>{e.period}</span>
+      <div>
+        <h3 style={{ fontSize: 'clamp(15px, 2vw, 22px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)', marginBottom: 4 }}>{e.degree}</h3>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-3)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>{e.institution}</p>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.7 }}>{e.description}</p>
+      </div>
+    </div>
+  )
+}
+
+function ProjectItem({ project, i }: { project: typeof PROJECTS[0]; i: number }) {
+  const { ref, isVisible } = useReveal()
+  const [hovered, setHovered] = useState(false)
+
+  const inner = (
+    <>
+      <span className="proj-index" style={{ fontFamily: 'ui-monospace, monospace', fontSize: 'var(--text-sm)', color: 'var(--fg-3)', paddingTop: 2 }}>
+        {project.index}
+      </span>
+      <div style={{ minWidth: 0 }}>
+        <h3 style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)', marginBottom: 6 }}>{project.title}</h3>
+        <p className="proj-desc" style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.65, maxHeight: hovered ? 120 : 48, overflow: 'hidden', transition: 'max-height 0.4s ease, opacity 0.3s', opacity: hovered ? 1 : 0.7, wordBreak: 'break-word' }}>{project.description}</p>
+        <div className="proj-tags-mobile" style={{ display: 'none', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
+          {project.tags.map(tag => (
+            <span key={tag} style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 9px' }}>{tag}</span>
+          ))}
+        </div>
+      </div>
+      <div className="proj-tags-desktop" style={{ display: 'flex', flexWrap: 'wrap', gap: 6, paddingTop: 2 }}>
+        {project.tags.map(tag => (
+          <span key={tag} style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 9px' }}>{tag}</span>
+        ))}
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 2, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: project.dot, flexShrink: 0 }} />
+          <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--fg-3)', whiteSpace: 'nowrap' }}>{project.status}</span>
+        </div>
+        {project.href
+          ? <span style={{ color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)', transition: 'color 0.3s', display: 'inline-block', transform: hovered ? 'translate(2px,-2px)' : 'none', fontSize: 14 }}>↗</span>
+          : <span className="proj-soon" style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '2px 8px', opacity: hovered ? 1 : 0, transition: 'opacity 0.25s' }}>soon</span>
+        }
+      </div>
+    </>
+  )
+
+  const rowStyle: React.CSSProperties = {
+    display: 'grid', gridTemplateColumns: '48px 1fr 130px auto', gap: 20,
+    alignItems: 'start', padding: '20px 0',
+    borderBottom: '1px solid var(--border)',
+    opacity: isVisible ? 1 : 0,
+    transform: isVisible ? (hovered ? 'translateX(-4px)' : 'none') : 'translateY(16px)',
+    transition: `opacity 0.6s ease ${i * 80}ms, transform 0.5s cubic-bezier(0.22,1,0.36,1)`,
+    cursor: project.href ? 'pointer' : 'default',
+  }
+
+  return project.href ? (
+    <Link href={project.href} target="_blank" rel="noopener noreferrer"
+      ref={ref as React.Ref<HTMLAnchorElement>}
+      className="proj-row"
+      style={{ ...rowStyle, textDecoration: 'none' }}
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+    >{inner}</Link>
+  ) : (
+    <div ref={ref} className="proj-row" style={rowStyle}
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+    >{inner}</div>
+  )
+}
+
+function PublicationItem({ pub, i }: { pub: typeof PUBLICATIONS[0]; i: number }) {
+  const { ref, isVisible } = useReveal()
+  return (
+    <div ref={ref} style={{ border: '1px solid var(--border)', borderRadius: 4, padding: 'clamp(20px, 4vw, 32px)', background: 'radial-gradient(ellipse 80% 60% at 80% 30%, rgba(88,0,180,0.08) 0%, transparent 65%), rgba(255,255,255,0.01)', opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(16px)', transition: `all 0.6s ease ${i * 80}ms`, marginBottom: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 16 }}>
+        <div>
+          <span style={{ fontSize: 11, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', display: 'block', marginBottom: 10 }}>{pub.venue} · {pub.year}</span>
+          <h3 style={{ fontSize: 'clamp(16px, 2.5vw, 26px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)' }}>{pub.title}</h3>
+        </div>
+        {pub.href && (
+          <a href={pub.href} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 'var(--text-xs)', color: 'var(--fg-2)', border: '0.5px solid var(--border-cta)', borderRadius: 3, padding: '8px 14px', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap', textDecoration: 'none' }}>read paper ↗</a>
+        )}
+      </div>
+      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.7, maxWidth: 680, marginBottom: 20 }}>{pub.description}</p>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {pub.tags.map(tag => (
+          <span key={tag} style={{ fontSize: 10, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 10px' }}>{tag}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function StackGroup({ group, i }: { group: typeof STACK[0]; i: number }) {
+  const { ref, isVisible } = useReveal()
+  return (
+    <div ref={ref} style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(16px)', transition: `all 0.6s ease ${i * 60}ms` }}>
+      <span style={{ fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--fg-3)', display: 'block', marginBottom: 12 }}>{group.category}</span>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        {group.items.map(item => <StackPill key={item} item={item} />)}
+      </div>
+    </div>
+  )
+}
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   const { ref, isVisible } = useReveal()
   return (
@@ -225,44 +354,14 @@ export default function WorkPage() {
           <SectionLabel>Experience</SectionLabel>
           <div style={{ position: 'relative' }}>
             <div className="exp-timeline-line" style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 1, background: 'var(--border)' }} />
-            {EXPERIENCE.map((e, i) => {
-              const { ref, isVisible } = useReveal()
-              return (
-                <div key={i} ref={ref} className="exp-item" style={{ paddingLeft: 36, paddingBottom: 48, position: 'relative', opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(20px)', transition: `all 0.7s ease ${i * 100}ms` }}>
-                  <div style={{ position: 'absolute', left: -5, top: 6, width: 11, height: 11, borderRadius: '50%', border: '1px solid var(--border-pill)', background: 'var(--bg)' }} />
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', marginBottom: 10 }}>
-                    <h3 style={{ fontSize: 'clamp(16px, 2.5vw, 26px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)' }}>{e.role}</h3>
-                    <span style={{ fontSize: 'var(--text-xs)', letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border-pill)', borderRadius: 999, padding: '3px 10px', flexShrink: 0 }}>{e.type}</span>
-                    <span style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', letterSpacing: '0.06em', flexShrink: 0 }}>{e.period}</span>
-                  </div>
-                  <p style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)', lineHeight: 1.7, maxWidth: 680, marginBottom: 14 }}>{e.description}</p>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    {e.highlights.map(h => (
-                      <span key={h} style={{ fontSize: 10, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 10px' }}>{h}</span>
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
+            {EXPERIENCE.map((e, i) => <ExperienceItem key={i} e={e} i={i} />)}
           </div>
         </section>
 
         {/* ── Education ─────────────────────────────────── */}
         <section style={{ padding: '0 0 72px' }}>
           <SectionLabel>Education</SectionLabel>
-          {EDUCATION.map((e, i) => {
-            const { ref, isVisible } = useReveal()
-            return (
-              <div key={i} ref={ref} className="edu-row" style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: 24, borderBottom: '1px solid var(--border)', paddingBottom: 28, opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(16px)', transition: 'all 0.6s ease' }}>
-                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', letterSpacing: '0.06em', paddingTop: 4 }}>{e.period}</span>
-                <div>
-                  <h3 style={{ fontSize: 'clamp(15px, 2vw, 22px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)', marginBottom: 4 }}>{e.degree}</h3>
-                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-3)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>{e.institution}</p>
-                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.7 }}>{e.description}</p>
-                </div>
-              </div>
-            )
-          })}
+          {EDUCATION.map((e, i) => <EducationItem key={i} e={e} i={i} />)}
         </section>
 
         {/* ── Projects ──────────────────────────────────── */}
@@ -273,110 +372,20 @@ export default function WorkPage() {
             <span>#</span><span>project</span><span>stack</span><span>status</span>
           </div>
 
-          {PROJECTS.map((project, i) => {
-            const { ref, isVisible } = useReveal()
-            const [hovered, setHovered] = useState(false)
-
-            const inner = (
-              <>
-                <span className="proj-index" style={{ fontFamily: 'ui-monospace, monospace', fontSize: 'var(--text-sm)', color: 'var(--fg-3)', paddingTop: 2 }}>
-                  {project.index}
-                </span>
-                <div style={{ minWidth: 0 }}>
-                  <h3 style={{ fontSize: 'clamp(14px, 2vw, 20px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)', marginBottom: 6 }}>{project.title}</h3>
-                  <p className="proj-desc" style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.65, maxHeight: hovered ? 120 : 48, overflow: 'hidden', transition: 'max-height 0.4s ease, opacity 0.3s', opacity: hovered ? 1 : 0.7, wordBreak: 'break-word' }}>{project.description}</p>
-                  {/* Tags shown inline on mobile */}
-                  <div className="proj-tags-mobile" style={{ display: 'none', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
-                    {project.tags.map(tag => (
-                      <span key={tag} style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 9px' }}>{tag}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className="proj-tags-desktop" style={{ display: 'flex', flexWrap: 'wrap', gap: 6, paddingTop: 2 }}>
-                  {project.tags.map(tag => (
-                    <span key={tag} style={{ fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 9px' }}>{tag}</span>
-                  ))}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 2, flexWrap: 'wrap' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: project.dot, flexShrink: 0 }} />
-                    <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--fg-3)', whiteSpace: 'nowrap' }}>{project.status}</span>
-                  </div>
-                  {project.href
-                    ? <span style={{ color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)', transition: 'color 0.3s', display: 'inline-block', transform: hovered ? 'translate(2px,-2px)' : 'none', fontSize: 14 }}>↗</span>
-                    : <span className="proj-soon" style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '2px 8px', opacity: hovered ? 1 : 0, transition: 'opacity 0.25s' }}>soon</span>
-                  }
-                </div>
-              </>
-            )
-
-            const rowStyle: React.CSSProperties = {
-              display: 'grid', gridTemplateColumns: '48px 1fr 130px auto', gap: 20,
-              alignItems: 'start', padding: '20px 0',
-              borderBottom: '1px solid var(--border)',
-              opacity: isVisible ? 1 : 0,
-              transform: isVisible ? (hovered ? 'translateX(-4px)' : 'none') : 'translateY(16px)',
-              transition: `opacity 0.6s ease ${i * 80}ms, transform 0.5s cubic-bezier(0.22,1,0.36,1)`,
-              cursor: project.href ? 'pointer' : 'default',
-            }
-
-            return project.href ? (
-              <Link key={project.index} href={project.href} target="_blank" rel="noopener noreferrer"
-                ref={ref as React.Ref<HTMLAnchorElement>}
-                className="proj-row"
-                style={{ ...rowStyle, textDecoration: 'none' }}
-                onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-              >{inner}</Link>
-            ) : (
-              <div key={project.index} ref={ref} className="proj-row" style={rowStyle}
-                onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-              >{inner}</div>
-            )
-          })}
+          {PROJECTS.map((project, i) => <ProjectItem key={project.index} project={project} i={i} />)}
         </section>
 
         {/* ── Publications ──────────────────────────────── */}
         <section style={{ padding: '0 0 72px' }}>
           <SectionLabel>Publications</SectionLabel>
-          {PUBLICATIONS.map((pub, i) => {
-            const { ref, isVisible } = useReveal()
-            return (
-              <div key={i} ref={ref} style={{ border: '1px solid var(--border)', borderRadius: 4, padding: 'clamp(20px, 4vw, 32px)', background: 'radial-gradient(ellipse 80% 60% at 80% 30%, rgba(88,0,180,0.08) 0%, transparent 65%), rgba(255,255,255,0.01)', opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(16px)', transition: 'all 0.6s ease', marginBottom: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 16 }}>
-                  <div>
-                    <span style={{ fontSize: 11, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', display: 'block', marginBottom: 10 }}>{pub.venue} · {pub.year}</span>
-                    <h3 style={{ fontSize: 'clamp(16px, 2.5vw, 26px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)' }}>{pub.title}</h3>
-                  </div>
-                  {pub.href && (
-                    <a href={pub.href} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 'var(--text-xs)', color: 'var(--fg-2)', border: '0.5px solid var(--border-cta)', borderRadius: 3, padding: '8px 14px', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap', textDecoration: 'none' }}>read paper ↗</a>
-                  )}
-                </div>
-                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.7, maxWidth: 680, marginBottom: 20 }}>{pub.description}</p>
-                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  {pub.tags.map(tag => (
-                    <span key={tag} style={{ fontSize: 10, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 10px' }}>{tag}</span>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
+          {PUBLICATIONS.map((pub, i) => <PublicationItem key={i} pub={pub} i={i} />)}
         </section>
 
         {/* ── Tech Stack ────────────────────────────────── */}
         <section style={{ padding: '0 0 80px' }}>
           <SectionLabel>Stack</SectionLabel>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 36 }}>
-            {STACK.map((group, i) => {
-              const { ref, isVisible } = useReveal()
-              return (
-                <div key={group.category} ref={ref} style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(16px)', transition: `all 0.6s ease ${i * 60}ms` }}>
-                  <span style={{ fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--fg-3)', display: 'block', marginBottom: 12 }}>{group.category}</span>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                    {group.items.map(item => <StackPill key={item} item={item} />)}
-                  </div>
-                </div>
-              )
-            })}
+            {STACK.map((group, i) => <StackGroup key={group.category} group={group} i={i} />)}
           </div>
         </section>
 
