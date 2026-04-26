@@ -54,7 +54,7 @@ import effectGif from './5a934e84f67d2a61a118ec95b1d6cb74.gif';
 
 const manrope = Manrope({
   subsets: ['latin'],
-  weight: ['200','300','400','600','700'],
+  weight: ['300','400','600'],
   variable: '--font-manrope',
   display: 'swap',
 })

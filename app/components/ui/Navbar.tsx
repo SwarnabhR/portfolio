@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: 'blog',       href: '/blog',       soon: false },
   { label: 'gallery',    href: '/gallery',    soon: false },
   { label: 'playlist',   href: '/playlist',   soon: false },
-  { label: 'playground', href: '/playground', soon: true  },
+  { label: 'playground', href: '/playground', soon: false },
 ]
 
 const SOCIALS = [

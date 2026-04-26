@@ -7,7 +7,7 @@ const REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN
 let cachedToken: string | null = null
 let tokenExpiresAt = 0
 
-async function getAccessToken() {
+async function getAccessToken(): Promise<string> {
   if (cachedToken && Date.now() < tokenExpiresAt) return cachedToken
 
   const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
@@ -24,6 +24,13 @@ async function getAccessToken() {
   })
 
   const data = await response.json()
+
+  if (!response.ok || !data.access_token) {
+    cachedToken    = null
+    tokenExpiresAt = 0
+    throw new Error(data.error_description ?? data.error ?? 'Token refresh failed')
+  }
+
   cachedToken    = data.access_token
   tokenExpiresAt = Date.now() + (data.expires_in - 60) * 1000
   return cachedToken
@@ -32,10 +39,7 @@ async function getAccessToken() {
 export async function GET() {
   try {
     if (!REFRESH_TOKEN) {
-      return NextResponse.json(
-        { error: 'Spotify not authorized. Visit /api/auth/spotify to authorize.' },
-        { status: 401 }
-      )
+      return NextResponse.json({ isPlaying: false })
     }
 
     const accessToken = await getAccessToken()
@@ -67,9 +71,6 @@ export async function GET() {
       progress: data.progress_ms,
     })
   } catch {
-    return NextResponse.json(
-      { error: 'Failed to fetch now playing' },
-      { status: 500 }
-    )
+    return NextResponse.json({ isPlaying: false })
   }
 }
