@@ -31,7 +31,7 @@ async function getAccessToken(): Promise<string> {
     throw new Error(data.error_description ?? data.error ?? 'Token refresh failed')
   }
 
-  cachedToken    = data.access_token
+  cachedToken    = data.access_token as string
   tokenExpiresAt = Date.now() + (data.expires_in - 60) * 1000
   return cachedToken
 }

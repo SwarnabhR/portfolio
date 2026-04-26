@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
       const resend = new Resend(process.env.RESEND_API_KEY)
       await resend.emails.send({
         from: 'Portfolio Contact <onboarding@resend.dev>',
-        to: process.env.NOTIFY_EMAIL ?? 'workspace.swarnabh@gmail.com',
+        to: process.env.NOTIFY_EMAIL ?? 'swarnabh.roy@gmail.com',
         subject: `New message from ${cleanName}`,
         text: `Name: ${cleanName}\nEmail: ${cleanEmail}\n\n${cleanMessage}`,
         html: `

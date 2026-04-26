@@ -145,7 +145,7 @@ export default function Contact() {
               crypto, forex, and commodities, especially where fast news
               and linked market reactions matter.
             </p>
-            <CtaLink href="mailto:workspace.swarnabh@gmail.com" external>
+            <CtaLink href="mailto:swarnabh.roy@gmail.com" external>
               book a call ↗
             </CtaLink>
           </div>
