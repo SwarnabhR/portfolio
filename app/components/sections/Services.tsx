@@ -75,7 +75,7 @@ function ServiceRow({
   onEnter,
   onLeave,
 }: {
-  service: typeof SERVICES[0]
+  service: ServiceData
   index: number
   anyHover: boolean
   onEnter: () => void

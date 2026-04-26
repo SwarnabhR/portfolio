@@ -168,12 +168,10 @@
   --text-display: clamp(62px, 10vw, 120px);    /* hero h1 — confirmed */
   --text-bg-word: clamp(48px, 16vw, 210px);    /* decorative bg text */
 
-  /* Weights — only the 5 weights we load from Google Fonts */
-  --weight-extralight: 200;
-  --weight-light:      300;   /* body copy — confirmed */
-  --weight-regular:    400;   /* headings  — confirmed */
-  --weight-semibold:   600;
-  --weight-bold:       700;
+  /* Weights — 300/400/600 loaded from Google Fonts */
+  --weight-light:    300;   /* body copy */
+  --weight-regular:  400;   /* headings  */
+  --weight-semibold: 600;
 
   /* Line heights — confirmed from Framer presets */
   --leading-none:    1.00;   /* display headings */

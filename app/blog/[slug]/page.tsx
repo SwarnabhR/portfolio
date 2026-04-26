@@ -66,6 +66,11 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt ?? undefined,
+    openGraph: {
+      title: `${post.title} — S. Roy`,
+      description: post.excerpt ?? undefined,
+      images: post.coverImage?.asset?.url ? [post.coverImage.asset.url] : [],
+    },
   }
 }
 
