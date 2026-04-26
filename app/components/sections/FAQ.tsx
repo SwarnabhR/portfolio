@@ -3,30 +3,28 @@
 import { useState } from 'react'
 import { useReveal } from '@/hooks/useReveal'
 
-const FAQS = [
+type FaqData = { q: string; a: string }
+
+const DEFAULT_FAQS: FaqData[] = [
   {
-    num: '01',
     q: 'what kind of projects do you take on?',
     a: 'Algorithmic strategy development, backtesting infrastructure, real-time data pipelines, and ML models for equities, cryptocurrencies, forex, and commodities. I work best on projects where rigour matters — where a 10bps edge or a sub-second latency gain is worth engineering properly.',
   },
   {
-    num: '02',
     q: 'what markets and instruments do you specialise in?',
     a: 'I handle Indian and international equities, including NSE/BSE, NYSE, SSE, and LSE, along with cryptocurrencies, forex, and commodity futures such as gold and oil. My work covers tick-data ingestion, OHLCV time-series storage, and strategy simulation across markets, depending on data/API access.',
   },
   {
-    num: '03',
     q: 'how do you approach research and analysis?',
     a: 'I combine fast news, deep learning, quantitative mathematics, and interpretable models to explain market reactions. The thesis is that everything is linked: rates, indices, equities, crypto, forex, commodities, and news all feed into each other, so I look for dependencies rather than isolated signals.',
   },
   {
-    num: '04',
     q: 'are you open to research collaborations or academic work?',
     a: 'Yes — I have experience taking work through to publication (VeriGuard was accepted on first submission). If you have a dataset and a research question at the intersection of ML and finance, I am interested.',
   },
 ]
 
-function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
+function FaqRow({ faq, index }: { faq: FaqData & { num: string }; index: number }) {
   const [open, setOpen] = useState(false)
   const { ref, isVisible } = useReveal()
 
@@ -44,6 +42,8 @@ function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
       <button
         onClick={() => setOpen(o => !o)}
         onMouseEnter={() => setOpen(true)}
+        aria-expanded={open}
+        aria-controls={`faq-answer-${faq.num}`}
         className="w-full flex justify-between items-center gap-4 py-5 text-left"
         style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
       >
@@ -77,6 +77,9 @@ function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
       </button>
 
       <div
+        id={`faq-answer-${faq.num}`}
+        role="region"
+        aria-label={faq.q}
         style={{
           overflow: 'hidden',
           maxHeight: open ? 200 : 0,
@@ -94,7 +97,10 @@ function FaqRow({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
   )
 }
 
-export default function FAQ() {
+export default function FAQ({ items }: { items?: { question: string; answer: string }[] }) {
+  const FAQS = (items?.length ? items.map(i => ({ q: i.question, a: i.answer })) : DEFAULT_FAQS)
+    .map((f, i) => ({ ...f, num: String(i + 1).padStart(2, '0') }))
+
   const { ref: labelRef,   isVisible: labelVisible   } = useReveal()
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 

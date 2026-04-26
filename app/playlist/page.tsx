@@ -3,7 +3,11 @@ import PlaylistClient from './PlaylistClient'
 
 export const metadata = {
   title: 'Playlist',
-  description: 'Curated playlists by S. Roy — finance, ML, music.',
+  description: 'Curated playlists and live listening log by S. Roy — every scrobble from last.fm.',
+  openGraph: {
+    title: 'Playlist — S. Roy',
+    description: 'Curated playlists and live listening log by S. Roy — every scrobble from last.fm.',
+  },
 }
 
 const client = createClient({

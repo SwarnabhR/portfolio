@@ -3,31 +3,20 @@
 import { useState, useEffect, useRef } from 'react'
 import { useReveal } from '@/hooks/useReveal'
 
-const SERVICES = [
-  {
-    index: '01',
-    title: 'algorithmic strategy development',
-    description: 'Signal research to live execution — RSI, VWAP, momentum, and mean-reversion across equities, crypto, forex, and commodities.',
-    gradient: 'linear-gradient(135deg,#100408,#2a0c00,#180020)',
-  },
-  {
-    index: '02',
-    title: 'backtesting & research',
-    description: 'Fast-news analysis, cross-asset dependency research, walk-forward validation, and cost modelling.',
-    gradient: 'linear-gradient(135deg,#06080f,#000e28,#0a0020)',
-  },
-  {
-    index: '03',
-    title: 'data pipeline engineering',
-    description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, exchange APIs, and WebSocket feeds.',
-    gradient: 'linear-gradient(135deg,#06100a,#001808,#000f08)',
-  },
-  {
-    index: '04',
-    title: 'ml for finance',
-    description: 'Deep learning and interpretable models that explain reactions across linked markets.',
-    gradient: 'linear-gradient(135deg,#100e04,#181200,#110600)',
-  },
+const GRADIENTS = [
+  'linear-gradient(135deg,#100408,#2a0c00,#180020)',
+  'linear-gradient(135deg,#06080f,#000e28,#0a0020)',
+  'linear-gradient(135deg,#06100a,#001808,#000f08)',
+  'linear-gradient(135deg,#100e04,#181200,#110600)',
+]
+
+type ServiceData = { index: string; title: string; description: string; gradient: string }
+
+const DEFAULT_SERVICES: ServiceData[] = [
+  { index: '01', title: 'algorithmic strategy development', description: 'Signal research to live execution — RSI, VWAP, momentum, and mean-reversion across equities, crypto, forex, and commodities.', gradient: GRADIENTS[0] },
+  { index: '02', title: 'backtesting & research', description: 'Fast-news analysis, cross-asset dependency research, walk-forward validation, and cost modelling.', gradient: GRADIENTS[1] },
+  { index: '03', title: 'data pipeline engineering', description: 'Real-time tick ingestion, TimescaleDB/QuestDB storage, exchange APIs, and WebSocket feeds.', gradient: GRADIENTS[2] },
+  { index: '04', title: 'ml for finance', description: 'Deep learning and interpretable models that explain reactions across linked markets.', gradient: GRADIENTS[3] },
 ]
 
 function useImageCursor() {
@@ -99,6 +88,8 @@ function ServiceRow({
   return (
     <div
       ref={ref}
+      role="listitem"
+      aria-label={service.title}
       onMouseEnter={() => { setHovered(true); onEnter() }}
       onMouseLeave={() => { setHovered(false); onLeave() }}
       className="flex justify-between items-center gap-6 border-b py-5"
@@ -141,7 +132,11 @@ function ServiceRow({
   )
 }
 
-export default function Services() {
+export default function Services({ items }: { items?: { title: string; description: string }[] }) {
+  const SERVICES: ServiceData[] = items?.length
+    ? items.map((s, i) => ({ index: String(i + 1).padStart(2, '0'), title: s.title, description: s.description, gradient: GRADIENTS[i % GRADIENTS.length] }))
+    : DEFAULT_SERVICES
+
   const [hoverAny, setHoverAny] = useState(false)
   const { cursorRef, imgRef, active, setActive } = useImageCursor()
   const { ref: labelRef,   isVisible: labelVisible   } = useReveal()
@@ -216,6 +211,8 @@ export default function Services() {
         </h2>
 
         <div
+          role="list"
+          aria-label="Services offered"
           className="pt-8"
           onMouseLeave={() => { setHoverAny(false); setActive(null) }}
         >

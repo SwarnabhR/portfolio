@@ -14,31 +14,15 @@ function useIsMobile() {
   return mobile
 }
 
-const CARDS = [
-  {
-    date: '08.2024',
-    quote: '"Exceptional research instincts and rigorous methodology. Built a backtesting framework from scratch that caught edge cases our senior team had missed."',
-    name: 'Internship Lead',
-    role: 'Quantitative Research Desk',
-    rotation: -13,
-    glow: 'rgba(160,60,255,0.35)',
-  },
-  {
-    date: '03.2024',
-    quote: '"Rare combination of statistical depth and engineering discipline. The ML pipeline he delivered runs in production with zero issues since launch."',
-    name: 'Research Supervisor',
-    role: 'Algo Trading Team',
-    rotation: 8,
-    glow: 'rgba(200,34,68,0.30)',
-  },
-  {
-    date: '11.2023',
-    quote: '"Delivered a deepfake detection model that outperformed baselines by 12%. The paper was accepted on first submission — an impressive result."',
-    name: 'Academic Advisor',
-    role: 'CS Department',
-    rotation: -4,
-    glow: 'rgba(68,136,200,0.28)',
-  },
+const ROTATIONS = [-13, 8, -4]
+const GLOWS     = ['rgba(160,60,255,0.35)', 'rgba(200,34,68,0.30)', 'rgba(68,136,200,0.28)']
+
+type CardData = { date: string; quote: string; name: string; role: string; rotation: number; glow: string }
+
+const DEFAULT_CARDS: CardData[] = [
+  { date: '08.2024', quote: '"Exceptional research instincts and rigorous methodology. Built a backtesting framework from scratch that caught edge cases our senior team had missed."', name: 'Internship Lead', role: 'Quantitative Research Desk', rotation: ROTATIONS[0], glow: GLOWS[0] },
+  { date: '03.2024', quote: '"Rare combination of statistical depth and engineering discipline. The ML pipeline he delivered runs in production with zero issues since launch."', name: 'Research Supervisor', role: 'Algo Trading Team', rotation: ROTATIONS[1], glow: GLOWS[1] },
+  { date: '11.2023', quote: '"Delivered a deepfake detection model that outperformed baselines by 12%. The paper was accepted on first submission — an impressive result."', name: 'Academic Advisor', role: 'CS Department', rotation: ROTATIONS[2], glow: GLOWS[2] },
 ]
 
 const THRESHOLDS = [0.18, 0.42, 0.66]
@@ -54,7 +38,11 @@ const POSITIONS_MOBILE = [
   'translate(-50%,  -72%)',
 ]
 
-export default function Testimonials() {
+export default function Testimonials({ items }: { items?: { quote: string; name: string; role: string; date: string }[] }) {
+  const CARDS: CardData[] = items?.length
+    ? items.slice(0, 3).map((c, i) => ({ date: c.date, quote: c.quote, name: c.name, role: c.role, rotation: ROTATIONS[i % ROTATIONS.length], glow: GLOWS[i % GLOWS.length] }))
+    : DEFAULT_CARDS
+
   const [landed, setLanded] = useState([false, false, false])
   const [progress, setProgress] = useState(0)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -168,6 +156,8 @@ export default function Testimonials() {
             return (
               <div
                 key={i}
+                role="article"
+                aria-label={`Endorsement from ${card.name}, ${card.role}`}
                 className={`tcard-${i}`}
                 style={{
                   position: 'absolute',

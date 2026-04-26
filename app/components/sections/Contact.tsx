@@ -195,6 +195,7 @@ export default function Contact() {
                 }}
               >
                 <label
+                  htmlFor={`contact-${name}`}
                   style={{
                     fontSize: 'var(--text-sm)', fontWeight: 300, display: 'block', marginBottom: 6,
                     color: focused ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.35)',
@@ -206,6 +207,7 @@ export default function Contact() {
 
                 {type === 'area' ? (
                   <textarea
+                    id={`contact-${name}`}
                     name={name} placeholder={placeholder}
                     value={form[name as keyof typeof form]}
                     rows={4}
@@ -217,6 +219,7 @@ export default function Contact() {
                   />
                 ) : (
                   <input
+                    id={`contact-${name}`}
                     type={type} name={name} placeholder={placeholder}
                     value={form[name as keyof typeof form]}
                     onFocus={() => setActiveField(name)}

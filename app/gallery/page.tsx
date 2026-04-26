@@ -3,7 +3,11 @@ import GalleryClient from './GalleryClient'
 
 export const metadata = {
   title: 'Gallery',
-  description: 'Visual archive by S. Roy.',
+  description: 'Visual archive by S. Roy — photography and in-between moments.',
+  openGraph: {
+    title: 'Gallery — S. Roy',
+    description: 'Visual archive by S. Roy — photography and in-between moments.',
+  },
 }
 
 const client = createClient({
