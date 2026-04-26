@@ -66,8 +66,7 @@ export async function GET() {
       duration: data.item.duration_ms,
       progress: data.progress_ms,
     })
-  } catch (error) {
-    console.error('Spotify API error:', error)
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch now playing' },
       { status: 500 }

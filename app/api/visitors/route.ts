@@ -13,8 +13,7 @@ export async function POST(_req: NextRequest) {
     const count = await redis.incr(TOTAL_KEY)
     return NextResponse.json({ count })
   } catch (err) {
-    console.error('[visitors POST]', err)
-    return NextResponse.json({ error: String(err) }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
@@ -23,7 +22,6 @@ export async function GET() {
     const count = await redis.get<number>(TOTAL_KEY)
     return NextResponse.json({ count: count ?? 0 })
   } catch (err) {
-    console.error('[visitors GET]', err)
-    return NextResponse.json({ error: String(err) }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

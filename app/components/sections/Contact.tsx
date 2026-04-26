@@ -7,7 +7,7 @@ import CtaLink from '@/components/ui/CtaLink'
 const FIELDS = [
   { name: 'name',    label: 'Name',    type: 'text',  placeholder: 'jane smith'       },
   { name: 'email',   label: 'Email',   type: 'email', placeholder: 'jane@example.com' },
-  { name: 'message', label: 'Message', type: 'area',  placeholder: 'put me in bro'  },
+  { name: 'message', label: 'Message', type: 'area',  placeholder: 'tell me about your project'  },
 ]
 
 export default function Contact() {

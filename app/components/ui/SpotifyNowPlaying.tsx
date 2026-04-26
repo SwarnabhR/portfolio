@@ -22,11 +22,9 @@ export default function SpotifyNowPlaying() {
         const response = await fetch('/api/spotify/now-playing')
         if (!response.ok) throw new Error('Failed to fetch')
         const data = await response.json()
-        console.log('Spotify now playing:', data)
         setData(data)
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Error fetching track'
-        console.error('Spotify error:', msg)
         setError(msg)
       } finally {
         setLoading(false)

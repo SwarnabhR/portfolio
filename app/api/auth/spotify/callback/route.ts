@@ -40,14 +40,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: data }, { status: 400 })
     }
 
-    // Store refresh token in .env.local or Sanity
-    // For now, log it so you can copy-paste into .env.local
-    console.log('Spotify Refresh Token:', data.refresh_token)
-
     return NextResponse.json({
-      message: 'Authorization successful',
+      message: 'Authorization successful. Add the refreshToken below to .env.local as SPOTIFY_REFRESH_TOKEN.',
       refreshToken: data.refresh_token,
-      instructions: 'Add this to .env.local as SPOTIFY_REFRESH_TOKEN',
     })
   } catch (err) {
     return NextResponse.json(

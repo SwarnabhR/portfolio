@@ -8,7 +8,6 @@ export function useScrollY(): number {
     const [scrollY, setScrollY] = useState(0)
 
     useEffect(() => {
-        // Hanlder 
         const handleScroll = () => {
             setScrollY(window.scrollY)
         }

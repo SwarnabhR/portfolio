@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://666oxy.vercel.app/sitemap.xml
