@@ -538,7 +538,10 @@ export default function BacktestingEnginePage() {
 
   // ── helpers ──
   const fmt = (n: number, dec = 2) => n.toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
-  const pct  = (n: number) => `${n >= 0 ? '+' : ''}${fmt(n)}%`
+  const pct  = (n: number) => {
+    const decimals = Math.abs(n) < 0.1 && n !== 0 ? 3 : 2
+    return `${n >= 0 ? '+' : ''}${n.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals})}%`
+  }
   const isRunning = ['fetching','loading','running'].includes(status)
 
   const downloadCSV = useCallback(() => {
@@ -798,10 +801,10 @@ export default function BacktestingEnginePage() {
                 <span style={labelStyle}>Equity Curve — {selectedSymbol || symbolInput} · {variant.label}</span>
                 <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.4)' }}>
-                    <span style={{ width: 20, height: 2, background: result.metrics.total_return_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)', display: 'inline-block' }} />
+                    <span style={{ width: 20, height: 2, background: result.metrics.total_return_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)', display: 'inline-block', flexShrink: 0 }} />
                     Strategy {pct(result.metrics.total_return_pct)}
                   </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.3)' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
                     <span style={{ width: 20, height: 1, background: 'rgba(255,255,255,0.25)', display: 'inline-block', borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
                     Buy &amp; Hold {result.benchmark.length > 0
                       ? pct(((result.benchmark[result.benchmark.length - 1].value / initialCapital) - 1) * 100)
