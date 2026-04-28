@@ -246,6 +246,7 @@ interface Metrics {
 interface BacktestResult {
   metrics: Metrics
   equity_curve: { date: string; value: number }[]
+  benchmark: { date: string; value: number}[]
   trades: { entry_date: string; exit_date: string; direction: string; pnl: number; pnl_pct: number }[]
 }
 
@@ -286,6 +287,11 @@ for _, row in trades_df.iterrows():
         'pnl_pct':    round(float(row['pnl_pct']) * 100, 2),
     })
 
+first_close = float(df['close'].iloc[0])
+benchmark_list = [
+  {'date': str(d.date()), 'value': round(float(initial_capital) * (v / first_close), 2)}
+  for d, v in df['close'].items()
+]
 result = json.dumps({
     'metrics': {
         'sharpe_ratio':     round(float(metrics.sharpe_ratio),     3),
@@ -296,6 +302,7 @@ result = json.dumps({
         'total_return_pct': round(float(metrics.total_return_pct), 2),
     },
     'equity_curve': equity_list,
+    'benchmark': benchmark_list,
     'trades': trades_list,
 })
 result
@@ -384,7 +391,9 @@ export default function BacktestingEnginePage() {
   }, [])
 
   // ── draw equity curve on canvas ──
-  const drawChart = useCallback((curve: { date: string; value: number }[], initial: number) => {
+  const drawChart = useCallback((curve: { date: string; value: number }[],
+                                 benchmark: { date: string; value: number }[],
+                                 initial: number) => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -455,6 +464,19 @@ export default function BacktestingEnginePage() {
     })
     ctx.stroke()
 
+    // benchmark (buy & hold)
+    ctx.beginPath()
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)'
+    ctx.lineWidth = 1
+    ctx.setLineDash([3, 5])
+    benchmark.forEach((p, i) => {
+      const x = pad.left + (i / benchmark.length - 1) * (w - pad.left - pad.right)
+      if (i == 0) ctx.moveTo(x, scaleY(p.value))
+      else        ctx.lineTo(x, scaleY(p.value))
+    })
+    ctx.stroke()
+    ctx.setLineDash([])
+
     // x-axis labels (sample ~5 dates)
     ctx.fillStyle = 'rgba(255,255,255,0.3)'
     ctx.textAlign = 'center'
@@ -467,7 +489,7 @@ export default function BacktestingEnginePage() {
   }, [])
 
   useEffect(() => {
-    if (result) drawChart(result.equity_curve, initialCapital)
+    if (result) drawChart(result.equity_curve, result.benchmark, initialCapital)
   }, [result, drawChart, initialCapital])
 
   // ── run ──
@@ -518,6 +540,23 @@ export default function BacktestingEnginePage() {
   const fmt = (n: number, dec = 2) => n.toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
   const pct  = (n: number) => `${n >= 0 ? '+' : ''}${fmt(n)}%`
   const isRunning = ['fetching','loading','running'].includes(status)
+
+  const downloadCSV = useCallback(() => {
+    if (!result) return
+    const sym = selectedSymbol || symbolInput.trim().toUpperCase()
+    const headers = ['entry_date', 'exit_date', 'direction', 'pnl', 'pnl_pct']
+    const rows = result.trades.map(t => 
+    [t.entry_date, t.exit_date, t.direction, t.pnl.toFixed(2), t.pnl_pct.toFixed(2)]
+    )
+    const csv = [headers.join(','), ...rows].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${sym}_${variant.cls}_${startDate}_${endDate}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }, [result, selectedSymbol, symbolInput, variant.cls, startDate, endDate])
 
   const inputStyle: React.CSSProperties = {
     background: 'rgba(255,255,255,0.04)',
@@ -754,17 +793,41 @@ export default function BacktestingEnginePage() {
             {/* Equity curve */}
             <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
               borderRadius: 6, padding: 20, marginBottom: 24 }}>
-              <span style={{ ...labelStyle, marginBottom: 16 }}>Equity Curve — {selectedSymbol || symbolInput} · {variant.label}</span>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+                <span style={labelStyle}>Equity Curve — {selectedSymbol || symbolInput} · {variant.label}</span>
+                <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.4)' }}>
+                    <span style={{ width: 20, height: 2, background: result.metrics.total_return_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)', display: 'inline-block' }} />
+                    Strategy {pct(result.metrics.total_return_pct)}
+                  </span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.3)' }}>
+                    <span style={{ width: 20, height: 1, background: 'rgba(255,255,255,0.25)', display: 'inline-block', borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
+                    Buy &amp; Hold {result.benchmark.length > 0
+                      ? pct(((result.benchmark[result.benchmark.length - 1].value / initialCapital) - 1) * 100)
+                      : '—'}
+                  </span>
+                </div>
+              </div>
               <canvas ref={canvasRef} style={{ width: '100%', height: 260, display: 'block' }} />
             </div>
 
-            {/* Trades table toggle */}
-            <button
-              onClick={() => setShowTrades(p => !p)}
-              style={{ ...chipStyle(showTrades), marginBottom: 16 }}
-            >
-              {showTrades ? 'Hide' : 'Show'} Trade Log ({result.trades.length})
-            </button>
+            {/* Trades table toggle + Download */}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 16 }}>
+              <button onClick={() => setShowTrades(p => !p)} style={chipStyle(showTrades)}>
+                {showTrades ? 'Hide' : 'Show'} Trade Log ({result.trades.length})
+              </button>
+
+              <button onClick={downloadCSV}
+                      style={{
+                        ...chipStyle(false),
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6,
+                      }} title='Download full trade log as CSV'>
+                        ↓ Export CSV
+              </button>
+            </div>
 
             {showTrades && result.trades.length > 0 && (
               <div style={{ overflowX: 'auto', marginBottom: 40 }}>
