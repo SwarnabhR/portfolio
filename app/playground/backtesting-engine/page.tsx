@@ -252,38 +252,25 @@ interface BacktestResult {
 // ─── Pyodide bridge code (runs in-browser) ────────────────────────────────────
 // We fetch each engine .py from /engine/ (static assets) and exec them in order
 const PYODIDE_BRIDGE = `
-import json, sys, io
+import json
 
-# ── inject OHLCV rows as a DataFrame ──────────────────────────────────────────
-rows = json.loads(ohlcv_json)         # passed from JS as a global pyodide variable
+# ── inject OHLCV rows as a DataFrame ──
+rows = json.loads(ohlcv_json)
 import pandas as pd
 df = pd.DataFrame(rows)
 df['date'] = pd.to_datetime(df['date'])
 df = df.set_index('date').sort_index()
 df.columns = [c.lower() for c in df.columns]
 
-# ── run backtest ───────────────────────────────────────────────────────────────
-from backtest import Backtest
-from strategy import (
-    EMACrossover, EMACrossoverLS, EMACrossoverRegime,
-    RSIMeanReversion, RSIMeanReversionLS, RSIMeanReversionRegime,
-    BollingerBreakout, BollingerBreakoutLS, BollingerBreakoutRegime,
-    MACDCrossover, MACDCrossoverLS, MACDCrossoverRegime,
-    SupertrendStrategy, SupertrendLS, SupertrendRegime,
-    IchimokuStrategy, IchimokuLS, IchimokuRegime,
-    WilliamsRStrategy, WilliamsRLS, WilliamsRRegime,
-    DonchianBreakout, DonchianBreakoutLS, DonchianBreakoutRegime,
-    PSARStrategy, PSARLS, PSARRegime,
-)
-
-strategy_cls = eval(strategy_class_name)  # passed from JS
+# ── instantiate strategy and run ──
+strategy_cls = globals()[strategy_class_name]
 params_dict  = json.loads(strategy_params_json)
 strategy     = strategy_cls(**params_dict)
 
 bt = Backtest(initial=float(initial_capital))
 trades_df, equity_curve, metrics = bt.run(df, strategy)
 
-# ── serialise results ──────────────────────────────────────────────────────────
+# ── serialise results ──
 equity_list = [
     {'date': str(d.date()), 'value': round(float(v), 2)}
     for d, v in equity_curve.items()
@@ -329,8 +316,12 @@ export default function BacktestingEnginePage() {
   const [symbolInput,     setSymbolInput]     = useState('')
   const [selectedSymbol,  setSelectedSymbol]  = useState('')
   const [strategyIdx,     setStrategyIdx]     = useState(0)
+  const [paramValues,     setParamValues]     = useState<Record<string, number>>(() => {
+    const d: Record<string, number> = {}
+    STRATEGIES[0].params.forEach(p => { d[p.key] = p.default })
+    return d
+  })
   const [variantIdx,      setVariantIdx]      = useState(0)
-  const [paramValues,     setParamValues]     = useState<Record<string, number>>({})
   const [startDate,       setStartDate]       = useState('2021-01-01')
   const [endDate,         setEndDate]         = useState(new Date().toISOString().slice(0, 10))
   const [initialCapital,  setInitialCapital]  = useState(100000)
@@ -347,12 +338,12 @@ export default function BacktestingEnginePage() {
   const exMeta   = EXCHANGES[exchange]
 
   // ── sync param defaults when strategy changes ──
-  useEffect(() => {
-    const defaults: Record<string, number> = {}
-    STRATEGIES[strategyIdx].params.forEach(p => { defaults[p.key] = p.default })
-    setParamValues(defaults)
-    setVariantIdx(0)
-  }, [strategyIdx])
+  // useEffect(() => {
+  //   const defaults: Record<string, number> = {}
+  //   STRATEGIES[strategyIdx].params.forEach(p => { defaults[p.key] = p.default })
+  //   setParamValues(defaults)
+  //   setVariantIdx(0)
+  // }, [strategyIdx])
 
   // ── load Pyodide once ──
   const ensurePyodide = useCallback(async () => {
@@ -379,6 +370,14 @@ export default function BacktestingEnginePage() {
       if (!resp.ok) throw new Error(`Failed to load engine/${file}`)
       const code = await resp.text()
       await py.runPythonAsync(code)
+
+      const modName = file.replace('.py', '')
+      await py.runPythonAsync(`
+        import sys, types as _types
+        _mod = _types.ModuleType('${modName}')
+        _mod.__dict__.update({k: v for k, v in globals().items() if not k.startswith('__')})
+        sys.modules['${modName}'] = _mod
+        `)
     }
     pyodideRef.current = py
     return py
@@ -391,8 +390,8 @@ export default function BacktestingEnginePage() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const W = canvas.width  = canvas.offsetWidth  * devicePixelRatio
-    const H = canvas.height = canvas.offsetHeight * devicePixelRatio
+    canvas.width  = canvas.offsetWidth  * devicePixelRatio
+    canvas.height = canvas.offsetHeight * devicePixelRatio
     ctx.scale(devicePixelRatio, devicePixelRatio)
     const w = canvas.offsetWidth
     const h = canvas.offsetHeight
@@ -649,7 +648,13 @@ export default function BacktestingEnginePage() {
           {/* Strategy family */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
             {STRATEGIES.map((s, i) => (
-              <button key={s.cls} onClick={() => setStrategyIdx(i)} style={chipStyle(strategyIdx === i)}>
+              <button key={s.cls} onClick={() => {
+                setStrategyIdx(i)
+                setVariantIdx(0)
+                const d: Record<string, number> = {}
+                STRATEGIES[i].params.forEach(p => { d[p.key] = p.default })
+                setParamValues(d)
+              }} style={chipStyle(strategyIdx === i)}>
                 {s.label}
               </button>
             ))}
