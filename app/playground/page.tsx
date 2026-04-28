@@ -1,22 +1,31 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Playground',
-  description: 'Interactive experiments and tools by S. Roy — coming soon.',
+  description: 'Interactive experiments and tools by S. Roy.',
   openGraph: {
     title: 'Playground — S. Roy',
-    description: 'Interactive experiments and tools by S. Roy — coming soon.',
+    description: 'Interactive experiments and tools by S. Roy.',
   },
 }
 
 const EXPERIMENTS = [
-  { id: '01', name: 'options_pricer',     desc: 'Black-Scholes & binomial tree pricer with Greeks',    status: 'building' },
-  { id: '02', name: 'regime_detector',    desc: 'HMM-based market regime classifier, live feed',        status: 'planned'  },
-  { id: '03', name: 'order_flow_sim',     desc: 'Visualise limit order book dynamics in real time',     status: 'planned'  },
-  { id: '04', name: 'correlation_matrix', desc: 'Cross-asset rolling correlation heatmap',              status: 'planned'  },
+  {
+    id: '01',
+    name: 'backtesting_engine',
+    desc: 'Run live strategy backtests on NSE, NYSE, LSE & SSE equities in-browser',
+    status: 'live',
+    href: '/playground/backtesting-engine',
+  },
+  { id: '02', name: 'options_pricer',     desc: 'Black-Scholes & binomial tree pricer with Greeks',    status: 'building', href: null },
+  { id: '03', name: 'regime_detector',    desc: 'HMM-based market regime classifier, live feed',        status: 'planned',  href: null },
+  { id: '04', name: 'order_flow_sim',     desc: 'Visualise limit order book dynamics in real time',     status: 'planned',  href: null },
+  { id: '05', name: 'correlation_matrix', desc: 'Cross-asset rolling correlation heatmap',              status: 'planned',  href: null },
 ]
 
 const STATUS_COLOR: Record<string, string> = {
+  live:     'rgba(34,197,94,0.9)',
   building: 'rgba(194,24,91,0.85)',
   planned:  'rgba(255,255,255,0.2)',
 }
@@ -32,7 +41,6 @@ export default function PlaygroundPage() {
         overflow: 'hidden',
       }}
     >
-      {/* Atmospheric gradient */}
       <div
         aria-hidden="true"
         style={{
@@ -42,7 +50,6 @@ export default function PlaygroundPage() {
         }}
       />
 
-      {/* Decorative bg word */}
       <span
         aria-hidden="true"
         style={{
@@ -57,7 +64,6 @@ export default function PlaygroundPage() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6" style={{ paddingTop: 48 }}>
 
-        {/* Header */}
         <div style={{ marginBottom: 20 }}>
           <span
             style={{
@@ -94,74 +100,85 @@ export default function PlaygroundPage() {
           research experiments. built in public.
         </p>
 
-        {/* Experiment list */}
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          {EXPERIMENTS.map((exp, i) => (
-            <div
-              key={exp.id}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '36px 1fr auto',
-                gap: 24, alignItems: 'center',
-                padding: '20px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
-                opacity: exp.status === 'planned' ? 0.45 : 1,
-              }}
-            >
-              <span
+          {EXPERIMENTS.map((exp) => {
+            const row = (
+              <div
                 style={{
-                  fontFamily: 'monospace',
-                  fontSize: 'var(--text-xs)',
-                  color: 'rgba(255,255,255,0.2)',
+                  display: 'grid',
+                  gridTemplateColumns: '36px 1fr auto',
+                  gap: 24, alignItems: 'center',
+                  padding: '20px 0',
+                  borderBottom: '1px solid rgba(255,255,255,0.06)',
+                  opacity: exp.status === 'planned' ? 0.45 : 1,
+                  cursor: exp.href ? 'pointer' : 'default',
+                  textDecoration: 'none',
                 }}
               >
-                {exp.id}
-              </span>
-
-              <div>
-                <p
+                <span
                   style={{
-                    fontSize: 'clamp(15px, 2vw, 20px)', fontWeight: 300,
-                    letterSpacing: '-0.01em', color: 'var(--fg-1)',
-                    marginBottom: 4,
+                    fontFamily: 'monospace',
+                    fontSize: 'var(--text-xs)',
+                    color: 'rgba(255,255,255,0.2)',
                   }}
                 >
-                  {exp.name}
-                  <span style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>.tsx</span>
-                </p>
-                <p
-                  style={{
-                    fontSize: 'var(--text-sm)', fontWeight: 300,
-                    color: 'rgba(255,255,255,0.35)',
-                  }}
-                >
-                  {exp.desc}
-                </p>
-              </div>
+                  {exp.id}
+                </span>
 
-              <span
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  fontSize: 'var(--text-xs)', fontWeight: 400,
-                  letterSpacing: '0.08em', textTransform: 'uppercase',
-                  color: STATUS_COLOR[exp.status],
-                  flexShrink: 0,
-                }}
-              >
-                {exp.status === 'building' && (
-                  <span
+                <div>
+                  <p
                     style={{
-                      width: 6, height: 6, borderRadius: '50%',
-                      background: 'rgba(194,24,91,0.85)',
-                      animation: 'pgPulse 1.6s ease-in-out infinite',
-                      display: 'inline-block',
+                      fontSize: 'clamp(15px, 2vw, 20px)', fontWeight: 300,
+                      letterSpacing: '-0.01em', color: 'var(--fg-1)',
+                      marginBottom: 4,
                     }}
-                  />
-                )}
-                {exp.status}
-              </span>
-            </div>
-          ))}
+                  >
+                    {exp.name}
+                    <span style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 300 }}>.tsx</span>
+                    {exp.href && <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 13, marginLeft: 8 }}>↗</span>}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 'var(--text-sm)', fontWeight: 300,
+                      color: 'rgba(255,255,255,0.35)',
+                    }}
+                  >
+                    {exp.desc}
+                  </p>
+                </div>
+
+                <span
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    fontSize: 'var(--text-xs)', fontWeight: 400,
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    color: STATUS_COLOR[exp.status],
+                    flexShrink: 0,
+                  }}
+                >
+                  {(exp.status === 'building' || exp.status === 'live') && (
+                    <span
+                      style={{
+                        width: 6, height: 6, borderRadius: '50%',
+                        background: STATUS_COLOR[exp.status],
+                        animation: 'pgPulse 1.6s ease-in-out infinite',
+                        display: 'inline-block',
+                      }}
+                    />
+                  )}
+                  {exp.status}
+                </span>
+              </div>
+            )
+
+            return exp.href ? (
+              <Link key={exp.id} href={exp.href} style={{ textDecoration: 'none', display: 'block' }}>
+                {row}
+              </Link>
+            ) : (
+              <div key={exp.id}>{row}</div>
+            )
+          })}
         </div>
 
         <p
