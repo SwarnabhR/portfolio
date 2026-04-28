@@ -1,5 +1,7 @@
 'use client'
 
+import Link from "next/link"
+
 export default function GlobalError({
   reset,
 }: {
@@ -81,7 +83,7 @@ export default function GlobalError({
           >
             try again
           </button>
-          <a
+          <Link
             href="/"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -93,7 +95,7 @@ export default function GlobalError({
             }}
           >
             go home ↗
-          </a>
+          </Link>
         </div>
       </div>
     </div>
