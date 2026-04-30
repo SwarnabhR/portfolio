@@ -278,10 +278,8 @@ function WindowReturnBars({ windows }: { windows: WFWindow[] }) {
 // ---------------------------------------------------------------------------
 // WFO Summary KPI strip
 // ---------------------------------------------------------------------------
-function WFOKPIs({ result, pct, fmt }: {
+function WFOKPIs({ result }: {
   result: WFResult
-  pct: (n: number) => string
-  fmt: (n: number, dec?: number) => string
 }) {
   const kpis = [
     { label: 'Avg OOS Return', value: pct(result.avg_out_return),
@@ -681,7 +679,7 @@ export function WalkForwardOptimizerTab({
         <div style={{ animation: 'btFadeIn 0.4s ease' }}>
 
           {/* KPI strip */}
-          <WFOKPIs result={wfResult} pct={pct} fmt={fmt} />
+          <WFOKPIs result={wfResult} />
 
           {/* Equity + mini charts */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 24,
