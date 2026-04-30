@@ -10,7 +10,6 @@ import type {
   WFResult,
 } from './types'
 import { ensurePyodide, PYODIDE_BRIDGE, PYODIDE_BRIDGE_WFO } from './lib/pyodide';
-import { fmt, pct } from './lib/format';
 import { ConfigPanel } from './components/ConfigPanel';
 import { MetricsGrid } from './components/MetricsGrid';
 import { EquityChart } from './components/EquityChart';
@@ -29,7 +28,6 @@ export default function BacktestingEnginePage() {
   const paramValues     = useBacktestStore(s => s.paramValues)
   const activeTab       = useBacktestStore(s => s.activeTab)
   const result          = useBacktestStore(s => s.btResult)
-  const showTrades      = useBacktestStore(s => s.showTrades)
   const wfInSample      = useBacktestStore(s => s.wfInSample)
   const wfOutSample     = useBacktestStore(s => s.wfOutSample)
   const wfMode          = useBacktestStore(s => s.wfMode)
@@ -337,45 +335,6 @@ sys.modules['optimizer'] = _mod
                 startDate={startDate}
                 endDate={endDate}
               />
-
-              {showTrades && result.trades.length > 0 && (
-                <div style={{ overflowX: 'auto', marginBottom: 40 }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-                    <thead>
-                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                        {['Entry', 'Exit', 'Direction', 'P&L', 'P&L %'].map(h => (
-                          <th key={h} style={{ padding: '8px 12px', textAlign: 'left',
-                            fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
-                            color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {result.trades.slice(0, 100).map((t, i) => (
-                        <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                          <td style={{ padding: '7px 12px', color: 'rgba(255,255,255,0.55)', fontVariantNumeric: 'tabular-nums' }}>{t.entry_date}</td>
-                          <td style={{ padding: '7px 12px', color: 'rgba(255,255,255,0.55)', fontVariantNumeric: 'tabular-nums' }}>{t.exit_date}</td>
-                          <td style={{ padding: '7px 12px', color: t.direction === 'long' ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)',
-                            textTransform: 'uppercase', fontSize: 10, letterSpacing: '0.08em' }}>{t.direction}</td>
-                          <td style={{ padding: '7px 12px', fontVariantNumeric: 'tabular-nums',
-                            color: t.pnl >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)' }}>
-                            {exMeta.currency}{fmt(Math.abs(t.pnl))}
-                          </td>
-                          <td style={{ padding: '7px 12px', fontVariantNumeric: 'tabular-nums',
-                            color: t.pnl_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)' }}>
-                            {pct(t.pnl_pct)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  {result.trades.length > 100 && (
-                    <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 8, textAlign: 'center' }}>
-                      Showing first 100 of {result.trades.length} trades
-                    </p>
-                  )}
-                </div>
-              )}
             </div>
           )}
         </>
