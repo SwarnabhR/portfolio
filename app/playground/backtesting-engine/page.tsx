@@ -1,6 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
+import { useBacktestStore } from '@/store/backtestStore'
+import { WalkForwardOptimizerTab } from './WalkForwardOptimizerTab'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -250,6 +252,32 @@ interface BacktestResult {
   trades: { entry_date: string; exit_date: string; direction: string; pnl: number; pnl_pct: number }[]
 }
 
+interface WFWindow {
+  window:       number
+  in_start:     string
+  in_end:       string
+  out_start:    string
+  out_end:      string
+  best_params:  Record<string, number>
+  in_sharpe:    number
+  in_cagr:      number
+  out_sharpe:   number
+  out_cagr:     number
+  out_return:   number
+  out_trades:   number
+  out_drawdown: number
+}
+
+interface WFResult {
+  windows:        WFWindow[]
+  equity_curve:   { date: string; value: number }[]
+  avg_out_sharpe: number
+  avg_out_cagr:   number
+  avg_out_return: number
+  total_trades:   number
+  consistency:    number
+}
+
 // ─── Pyodide bridge code (runs in-browser) ────────────────────────────────────
 // We fetch each engine .py from /engine/ (static assets) and exec them in order
 const PYODIDE_BRIDGE = `
@@ -308,6 +336,94 @@ result = json.dumps({
 result
 `
 
+const PYODIDE_BRIDGE_WFO = `
+import json, numpy as np
+
+rows       = json.loads(ohlcv_json)
+opt_metric = optimizer_metric
+in_days    = int(in_sample_days)
+out_days   = int(out_sample_days)
+mode       = wf_mode
+min_trades = 3
+
+import pandas as pd
+df = pd.DataFrame(rows)
+df['date'] = pd.to_datetime(df['date'])
+df = df.set_index('date').sort_index()
+df.columns = [c.lower() for c in df.columns]
+
+strategy_cls = globals()[strategy_class_name]
+param_grid   = json.loads(param_grid_json)
+
+total = len(df)
+windows = []
+start_idx = 0
+win_num = 0
+
+while True:
+    is_start = 0 if mode == 'anchored' else start_idx
+    is_end   = is_start + in_days
+    oos_end  = is_end + out_days
+    if oos_end > total:
+        break
+    windows.append((win_num, df.iloc[is_start:is_end], df.iloc[is_end:oos_end]))
+    start_idx = is_end
+    win_num += 1
+
+if not windows:
+    raise ValueError("Not enough data for even one window. Reduce in-sample or out-of-sample days.")
+
+from optimizer import GridOptimizer
+from backtest import Backtest
+
+window_results = []
+oos_equity_pieces = []
+
+for win_num, in_df, out_df in windows:
+    keys = list(param_grid.keys())
+    constraint = (lambda p: p['fast'] < p['slow']) if ('fast' in keys and 'slow' in keys) else None
+    opt = GridOptimizer(strategy_class=strategy_cls, param_grid=param_grid,
+                        initial=float(initial_capital), min_trades=min_trades, constraint=constraint)
+    best = opt.best(in_df, sort_by=opt_metric)
+    if best is None:
+        continue
+    bt = Backtest(initial=float(initial_capital))
+    try:
+        trades_df, equity_curve, metrics = bt.run(out_df, strategy_cls(**best.params))
+    except Exception:
+        continue
+    scale = (oos_equity_pieces[-1]['value'] / float(initial_capital)) if oos_equity_pieces else 1.0
+    for d, v in equity_curve.items():
+        oos_equity_pieces.append({'date': str(d.date()), 'value': round(float(v) * scale, 2)})
+    window_results.append({
+        'window': win_num,
+        'in_start': str(in_df.index[0].date()), 'in_end': str(in_df.index[-1].date()),
+        'out_start': str(out_df.index[0].date()), 'out_end': str(out_df.index[-1].date()),
+        'best_params': {k: float(v) for k, v in best.params.items()},
+        'in_sharpe': round(best.sharpe_ratio, 3), 'in_cagr': round(best.cagr * 100, 2),
+        'out_sharpe': round(float(metrics.sharpe_ratio), 3),
+        'out_cagr': round(float(metrics.cagr) * 100, 2),
+        'out_return': round(float(metrics.total_return_pct), 2),
+        'out_trades': int(metrics.total_trades),
+        'out_drawdown': round(float(metrics.max_drawdown_pct), 2),
+    })
+
+if not window_results:
+    raise ValueError("Optimizer found no valid parameter combinations in any window.")
+
+out_returns = [w['out_return'] for w in window_results]
+result = json.dumps({
+    'windows': window_results,
+    'equity_curve': oos_equity_pieces,
+    'avg_out_sharpe': round(float(np.mean([w['out_sharpe'] for w in window_results])), 3),
+    'avg_out_cagr':   round(float(np.mean([w['out_cagr']   for w in window_results])), 2),
+    'avg_out_return': round(float(np.mean(out_returns)), 2),
+    'total_trades':   sum(w['out_trades'] for w in window_results),
+    'consistency':    round(100 * sum(1 for r in out_returns if r > 0) / len(out_returns), 1),
+})
+result
+`
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 declare global {
@@ -318,24 +434,51 @@ declare global {
 }
 
 export default function BacktestingEnginePage() {
-  // ── state ──
-  const [exchange,        setExchange]        = useState<Exchange>('NSE')
-  const [symbolInput,     setSymbolInput]     = useState('')
-  const [selectedSymbol,  setSelectedSymbol]  = useState('')
-  const [strategyIdx,     setStrategyIdx]     = useState(0)
-  const [paramValues,     setParamValues]     = useState<Record<string, number>>(() => {
+  // ── Zustand store ──
+  const exchange        = useBacktestStore(s => s.exchange)
+  const symbolInput     = useBacktestStore(s => s.symbolInput)
+  const selectedSymbol  = useBacktestStore(s => s.selectedSymbol)
+  const startDate       = useBacktestStore(s => s.startDate)
+  const endDate         = useBacktestStore(s => s.endDate)
+  const initialCapital  = useBacktestStore(s => s.initialCapital)
+  const strategyIdx     = useBacktestStore(s => s.strategyIdx)
+  const variantIdx      = useBacktestStore(s => s.variantIdx)
+  const paramValues     = useBacktestStore(s => s.paramValues)
+  const activeTab       = useBacktestStore(s => s.activeTab)
+  const status          = useBacktestStore(s => s.btStatus)
+  const statusMsg       = useBacktestStore(s => s.btStatusMsg)
+  const result          = useBacktestStore(s => s.btResult)
+  const showTrades      = useBacktestStore(s => s.showTrades)
+  const wfInSample      = useBacktestStore(s => s.wfInSample)
+  const wfOutSample     = useBacktestStore(s => s.wfOutSample)
+  const wfMode          = useBacktestStore(s => s.wfMode)
+  const optMetric       = useBacktestStore(s => s.optMetric)
+
+  const setBtResult    = useBacktestStore(s => s.setBtResult)
+  const setBtStatus    = useBacktestStore(s => s.setBtStatus)
+  const setBtStatusMsg = useBacktestStore(s => s.setBtStatusMsg)
+  const setWfResult    = useBacktestStore(s => s.setWfResult)
+  const setWfStatus    = useBacktestStore(s => s.setWfStatus)
+  const setWfStatusMsg = useBacktestStore(s => s.setWfStatusMsg)
+  const setActiveTab      = useBacktestStore(s => s.setActiveTab)
+  const setExchange       = useBacktestStore(s => s.setExchange)
+  const setSymbolInput    = useBacktestStore(s => s.setSymbolInput)
+  const setSelectedSymbol = useBacktestStore(s => s.setSelectedSymbol)
+  const setStartDate      = useBacktestStore(s => s.setStartDate)
+  const setEndDate        = useBacktestStore(s => s.setEndDate)
+  const setInitialCapital = useBacktestStore(s => s.setInitialCapital)
+  const setStrategyIdx    = useBacktestStore(s => s.setStrategyIdx)
+  const setVariantIdx     = useBacktestStore(s => s.setVariantIdx)
+  const setParamValues    = useBacktestStore(s => s.setParamValues)
+  const setShowTrades     = useBacktestStore(s => s.setShowTrades)
+
+  // ── init param defaults once ──
+  useEffect(() => {
     const d: Record<string, number> = {}
     STRATEGIES[0].params.forEach(p => { d[p.key] = p.default })
-    return d
-  })
-  const [variantIdx,      setVariantIdx]      = useState(0)
-  const [startDate,       setStartDate]       = useState('2021-01-01')
-  const [endDate,         setEndDate]         = useState(new Date().toISOString().slice(0, 10))
-  const [initialCapital,  setInitialCapital]  = useState(100000)
-  const [status,          setStatus]          = useState<'idle'|'fetching'|'loading'|'running'|'done'|'error'>('idle')
-  const [statusMsg,       setStatusMsg]       = useState('')
-  const [result,          setResult]          = useState<BacktestResult | null>(null)
-  const [showTrades,      setShowTrades]      = useState(false)
+    setParamValues(d)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const pyodideRef = useRef<unknown>(null)
   const canvasRef  = useRef<HTMLCanvasElement>(null)
@@ -343,14 +486,6 @@ export default function BacktestingEnginePage() {
   const strategy = STRATEGIES[strategyIdx]
   const variant  = strategy.variants[variantIdx]
   const exMeta   = EXCHANGES[exchange]
-
-  // ── sync param defaults when strategy changes ──
-  // useEffect(() => {
-  //   const defaults: Record<string, number> = {}
-  //   STRATEGIES[strategyIdx].params.forEach(p => { defaults[p.key] = p.default })
-  //   setParamValues(defaults)
-  //   setVariantIdx(0)
-  // }, [strategyIdx])
 
   // ── load Pyodide once ──
   const ensurePyodide = useCallback(async () => {
@@ -364,13 +499,12 @@ export default function BacktestingEnginePage() {
         document.head.appendChild(s)
       })
     }
-    setStatusMsg('Loading Python runtime...')
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setBtStatusMsg('Loading Python runtime...')    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const py = await (window.loadPyodide as any)({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.4/full/' })
-    setStatusMsg('Installing packages (pandas, numpy)...')
+    setBtStatusMsg('Installing packages (pandas, numpy)...')
     await py.loadPackage(['pandas', 'numpy'])
     // Load engine source files from /engine/ static directory
-    setStatusMsg('Loading engine modules...')
+    setBtStatusMsg('Loading engine modules...')
     const engineFiles = ['risk.py', 'costs.py', 'sizer.py', 'indicators.py', 'strategy.py', 'backtest.py']
     for (const file of engineFiles) {
       const resp = await fetch(`/engine/${file}`)
@@ -388,6 +522,7 @@ export default function BacktestingEnginePage() {
     }
     pyodideRef.current = py
     return py
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // ── draw equity curve on canvas ──
@@ -495,11 +630,11 @@ export default function BacktestingEnginePage() {
   // ── run ──
   const handleRun = useCallback(async () => {
     const sym = selectedSymbol || symbolInput.trim().toUpperCase()
-    if (!sym) { setStatusMsg('Please select or enter a symbol.'); setStatus('error'); return }
+    if (!sym) { setBtStatusMsg('Please select or enter a symbol.'); setBtStatus('error'); return }
 
-    setStatus('fetching')
-    setResult(null)
-    setStatusMsg('Fetching market data...')
+    setBtStatus('fetching')
+    setBtResult(null)
+    setBtStatusMsg('Fetching market data...')
 
     try {
       // 1. Fetch OHLCV via Next.js API route
@@ -511,13 +646,13 @@ export default function BacktestingEnginePage() {
       if (rows.length < 50) throw new Error(`Only ${rows.length} data points — try a longer date range or a different symbol.`)
 
       // 2. Ensure Pyodide is ready
-      setStatus('loading')
+      setBtStatus('loading')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const py = await ensurePyodide() as any
 
       // 3. Run backtest in Python
-      setStatus('running')
-      setStatusMsg('Running backtest...')
+      setBtStatus('running')
+      setBtStatusMsg('Running backtest...')
 
       py.globals.set('ohlcv_json',           JSON.stringify(rows))
       py.globals.set('strategy_class_name',  variant.cls)
@@ -527,14 +662,88 @@ export default function BacktestingEnginePage() {
       const raw: string = await py.runPythonAsync(PYODIDE_BRIDGE)
       const parsed = JSON.parse(raw) as BacktestResult
 
-      setResult(parsed)
-      setStatus('done')
-      setStatusMsg('')
+      setBtResult(parsed)
+      setBtStatus('done')
+      setBtStatusMsg('')
     } catch (err) {
-      setStatus('error')
-      setStatusMsg(err instanceof Error ? err.message : String(err))
+      setBtStatus('error')
+      setBtStatusMsg(err instanceof Error ? err.message : String(err))
     }
-  }, [exchange, selectedSymbol, symbolInput, startDate, endDate, initialCapital, variant, paramValues, ensurePyodide])
+  }, [exchange, selectedSymbol, symbolInput, startDate, endDate,
+    initialCapital, variant, ensurePyodide,
+    setBtResult, setBtStatus, setBtStatusMsg, paramValues])
+
+  const handleRunWFO = useCallback(async () => {
+    const sym = selectedSymbol || symbolInput.trim().toUpperCase()
+    if (!sym) { setWfStatusMsg('Please select or enter a symbol.'); setWfStatus('error'); return }
+
+    setWfStatus('fetching')
+    setWfResult(null)
+    setWfStatusMsg('Fetching market data...')
+
+    try {
+      const params = new URLSearchParams({ symbol: sym, exchange, start: startDate, end: endDate })
+      const dataRes = await fetch(`/api/market-data?${params}`)
+      const dataJson = await dataRes.json()
+      if (!dataRes.ok) throw new Error(dataJson.error ?? 'Market data fetch failed')
+      const { rows } = dataJson as { rows: object[] }
+      if (rows.length < 100) throw new Error(`Only ${rows.length} data points — need more history for walk-forward.`)
+
+      setWfStatus('loading')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const py = await ensurePyodide() as any
+
+      if (!py._wfoLoaded) {
+        setWfStatusMsg('Loading optimizer module...')
+        const resp = await fetch('/engine/optimizer.py')
+        if (!resp.ok) throw new Error('Failed to load engine/optimizer.py')
+        const code = await resp.text()
+        await py.runPythonAsync(code)
+        await py.runPythonAsync(`
+import sys, types as _types
+_mod = _types.ModuleType('optimizer')
+_mod.__dict__.update({k: v for k, v in globals().items() if not k.startswith('__')})
+sys.modules['optimizer'] = _mod
+        `)
+        py._wfoLoaded = true
+      }
+
+      setWfStatus('running')
+
+      const paramGrid: Record<string, number[]> = {}
+      STRATEGIES[strategyIdx].params.forEach(p => {
+        const vals: number[] = []
+        const stride = Math.max(p.step, Math.floor((p.max - p.min) / 6 / p.step) * p.step)
+        for (let v = p.min; v <= p.max && vals.length < 7; v = Math.round((v + stride) * 1000) / 1000) {
+          vals.push(v)
+        }
+        paramGrid[p.key] = vals
+      })
+
+      const totalCombos = Object.values(paramGrid).reduce((a, v) => a * v.length, 1)
+      setWfStatusMsg(`Optimizing ${totalCombos} combos across windows...`)
+
+      py.globals.set('ohlcv_json',          JSON.stringify(rows))
+      py.globals.set('strategy_class_name', variant.cls)
+      py.globals.set('param_grid_json',     JSON.stringify(paramGrid))
+      py.globals.set('initial_capital',     String(initialCapital))
+      py.globals.set('in_sample_days',      String(wfInSample))
+      py.globals.set('out_sample_days',     String(wfOutSample))
+      py.globals.set('wf_mode',             wfMode)
+      py.globals.set('optimizer_metric',    optMetric)
+
+      const raw: string = await py.runPythonAsync(PYODIDE_BRIDGE_WFO)
+      setWfResult(JSON.parse(raw) as WFResult)
+      setWfStatus('done')
+      setWfStatusMsg('')
+    } catch (err) {
+      setWfStatus('error')
+      setWfStatusMsg(err instanceof Error ? err.message : String(err))
+    }
+  }, [exchange, selectedSymbol, symbolInput, startDate, endDate,
+    initialCapital, variant, strategyIdx, wfInSample, wfOutSample,
+    wfMode, optMetric, ensurePyodide,
+    setWfResult, setWfStatus, setWfStatusMsg])
 
   // ── helpers ──
   const fmt = (n: number, dec = 2) => n.toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
@@ -542,7 +751,7 @@ export default function BacktestingEnginePage() {
     const decimals = Math.abs(n) < 0.1 && n !== 0 ? 3 : 2
     return `${n >= 0 ? '+' : ''}${n.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals})}%`
   }
-  const isRunning = ['fetching','loading','running'].includes(status)
+  const isRunning    = ['fetching','loading','running'].includes(status)
 
   const downloadCSV = useCallback(() => {
     if (!result) return
@@ -616,6 +825,24 @@ export default function BacktestingEnginePage() {
           </p>
         </div>
 
+        {/* ── Tab Switcher ── */}
+        <div style={{ display: 'flex', gap: 4, marginBottom: 28,
+          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+          borderRadius: 6, padding: 4, width: 'fit-content' }}>
+          {(['backtest', 'optimizer'] as const).map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)} style={{
+              padding: '7px 20px', borderRadius: 4, fontSize: 12,
+              letterSpacing: '0.08em', textTransform: 'uppercase',
+              background: activeTab === tab ? 'rgba(160,96,255,0.15)' : 'transparent',
+              border: `1px solid ${activeTab === tab ? 'rgba(160,96,255,0.4)' : 'transparent'}`,
+              color: activeTab === tab ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)',
+              cursor: 'pointer', transition: 'all 0.15s',
+            }}>
+              {tab === 'backtest' ? 'Backtest' : 'Walk-Forward Optimizer'}
+            </button>
+          ))}
+        </div>
+
         {/* ── Config panel ── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16, marginBottom: 24 }}>
 
@@ -682,196 +909,204 @@ export default function BacktestingEnginePage() {
             />
           </div>
         </div>
-
+        {activeTab === 'backtest' && (<>
         {/* ── Strategy ── */}
-        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 6, padding: 20, marginBottom: 24 }}>
-          <label style={labelStyle}>Strategy</label>
+          <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 6, padding: 20, marginBottom: 24 }}>
+            <label style={labelStyle}>Strategy</label>
 
-          {/* Strategy family */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
-            {STRATEGIES.map((s, i) => (
-              <button key={s.cls} onClick={() => {
-                setStrategyIdx(i)
-                setVariantIdx(0)
-                const d: Record<string, number> = {}
-                STRATEGIES[i].params.forEach(p => { d[p.key] = p.default })
-                setParamValues(d)
-              }} style={chipStyle(strategyIdx === i)}>
-                {s.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Variant */}
-          <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
-            {strategy.variants.map((v, i) => (
-              <button key={v.key} onClick={() => setVariantIdx(i)} style={chipStyle(variantIdx === i)}>
-                {v.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Params */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16 }}>
-            {strategy.params.map(p => (
-              <div key={p.key}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                  <label style={{ ...labelStyle, marginBottom: 0 }}>{p.label}</label>
-                  <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontVariantNumeric: 'tabular-nums' }}>
-                    {paramValues[p.key] ?? p.default}
-                  </span>
-                </div>
-                <input
-                  type="range" min={p.min} max={p.max} step={p.step}
-                  value={paramValues[p.key] ?? p.default}
-                  onChange={e => setParamValues(prev => ({ ...prev, [p.key]: Number(e.target.value) }))}
-                  style={{ width: '100%', accentColor: 'rgba(160,96,255,0.8)' }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Run button ── */}
-        <button
-          onClick={handleRun}
-          disabled={isRunning}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 10,
-            padding: '12px 32px',
-            background: isRunning ? 'rgba(255,255,255,0.04)' : 'rgba(160,96,255,0.15)',
-            border: `1px solid ${isRunning ? 'rgba(255,255,255,0.1)' : 'rgba(160,96,255,0.4)'}`,
-            borderRadius: 4, color: 'var(--fg-1)',
-            fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase',
-            cursor: isRunning ? 'not-allowed' : 'pointer',
-            marginBottom: 32,
-            transition: 'all 0.2s',
-          }}
-        >
-          {isRunning && (
-            <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.3)',
-              borderTopColor: 'rgba(160,96,255,0.9)', borderRadius: '50%',
-              animation: 'btSpin 0.7s linear infinite', display: 'inline-block' }} />
-          )}
-          {isRunning ? statusMsg : 'Run Backtest'}
-        </button>
-
-        {/* ── Error ── */}
-        {status === 'error' && (
-          <div style={{ padding: '12px 16px', background: 'rgba(239,68,68,0.08)',
-            border: '1px solid rgba(239,68,68,0.25)', borderRadius: 4,
-            color: 'rgba(239,68,68,0.9)', fontSize: 13, marginBottom: 24 }}>
-            {statusMsg}
-          </div>
-        )}
-
-        {/* ── Results ── */}
-        {result && (
-          <div style={{ animation: 'btFadeIn 0.4s ease' }}>
-
-            {/* Metrics */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginBottom: 24 }}>
-              {[
-                { label: 'Total Return',  value: pct(result.metrics.total_return_pct),  hi: result.metrics.total_return_pct >= 0 },
-                { label: 'CAGR',          value: pct(result.metrics.cagr),               hi: result.metrics.cagr >= 0 },
-                { label: 'Sharpe Ratio',  value: fmt(result.metrics.sharpe_ratio, 3),    hi: result.metrics.sharpe_ratio >= 1 },
-                { label: 'Max Drawdown',  value: `${fmt(result.metrics.max_drawdown_pct)}%`, hi: false },
-                { label: 'Win Rate',      value: `${fmt(result.metrics.win_rate)}%`,     hi: result.metrics.win_rate >= 50 },
-                { label: 'Total Trades',  value: String(result.metrics.total_trades),   hi: true },
-              ].map(m => (
-                <div key={m.label} style={{ padding: '16px 18px',
-                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
-                  borderRadius: 4 }}>
-                  <span style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: 'rgba(255,255,255,0.3)', display: 'block', marginBottom: 8 }}>{m.label}</span>
-                  <span style={{ fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 300, fontVariantNumeric: 'tabular-nums',
-                    color: m.label === 'Max Drawdown' ? 'rgba(239,68,68,0.9)'
-                         : m.hi ? 'rgba(34,197,94,0.9)' : 'rgba(239,68,68,0.85)' }}>
-                    {m.value}
-                  </span>
-                </div>
+            {/* Strategy family */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
+              {STRATEGIES.map((s, i) => (
+                <button key={s.cls} onClick={() => {
+                  setStrategyIdx(i)
+                  setVariantIdx(0)
+                  const d: Record<string, number> = {}
+                  STRATEGIES[i].params.forEach(p => { d[p.key] = p.default })
+                  setParamValues(d)
+                }} style={chipStyle(strategyIdx === i)}>
+                  {s.label}
+                </button>
               ))}
             </div>
 
-            {/* Equity curve */}
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
-              borderRadius: 6, padding: 20, marginBottom: 24 }}>
+            {/* Variant */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
+              {strategy.variants.map((v, i) => (
+                <button key={v.key} onClick={() => setVariantIdx(i)} style={chipStyle(variantIdx === i)}>
+                  {v.label}
+                </button>
+              ))}
+            </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
-                <span style={labelStyle}>Equity Curve — {selectedSymbol || symbolInput} · {variant.label}</span>
-                <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.4)' }}>
-                    <span style={{ width: 20, height: 2, background: result.metrics.total_return_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)', display: 'inline-block', flexShrink: 0 }} />
-                    Strategy {pct(result.metrics.total_return_pct)}
-                  </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
-                    <span style={{ width: 20, height: 1, background: 'rgba(255,255,255,0.25)', display: 'inline-block', borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
-                    Buy &amp; Hold {result.benchmark.length > 0
-                      ? pct(((result.benchmark[result.benchmark.length - 1].value / initialCapital) - 1) * 100)
-                      : '—'}
-                  </span>
+            {/* Params */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16 }}>
+              {strategy.params.map(p => (
+                <div key={p.key}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <label style={{ ...labelStyle, marginBottom: 0 }}>{p.label}</label>
+                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontVariantNumeric: 'tabular-nums' }}>
+                      {paramValues[p.key] ?? p.default}
+                    </span>
+                  </div>
+                  <input
+                    type="range" min={p.min} max={p.max} step={p.step}
+                    value={paramValues[p.key] ?? p.default}
+                    onChange={e => setParamValues({ ...paramValues, [p.key]: Number(e.target.value) })}
+                    style={{ width: '100%', accentColor: 'rgba(160,96,255,0.8)' }}
+                  />
                 </div>
-              </div>
-              <canvas ref={canvasRef} style={{ width: '100%', height: 260, display: 'block' }} />
+              ))}
             </div>
-
-            {/* Trades table toggle + Download */}
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 16 }}>
-              <button onClick={() => setShowTrades(p => !p)} style={chipStyle(showTrades)}>
-                {showTrades ? 'Hide' : 'Show'} Trade Log ({result.trades.length})
-              </button>
-
-              <button onClick={downloadCSV}
-                      style={{
-                        ...chipStyle(false),
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6,
-                      }} title='Download full trade log as CSV'>
-                        ↓ Export CSV
-              </button>
-            </div>
-
-            {showTrades && result.trades.length > 0 && (
-              <div style={{ overflowX: 'auto', marginBottom: 40 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      {['Entry', 'Exit', 'Direction', 'P&L', 'P&L %'].map(h => (
-                        <th key={h} style={{ padding: '8px 12px', textAlign: 'left',
-                          fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
-                          color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.trades.slice(0, 100).map((t, i) => (
-                      <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                        <td style={{ padding: '7px 12px', color: 'rgba(255,255,255,0.55)', fontVariantNumeric: 'tabular-nums' }}>{t.entry_date}</td>
-                        <td style={{ padding: '7px 12px', color: 'rgba(255,255,255,0.55)', fontVariantNumeric: 'tabular-nums' }}>{t.exit_date}</td>
-                        <td style={{ padding: '7px 12px', color: t.direction === 'long' ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)',
-                          textTransform: 'uppercase', fontSize: 10, letterSpacing: '0.08em' }}>{t.direction}</td>
-                        <td style={{ padding: '7px 12px', fontVariantNumeric: 'tabular-nums',
-                          color: t.pnl >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)' }}>
-                          {exMeta.currency}{fmt(Math.abs(t.pnl))}
-                        </td>
-                        <td style={{ padding: '7px 12px', fontVariantNumeric: 'tabular-nums',
-                          color: t.pnl_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)' }}>
-                          {pct(t.pnl_pct)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {result.trades.length > 100 && (
-                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 8, textAlign: 'center' }}>
-                    Showing first 100 of {result.trades.length} trades
-                  </p>
-                )}
-              </div>
-            )}
           </div>
-        )}
+
+          {/* ── Run button ── */}
+          <button
+            onClick={handleRun}
+            disabled={isRunning}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '12px 32px',
+              background: isRunning ? 'rgba(255,255,255,0.04)' : 'rgba(160,96,255,0.15)',
+              border: `1px solid ${isRunning ? 'rgba(255,255,255,0.1)' : 'rgba(160,96,255,0.4)'}`,
+              borderRadius: 4, color: 'var(--fg-1)',
+              fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase',
+              cursor: isRunning ? 'not-allowed' : 'pointer',
+              marginBottom: 32,
+              transition: 'all 0.2s',
+            }}
+          >
+            {isRunning && (
+              <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.3)',
+                borderTopColor: 'rgba(160,96,255,0.9)', borderRadius: '50%',
+                animation: 'btSpin 0.7s linear infinite', display: 'inline-block' }} />
+            )}
+            {isRunning ? statusMsg : 'Run Backtest'}
+          </button>
+
+          {/* ── Error ── */}
+          {status === 'error' && (
+            <div style={{ padding: '12px 16px', background: 'rgba(239,68,68,0.08)',
+              border: '1px solid rgba(239,68,68,0.25)', borderRadius: 4,
+              color: 'rgba(239,68,68,0.9)', fontSize: 13, marginBottom: 24 }}>
+              {statusMsg}
+            </div>
+          )}
+
+          {/* ── Results ── */}
+          {result && (
+            <div style={{ animation: 'btFadeIn 0.4s ease' }}>
+
+              {/* Metrics */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginBottom: 24 }}>
+                {[
+                  { label: 'Total Return',  value: pct(result.metrics.total_return_pct),  hi: result.metrics.total_return_pct >= 0 },
+                  { label: 'CAGR',          value: pct(result.metrics.cagr),               hi: result.metrics.cagr >= 0 },
+                  { label: 'Sharpe Ratio',  value: fmt(result.metrics.sharpe_ratio, 3),    hi: result.metrics.sharpe_ratio >= 1 },
+                  { label: 'Max Drawdown',  value: `${fmt(result.metrics.max_drawdown_pct)}%`, hi: false },
+                  { label: 'Win Rate',      value: `${fmt(result.metrics.win_rate)}%`,     hi: result.metrics.win_rate >= 50 },
+                  { label: 'Total Trades',  value: String(result.metrics.total_trades),   hi: true },
+                ].map(m => (
+                  <div key={m.label} style={{ padding: '16px 18px',
+                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+                    borderRadius: 4 }}>
+                    <span style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.3)', display: 'block', marginBottom: 8 }}>{m.label}</span>
+                    <span style={{ fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 300, fontVariantNumeric: 'tabular-nums',
+                      color: m.label === 'Max Drawdown' ? 'rgba(239,68,68,0.9)'
+                          : m.hi ? 'rgba(34,197,94,0.9)' : 'rgba(239,68,68,0.85)' }}>
+                      {m.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Equity curve */}
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: 6, padding: 20, marginBottom: 24 }}>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+                  <span style={labelStyle}>Equity Curve — {selectedSymbol || symbolInput} · {variant.label}</span>
+                  <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.4)' }}>
+                      <span style={{ width: 20, height: 2, background: result.metrics.total_return_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)', display: 'inline-block', flexShrink: 0 }} />
+                      Strategy {pct(result.metrics.total_return_pct)}
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
+                      <span style={{ width: 20, height: 1, background: 'rgba(255,255,255,0.25)', display: 'inline-block', borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
+                      Buy &amp; Hold {result.benchmark.length > 0
+                        ? pct(((result.benchmark[result.benchmark.length - 1].value / initialCapital) - 1) * 100)
+                        : '—'}
+                    </span>
+                  </div>
+                </div>
+                <canvas ref={canvasRef} style={{ width: '100%', height: 260, display: 'block' }} />
+              </div>
+
+              {/* Trades table toggle + Download */}
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 16 }}>
+                <button onClick={() => setShowTrades(!showTrades)} style={chipStyle(showTrades)}>
+                  {showTrades ? 'Hide' : 'Show'} Trade Log ({result.trades.length})
+                </button>
+
+                <button onClick={downloadCSV}
+                        style={{
+                          ...chipStyle(false),
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                        }} title='Download full trade log as CSV'>
+                          ↓ Export CSV
+                </button>
+              </div>
+
+              {showTrades && result.trades.length > 0 && (
+                <div style={{ overflowX: 'auto', marginBottom: 40 }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                        {['Entry', 'Exit', 'Direction', 'P&L', 'P&L %'].map(h => (
+                          <th key={h} style={{ padding: '8px 12px', textAlign: 'left',
+                            fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
+                            color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.trades.slice(0, 100).map((t, i) => (
+                        <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                          <td style={{ padding: '7px 12px', color: 'rgba(255,255,255,0.55)', fontVariantNumeric: 'tabular-nums' }}>{t.entry_date}</td>
+                          <td style={{ padding: '7px 12px', color: 'rgba(255,255,255,0.55)', fontVariantNumeric: 'tabular-nums' }}>{t.exit_date}</td>
+                          <td style={{ padding: '7px 12px', color: t.direction === 'long' ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)',
+                            textTransform: 'uppercase', fontSize: 10, letterSpacing: '0.08em' }}>{t.direction}</td>
+                          <td style={{ padding: '7px 12px', fontVariantNumeric: 'tabular-nums',
+                            color: t.pnl >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)' }}>
+                            {exMeta.currency}{fmt(Math.abs(t.pnl))}
+                          </td>
+                          <td style={{ padding: '7px 12px', fontVariantNumeric: 'tabular-nums',
+                            color: t.pnl_pct >= 0 ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)' }}>
+                            {pct(t.pnl_pct)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {result.trades.length > 100 && (
+                    <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 8, textAlign: 'center' }}>
+                      Showing first 100 of {result.trades.length} trades
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+      {activeTab === 'optimizer' && (
+        <WalkForwardOptimizerTab
+        STRATEGIES={STRATEGIES}
+        handleRunWFO={handleRunWFO}
+        />
+      )}
       </div>
 
       <style>{`
