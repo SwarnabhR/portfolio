@@ -9,7 +9,7 @@
 import React, { useRef, useEffect, useCallback } from 'react'
 import { useBacktestStore } from '@/store/backtestStore'
 import { fmt, pct } from './lib/format'
-import { WFWindow, WFResult, OptMetric } from './types';
+import { WFWindow, WFResult, OptMetric, StrategyMeta } from './types';
 
 // ── re-use the same STRATEGIES / EXCHANGES constants from the parent file ──
 // Import them if you extract this to its own file, or keep this component
@@ -407,8 +407,7 @@ export function WalkForwardOptimizerTab({
   STRATEGIES,
   handleRunWFO,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  STRATEGIES: any[]
+  STRATEGIES: StrategyMeta[]
   handleRunWFO: () => Promise<void>
 }) {
   // Zustand slices
@@ -422,11 +421,13 @@ export function WalkForwardOptimizerTab({
   const wfStatusMsg = useBacktestStore(s => s.wfStatusMsg)
   const wfResult    = useBacktestStore(s => s.wfResult)
   const initialCapital = useBacktestStore(s => s.initialCapital)
+  const setStrategyIdx = useBacktestStore(s => s.setStrategyIdx)
+  const setVariantIdx  = useBacktestStore(s => s.setVariantIdx)
+  const setWfInSample  = useBacktestStore(s => s.setWfInSample)
+  const setWfOutSample = useBacktestStore(s => s.setWfOutSample)
+  const setWfMode      = useBacktestStore(s => s.setWfMode)
+  const setOptMetric   = useBacktestStore(s => s.setOptMetric)
 
-  const {
-    setStrategyIdx, setVariantIdx,
-    setWfInSample, setWfOutSample, setWfMode, setOptMetric,
-  } = useBacktestStore.getState()
 
   const strategy    = STRATEGIES[strategyIdx]
   const isWfoRunning = ['fetching', 'loading', 'running'].includes(wfStatus)

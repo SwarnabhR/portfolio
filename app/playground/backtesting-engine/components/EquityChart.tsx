@@ -7,15 +7,16 @@ import { pct } from '../lib/format'
 
 interface EquityChartProps {
   curve:           EquityPoint[]
-  benchmark:       EquityPoint[]
+  benchmark?:      EquityPoint[]      // optional — omit for WFO
   initial:         number
-  symbol:          string
-  variantLabel:    string
-  totalReturnPct:  number
+  symbol?:         string             // optional
+  variantLabel?:   string             // optional
+  totalReturnPct?: number             // optional
+  accentColor?:    'green' | 'purple' // default: 'green'
 }
 
 export function EquityChart({
-  curve, benchmark, initial, symbol, variantLabel, totalReturnPct,
+  curve, benchmark, initial, symbol, variantLabel, totalReturnPct, accentColor
 }: EquityChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -63,10 +64,11 @@ export function EquityChart({
     // fill gradient
     const isPositive = values[values.length - 1] >= initial
     const grad = ctx.createLinearGradient(0, pad.top, 0, h - pad.bottom)
+    const positiveColor = accentColor === 'purple' ? '160,96,255' : '34,197,94'
     if (isPositive) {
-      grad.addColorStop(0,   'rgba(34,197,94,0.25)')
-      grad.addColorStop(0.7, 'rgba(34,197,94,0.05)')
-      grad.addColorStop(1,   'rgba(34,197,94,0)')
+      grad.addColorStop(0,   `rgba(${positiveColor}, 0.25)`)
+      grad.addColorStop(0.7, `rgba(${positiveColor},0.05)`)
+      grad.addColorStop(1,   `rgba(${positiveColor},0)`)
     } else {
       grad.addColorStop(0,   'rgba(239,68,68,0.25)')
       grad.addColorStop(0.7, 'rgba(239,68,68,0.05)')
@@ -82,7 +84,7 @@ export function EquityChart({
 
     // strategy line
     ctx.beginPath()
-    ctx.strokeStyle = isPositive ? 'rgba(34,197,94,0.9)' : 'rgba(239,68,68,0.9)'
+    ctx.strokeStyle = isPositive ? `rgba(${positiveColor},0.9)` : 'rgba(239,68,68,0.9)'
     ctx.lineWidth = 1.5
     curve.forEach((p, i) => {
       if (i === 0) ctx.moveTo(scaleX(i), scaleY(p.value))
@@ -91,17 +93,20 @@ export function EquityChart({
     ctx.stroke()
 
     // benchmark (buy & hold)
-    ctx.beginPath()
-    ctx.strokeStyle = 'rgba(255,255,255,0.2)'
-    ctx.lineWidth = 1
-    ctx.setLineDash([3, 5])
-    benchmark.forEach((p, i) => {
-      const x = pad.left + (i / (benchmark.length - 1)) * (w - pad.left - pad.right)
-      if (i === 0) ctx.moveTo(x, scaleY(p.value))
-      else         ctx.lineTo(x, scaleY(p.value))
-    })
-    ctx.stroke()
-    ctx.setLineDash([])
+    if (benchmark && benchmark.length > 1) {
+      ctx.beginPath()
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)'
+      ctx.lineWidth = 1
+      ctx.setLineDash([3, 5])
+      benchmark.forEach((p, i) => {
+        const x = pad.left + (i / (benchmark.length - 1)) * (w - pad.left - pad.right)
+        if (i == 0) ctx.moveTo(x, scaleY(p.value))
+        else ctx.lineTo(x, scaleY(p.value))
+      })
+      ctx.stroke()
+      ctx.setLineDash([])
+    }
+
 
     // x-axis labels
     ctx.fillStyle = 'rgba(255,255,255,0.3)'
@@ -110,12 +115,12 @@ export function EquityChart({
     for (let i = 0; i < curve.length; i += step) {
       ctx.fillText(curve[i].date.slice(0, 7), scaleX(i), h - pad.bottom + 16)
     }
-  }, [curve, benchmark, initial])
+  }, [curve, benchmark, initial, accentColor])
 
   useEffect(() => { drawChart() }, [drawChart])
 
-  const isPositive = totalReturnPct >= 0
-  const benchmarkReturn = benchmark.length > 0
+  const isPositive = (totalReturnPct ?? 0) >= 0
+  const benchmarkReturn = benchmark && benchmark.length > 0
     ? pct(((benchmark[benchmark.length - 1].value / initial) - 1) * 100)
     : '—'
 
@@ -126,26 +131,32 @@ export function EquityChart({
       borderRadius: 6, padding: 20, marginBottom: 24,
     }}>
       {/* Legend row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
-        <span style={{ fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.35)' }}>
-          Equity Curve — {symbol} · {variantLabel}
-        </span>
-        <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.4)' }}>
-            <span style={{ width: 20, height: 2, flexShrink: 0, display: 'inline-block',
-              background: isPositive ? 'rgba(34,197,94,0.8)' : 'rgba(239,68,68,0.8)' }} />
-            Strategy {pct(totalReturnPct)}
+      {symbol && variantLabel && totalReturnPct !== undefined && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+          <span style={{ fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.35)' }}>
+            Equity Curve — {symbol} · {variantLabel}
           </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 6,
-            color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
-            <span style={{ width: 20, height: 1, display: 'inline-block',
-              borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
-            Buy &amp; Hold {benchmarkReturn}
-          </span>
+          <div style={{ display: 'flex', gap: 16, fontSize: 11 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.4)' }}>
+              <span style={{ width: 20, height: 2, flexShrink: 0, display: 'inline-block',
+                background: isPositive
+                  ? `rgba(${accentColor === 'purple' ? '160,96,255' : '34,197,94'},0.8)`
+                  : 'rgba(239,68,68,0.8)' }} />
+              Strategy {pct(totalReturnPct)}
+            </span>
+            {benchmark && benchmark.length > 0 && (
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6,
+                color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
+                <span style={{ width: 20, height: 1, display: 'inline-block',
+                  borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
+                Buy &amp; Hold {benchmarkReturn}
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+)}
 
       <canvas ref={canvasRef} style={{ width: '100%', height: 260, display: 'block' }} />
     </div>
