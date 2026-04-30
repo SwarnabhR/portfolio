@@ -6,8 +6,16 @@ import { useBacktestStore } from '@/store/backtestStore'
 import { EXCHANGES } from '../constants/exchanges'
 import { STRATEGIES } from '../constants/strategies'
 import type { Exchange, RunStatus } from '../types'
+import { labelStyle, cardStyle, chipStyle } from '../lib/styles'
 
 // ─── Local style helpers ──────────────────────────────────────────────────────
+
+const card: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.03)',
+  border: '1px solid rgba(255,255,255,0.07)',
+  borderRadius: 6,
+  padding: 20,
+}
 
 const inputStyle: React.CSSProperties = {
   background: 'rgba(255,255,255,0.04)',
@@ -18,35 +26,6 @@ const inputStyle: React.CSSProperties = {
   fontSize: 13,
   outline: 'none',
   width: '100%',
-}
-
-const labelStyle: React.CSSProperties = {
-  fontSize: 11,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'rgba(255,255,255,0.35)',
-  display: 'block',
-  marginBottom: 6,
-}
-
-const chipStyle = (active: boolean): React.CSSProperties => ({
-  padding: '5px 14px',
-  fontSize: 12,
-  letterSpacing: '0.06em',
-  borderRadius: 999,
-  border: `1px solid ${active ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
-  background: active ? 'rgba(255,255,255,0.08)' : 'transparent',
-  color: active ? 'var(--fg-1)' : 'rgba(255,255,255,0.4)',
-  cursor: 'pointer',
-  transition: 'all 0.15s',
-  whiteSpace: 'nowrap',
-})
-
-const card: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.03)',
-  border: '1px solid rgba(255,255,255,0.07)',
-  borderRadius: 6,
-  padding: 20,
 }
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
@@ -170,7 +149,7 @@ export function ConfigPanel({ onRun }: ConfigPanelProps) {
       </div>
 
       {/* ── Strategy ── */}
-      <div style={{ ...card, marginBottom: 24 }}>
+      <div style={{ ...cardStyle, marginBottom: 24 }}>
         <label style={labelStyle}>Strategy</label>
 
         {/* Family chips */}
