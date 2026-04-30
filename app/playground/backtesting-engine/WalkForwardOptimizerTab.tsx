@@ -8,6 +8,8 @@
 
 import React, { useRef, useEffect, useCallback } from 'react'
 import { useBacktestStore } from '@/store/backtestStore'
+import { fmt, pct } from './lib/format'
+import { WFWindow, WFResult, OptMetric } from './types';
 
 // ── re-use the same STRATEGIES / EXCHANGES constants from the parent file ──
 // Import them if you extract this to its own file, or keep this component
@@ -16,46 +18,10 @@ import { useBacktestStore } from '@/store/backtestStore'
 // ---------------------------------------------------------------------------
 // Types (already declared in the parent file – remove duplicates if co-located)
 // ---------------------------------------------------------------------------
-interface WFWindow {
-  window:       number
-  in_start:     string
-  in_end:       string
-  out_start:    string
-  out_end:      string
-  best_params:  Record<string, number>
-  in_sharpe:    number
-  in_cagr:      number
-  out_sharpe:   number
-  out_cagr:     number
-  out_return:   number
-  out_trades:   number
-  out_drawdown: number
-}
-
-interface WFResult {
-  windows:        WFWindow[]
-  equity_curve:   { date: string; value: number }[]
-  avg_out_sharpe: number
-  avg_out_cagr:   number
-  avg_out_return: number
-  total_trades:   number
-  consistency:    number
-}
-
-type OptMetric = 'sharpe_ratio' | 'cagr' | 'total_return_pct'
 
 // ---------------------------------------------------------------------------
 // Helpers
-// ---------------------------------------------------------------------------
-const fmt = (n: number, dec = 2) =>
-  n.toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
 
-const pct = (n: number) => {
-  const d = Math.abs(n) < 0.1 && n !== 0 ? 3 : 2
-  return `${n >= 0 ? '+' : ''}${n.toLocaleString('en-IN', {
-    minimumFractionDigits: d, maximumFractionDigits: d,
-  })}%`
-}
 
 const labelStyle: React.CSSProperties = {
   fontSize: 11,

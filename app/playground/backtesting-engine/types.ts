@@ -10,6 +10,8 @@ export interface ExchangeMeta {
   sampleStocks: { symbol: string; name: string }[]
 }
 
+// ---------------------------------------------------------------------------
+export type OptMetric = 'sharpe_ratio' | 'cagr' | 'total_return_pct'
 // ─── Strategy ─────────────────────────────────────────────────────────────────
 
 export interface StrategyParam {
