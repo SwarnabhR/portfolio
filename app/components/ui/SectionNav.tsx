@@ -46,7 +46,7 @@ export default function SectionNav() {
       aria-label="Section navigation"
       className="hidden lg:flex"
       style={{
-        position: 'sticky',
+        position: 'fixed',
         left: 28,
         top: '50%',
         transform: 'translateY(-50%)',

@@ -5,17 +5,22 @@
 import { useState, useEffect } from "react"
 
 export function useScrollY(): number {
-    const [scrollY, setScrollY] = useState(0)
+    const [scrollY, setScrollY] = useState(() =>
+        typeof window !== 'undefined' ? window.scrollY : 0
+    )
 
     useEffect(() => {
-        const handleScroll = () => {
+        let raf: number
+
+        function updateScroll() {
             setScrollY(window.scrollY)
+            raf = requestAnimationFrame(updateScroll)
         }
 
-        window.addEventListener("scroll", handleScroll, { passive: true })
+        raf = requestAnimationFrame(updateScroll)
 
         return () => {
-            window.removeEventListener("scroll", handleScroll)
+            cancelAnimationFrame(raf)
         }
     }, [])
 
