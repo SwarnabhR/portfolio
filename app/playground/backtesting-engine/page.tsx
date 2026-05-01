@@ -14,6 +14,7 @@ import { ConfigPanel } from './components/ConfigPanel';
 import { MetricsGrid } from './components/MetricsGrid';
 import { EquityChart } from './components/EquityChart';
 import { TradeTable } from './components/TradeTable';
+import { EarlyAccessSignup } from './components/EarlyAccessSignup';
 
 export default function BacktestingEnginePage() {
   // ── Zustand store ──
@@ -242,6 +243,9 @@ sys.modules['optimizer'] = _mod
         handleRunWFO={handleRunWFO}
         />
       )}
+
+      {/* ── Early access sign-up ── */}
+      <EarlyAccessSignup />
       </div>
 
       <style>{`
