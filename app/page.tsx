@@ -6,8 +6,8 @@ import FAQ from "./components/sections/FAQ";
 import { Analytics } from '@vercel/analytics/next';
 import Hero from "./components/sections/Hero";
 import Services from "./components/sections/Services";
-import Testimonials from "./components/sections/Testimonials";
 import Work from "./components/sections/Work";
+import Playground from "./components/sections/Playground";
 import SpotifyWidget from "./components/ui/SpotifyWidget";
 
 const client = createClient({
@@ -18,10 +18,7 @@ const client = createClient({
 })
 
 export default async function Home() {
-  const [testimonials, faqs, services] = await Promise.all([
-    client.fetch<{ quote: string; name: string; role: string; date: string }[]>(
-      `*[_type == "testimonial"] | order(order asc) { quote, name, role, date }`
-    ),
+  const [faqs, services] = await Promise.all([
     client.fetch<{ question: string; answer: string }[]>(
       `*[_type == "faqItem"] | order(order asc) { question, answer }`
     ),
@@ -36,7 +33,7 @@ export default async function Home() {
       <Hero />
       <About />
       <Work />
-      <Testimonials items={testimonials.length ? testimonials : undefined} />
+      <Playground />
       <Services items={services.length ? services : undefined} />
       <FAQ items={faqs.length ? faqs : undefined} />
       <Contact />
