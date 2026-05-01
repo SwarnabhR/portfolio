@@ -155,8 +155,9 @@ function RecentFeed({ tracks }: { tracks: Track[] }) {
               textDecoration: 'none',
               background: track.nowplaying ? 'linear-gradient(90deg,rgba(88,0,180,0.1),transparent 70%)' : 'transparent',
               opacity: hoveredIdx !== null && hoveredIdx !== i ? 0.28 : 1,
-              transform: hoveredIdx === i ? 'translateX(-4px)' : 'none',
+              transform: hoveredIdx === i ? 'translateX(-4px)' : 'translateZ(0)',
               transition: 'opacity 0.3s, transform 0.3s',
+              willChange: 'opacity, transform',
             }}
           >
             <span style={{ fontFamily: 'monospace', fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.2)' }}>{String(i + 1).padStart(2, '0')}</span>
@@ -216,7 +217,7 @@ function TopCardsSection({ items, label, period, onPeriodChange }: {
 function TopCard({ item }: { item: TopItem }) {
   const [hovered, setHovered] = useState(false)
   return (
-    <a href={item.url} target="_blank" rel="noopener noreferrer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ display: 'block', background: 'var(--bg)', textDecoration: 'none', border: '1px solid transparent', borderColor: hovered ? 'rgba(160,60,255,0.35)' : 'transparent', transform: hovered ? 'translateY(-3px)' : 'none', transition: 'transform 0.4s cubic-bezier(.22,1,.36,1), border-color 0.3s', overflow: 'hidden' }}>
+    <a href={item.url} target="_blank" rel="noopener noreferrer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ display: 'block', background: 'var(--bg)', textDecoration: 'none', border: '1px solid transparent', borderColor: hovered ? 'rgba(160,60,255,0.35)' : 'transparent', transform: hovered ? 'translateY(-3px)' : 'translateZ(0)', transition: 'transform 0.4s cubic-bezier(.22,1,.36,1), border-color 0.3s', overflow: 'hidden', willChange: 'transform' }}>
       <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'baseline', gap: 12 }}>
         <span style={{ fontFamily: 'monospace', fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.2)', flexShrink: 0 }}>{String(item.rank).padStart(2, '0')}</span>
         <div style={{ minWidth: 0, flex: 1 }}>
@@ -253,10 +254,10 @@ function PlaylistRow({ item, index, dimmed }: { item: PlaylistItem; index: numbe
     <a ref={ref} href={url ?? '#'} target={url ? '_blank' : undefined} rel={url ? 'noopener noreferrer' : undefined}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       className="pl-row"
-      style={{ display: 'grid', gridTemplateColumns: '40px 160px 1fr auto auto 40px', gap: 24, alignItems: 'center', padding: '20px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', textDecoration: 'none', cursor: url ? 'pointer' : 'default', opacity: isVisible ? (dimmed ? 0.28 : 1) : 0, transform: isVisible ? (hovered ? 'translateX(-6px)' : 'translateX(0)') : 'translateY(16px)', transition: `opacity 0.5s ease ${index * 55}ms, transform 0.35s ease` }}
+      style={{ display: 'grid', gridTemplateColumns: '40px 160px 1fr auto auto 40px', gap: 24, alignItems: 'center', padding: '20px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', textDecoration: 'none', cursor: url ? 'pointer' : 'default', opacity: isVisible ? (dimmed ? 0.28 : 1) : 0, transform: isVisible ? (hovered ? 'translateX(-6px)' : 'translateX(0)') : 'translateY(16px)', transition: `opacity 0.5s ease ${index * 55}ms, transform 0.35s ease`, willChange: 'opacity, transform' }}
     >
       <span className="pl-index" style={{ fontFamily: 'monospace', fontSize: 'var(--text-sm)', color: 'rgba(255,255,255,0.2)' }}>0{index + 1}</span>
-      <div className="pl-thumb" style={{ width: 160, height: 90, borderRadius: 2, position: 'relative', overflow: 'hidden', flexShrink: 0, background: paletteFor(item.title), transform: hovered ? 'scale(1.02)' : 'scale(1)', transition: 'transform 0.4s ease' }}>
+      <div className="pl-thumb" style={{ width: 160, height: 90, borderRadius: 2, position: 'relative', overflow: 'hidden', flexShrink: 0, background: paletteFor(item.title), transform: hovered ? 'scale(1.02)' : 'scale(1)', transition: 'transform 0.4s ease', willChange: 'transform' }}>
         {item.thumbnail?.asset?.url && <Image src={item.thumbnail.asset.url} alt={item.thumbnail.alt ?? item.title} width={w} height={h} style={{ width: '100%', height: '100%', objectFit: 'cover' }} sizes="160px" />}
       </div>
       <div style={{ minWidth: 0 }}>
@@ -447,15 +448,21 @@ export default function PlaylistClient({ playlists }: { playlists: PlaylistItem[
         {/* Orb 1 — drifts top-right */}
         <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
           background: 'radial-gradient(ellipse 60% 70% at 75% 35%, rgba(88,0,180,0.45) 0%, transparent 70%)',
-          animation: 'heroOrb1 12s ease-in-out infinite alternate' }} />
+          animation: 'heroOrb1 12s ease-in-out infinite alternate',
+          willChange: 'transform',
+          transform: 'translateZ(0)' }} />
         {/* Orb 2 — drifts bottom-left */}
         <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
           background: 'radial-gradient(ellipse 45% 55% at 15% 80%, rgba(194,24,91,0.25) 0%, transparent 65%)',
-          animation: 'heroOrb2 16s ease-in-out infinite alternate' }} />
+          animation: 'heroOrb2 16s ease-in-out infinite alternate',
+          willChange: 'transform',
+          transform: 'translateZ(0)' }} />
         {/* Orb 3 — subtle blue accent */}
         <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
           background: 'radial-gradient(ellipse 35% 40% at 90% 90%, rgba(0,40,120,0.3) 0%, transparent 60%)',
-          animation: 'heroOrb1 20s ease-in-out infinite alternate-reverse' }} />
+          animation: 'heroOrb1 20s ease-in-out infinite alternate-reverse',
+          willChange: 'transform',
+          transform: 'translateZ(0)' }} />
 
         <div ref={headRef} className="max-w-6xl mx-auto px-6" style={{ position: 'relative', zIndex: 1, paddingTop: 48, paddingBottom: 48 }}>
         <div style={{ opacity: headVisible ? 1 : 0, transform: headVisible ? 'translateY(0)' : 'translateY(12px)', transition: 'opacity 0.5s ease, transform 0.5s ease', marginBottom: 20 }}>
