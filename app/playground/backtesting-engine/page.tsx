@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useBacktestStore } from '@/store/backtestStore'
 import { WalkForwardOptimizerTab } from './WalkForwardOptimizerTab'
 import { EXCHANGES } from './constants/exchanges';
@@ -49,113 +49,10 @@ export default function BacktestingEnginePage() {
     setParamValues(d)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  const canvasRef  = useRef<HTMLCanvasElement>(null)
 
   const strategy = STRATEGIES[strategyIdx]
   const variant  = strategy.variants[variantIdx]
   const exMeta   = EXCHANGES[exchange]
-
-  // ── draw equity curve on canvas ──
-  const drawChart = useCallback((curve: { date: string; value: number }[],
-                                 benchmark: { date: string; value: number }[],
-                                 initial: number) => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    canvas.width  = canvas.offsetWidth  * devicePixelRatio
-    canvas.height = canvas.offsetHeight * devicePixelRatio
-    ctx.scale(devicePixelRatio, devicePixelRatio)
-    const w = canvas.offsetWidth
-    const h = canvas.offsetHeight
-
-    ctx.clearRect(0, 0, w, h)
-
-    const pad = { top: 24, right: 24, bottom: 36, left: 72 }
-    const values = curve.map(p => p.value)
-    const minV = Math.min(...values) * 0.995
-    const maxV = Math.max(...values) * 1.005
-    const scaleX = (i: number) => pad.left + (i / (curve.length - 1)) * (w - pad.left - pad.right)
-    const scaleY = (v: number) => pad.top  + (1 - (v - minV) / (maxV - minV)) * (h - pad.top - pad.bottom)
-
-    // grid lines
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)'
-    ctx.lineWidth = 1
-    for (let i = 0; i <= 4; i++) {
-      const y = pad.top + (i / 4) * (h - pad.top - pad.bottom)
-      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w - pad.right, y); ctx.stroke()
-      const val = maxV - (i / 4) * (maxV - minV)
-      ctx.fillStyle = 'rgba(255,255,255,0.3)'
-      ctx.font = `${10 * devicePixelRatio / devicePixelRatio}px monospace`
-      ctx.textAlign = 'right'
-      ctx.fillText(val.toLocaleString('en-IN', { maximumFractionDigits: 0 }), pad.left - 6, y + 4)
-    }
-
-    // baseline (initial capital)
-    const baseY = scaleY(initial)
-    ctx.strokeStyle = 'rgba(255,255,255,0.12)'
-    ctx.setLineDash([4, 4])
-    ctx.beginPath(); ctx.moveTo(pad.left, baseY); ctx.lineTo(w - pad.right, baseY); ctx.stroke()
-    ctx.setLineDash([])
-
-    // fill gradient
-    const grad = ctx.createLinearGradient(0, pad.top, 0, h - pad.bottom)
-    const isPositive = values[values.length - 1] >= initial
-    if (isPositive) {
-      grad.addColorStop(0,   'rgba(34,197,94,0.25)')
-      grad.addColorStop(0.7, 'rgba(34,197,94,0.05)')
-      grad.addColorStop(1,   'rgba(34,197,94,0)')
-    } else {
-      grad.addColorStop(0,   'rgba(239,68,68,0.25)')
-      grad.addColorStop(0.7, 'rgba(239,68,68,0.05)')
-      grad.addColorStop(1,   'rgba(239,68,68,0)')
-    }
-    ctx.beginPath()
-    ctx.moveTo(scaleX(0), h - pad.bottom)
-    curve.forEach((p, i) => ctx.lineTo(scaleX(i), scaleY(p.value)))
-    ctx.lineTo(scaleX(curve.length - 1), h - pad.bottom)
-    ctx.closePath()
-    ctx.fillStyle = grad
-    ctx.fill()
-
-    // line
-    ctx.beginPath()
-    ctx.strokeStyle = isPositive ? 'rgba(34,197,94,0.9)' : 'rgba(239,68,68,0.9)'
-    ctx.lineWidth = 1.5
-    curve.forEach((p, i) => {
-      if (i === 0) ctx.moveTo(scaleX(i), scaleY(p.value))
-      else         ctx.lineTo(scaleX(i), scaleY(p.value))
-    })
-    ctx.stroke()
-
-    // benchmark (buy & hold)
-    ctx.beginPath()
-    ctx.strokeStyle = 'rgba(255,255,255,0.2)'
-    ctx.lineWidth = 1
-    ctx.setLineDash([3, 5])
-    benchmark.forEach((p, i) => {
-      const x = pad.left + (i / benchmark.length - 1) * (w - pad.left - pad.right)
-      if (i == 0) ctx.moveTo(x, scaleY(p.value))
-      else        ctx.lineTo(x, scaleY(p.value))
-    })
-    ctx.stroke()
-    ctx.setLineDash([])
-
-    // x-axis labels (sample ~5 dates)
-    ctx.fillStyle = 'rgba(255,255,255,0.3)'
-    ctx.textAlign = 'center'
-    const step = Math.floor(curve.length / 5)
-    for (let i = 0; i < curve.length; i += step) {
-      const x = scaleX(i)
-      const label = curve[i].date.slice(0, 7) // YYYY-MM
-      ctx.fillText(label, x, h - pad.bottom + 16)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (result) drawChart(result.equity_curve, result.benchmark, initialCapital)
-  }, [result, drawChart, initialCapital])
 
   // ── run ──
   const handleRun = useCallback(async () => {

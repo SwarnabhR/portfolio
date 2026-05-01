@@ -63,6 +63,10 @@
   --color-border-gray: #858689;   /* confirmed form input border colour */
   --color-placeholder: #ffffffb3; /* confirmed input placeholder */
 
+  /* Playground accent — interactive purple used in backtesting UI */
+  --accent-rgb: 160, 96, 255;
+  --accent:     rgb(var(--accent-rgb));
+
   /* ── Semantic aliases ────────────────────────────────────── */
   /*
      Named by PURPOSE.

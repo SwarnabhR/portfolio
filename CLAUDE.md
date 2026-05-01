@@ -24,7 +24,7 @@ No test suite is configured.
 - `/work` — full work/projects page
 - `/gallery` — photo gallery
 - `/playlist` — Spotify playlists
-- `/playground` — experimental demos
+- `/playground` — experimental demos (see Playground section below)
 - `/studio/[[...tool]]` — Sanity Studio (CMS editor)
 
 **Root layout** (`app/layout.tsx`) wraps every page with: `CustomCursor`, `Navbar`, `SectionNav`, `SmoothScroll` (Lenis), `PageTransition`, `Footer`, `@vercel/analytics`.
@@ -39,14 +39,17 @@ A fixed full-screen GIF (`app/5a934e84...gif`) is layered at `z-index: 9999` wit
 
 CSS custom properties are defined in `app/globals.css` and registered as Tailwind utilities via `@theme inline`. Use the semantic alias in components, never the raw hex or pixel value.
 
+The `inline` keyword in `@theme inline` is critical — it keeps CSS vars as live references at runtime rather than resolving them at build time. This is required for `rgba()` chains and dynamic color manipulation. Do not remove it.
+
 ```css
 /* Color hierarchy */
 --bg: #050506          /* page background */
 --fg-1: #ffffff        /* headings */
 --fg-2: #ffffffb3      /* body text (70% opacity) */
 --fg-3: #ffffff41      /* captions (25% opacity) */
---border: rgba(255,255,255,0.12)
---border-pill: rgba(255,255,255,0.25)
+--border: rgba(255,255,255,0.12)      /* default dividers */
+--border-input: rgba(255,255,255,0.30) /* form inputs (higher contrast) */
+--border-pill: rgba(255,255,255,0.25) /* pill labels */
 
 /* Text sizes (key entries) */
 --text-xs: 11px        /* pill labels */
@@ -67,11 +70,20 @@ CSS custom properties are defined in `app/globals.css` and registered as Tailwin
 
 ### Animations — `useReveal` for scroll-triggered reveals
 
-`useReveal<T>()` returns `{ ref, isVisible }`. Attach `ref` to the element; toggle opacity/transform class on `isVisible`. Triggers once (unobserves after first visibility).
+`useReveal<T>(options?)` returns `{ ref, isVisible }`. Attach `ref` to the element; toggle opacity/transform class on `isVisible`.
 
-### Section IDs
+Options (both optional):
+- `threshold` — fraction of element visible before trigger (default `0.15`)
+- `triggerOnce` — unobserve after first trigger (default `true`); set `false` for repeating animations
 
-**Section IDs must match** the list in `app/hooks/useActiveSection.ts` (`['about', 'work', 'services', 'contact']`) for nav highlighting to work. Add a new ID to that list when creating a nav-tracked section.
+### Section IDs — two trackers with different scope
+
+**Critical:** `SectionNav` and `useActiveSection` track *different* section lists:
+
+- `useActiveSection.ts` tracks `['about', 'work', 'services', 'contact']` at `threshold: 0.4` — drives top Navbar highlighting.
+- `SectionNav.tsx` has its own observer at `threshold: 0.3` and includes additional sections (`'hero'`, `'testimonials'`, `'notes'`).
+
+When adding a new nav-tracked section, add its ID to **both** `useActiveSection.ts` and `SectionNav.tsx` if it should appear in both indicators. Section IDs in HTML must match exactly.
 
 ### Client vs Server components
 
@@ -80,6 +92,32 @@ CSS custom properties are defined in `app/globals.css` and registered as Tailwin
 ### Responsive design
 
 `SectionNav` is `hidden lg:flex`. `SpotifyWidget` uses `max-width: min(240px, 44vw)`. No JS-based breakpoints — pure CSS.
+
+### Touch-device behavior
+
+Both Lenis smooth scroll (`SmoothScroll.tsx`) and `CustomCursor.tsx` check `window.matchMedia('(pointer: coarse)').matches` at runtime and disable themselves on touch devices. Do not assume these are active on mobile.
+
+### Navbar scroll states
+
+`Navbar.tsx` manages three independent states: `scrolled` (> 40px depth, triggers visual change), `hidden` (scrolling down past 80px, resets on scroll up), and `menuOpen` (locks body scroll, sets `pointerEvents: none` on overlay when closed). Menu links stagger in with `i * 60ms` transition delays.
+
+### Image remote patterns
+
+`next.config.ts` explicitly allowlists remote image sources. When adding a new external image origin, add it there first:
+- `i.scdn.co` — Spotify album art
+- `cdn.sanity.io` — Sanity assets
+- `lastfm.freetls.fastly.net` — Last.fm cover art
+
+## Playground & Backtesting Engine
+
+`/playground` hosts experimental demos. The primary live experiment is a **backtesting engine** at `/playground/backtesting-engine`.
+
+- Runs Python strategies client-side via **Pyodide** (WebAssembly Python runtime) — see `app/playground/backtesting-engine/lib/pyodide.ts`.
+- State is managed with **Zustand** (`app/store/backtestStore.ts`) using `subscribeWithSelector` middleware, split into three slices: `SharedSlice`, `BacktestSlice`, `OptimizerSlice`.
+- Supports 6 exchanges: NSE, BSE, NYSE, NASDAQ, LSE, SSE.
+- Walk-forward optimization is implemented as a separate tab with its own slice.
+
+Zustand is the only client-side state management library in the project. It is used exclusively in the playground — homepage sections are stateless or use local `useState`.
 
 ## File map
 
@@ -111,12 +149,14 @@ app/
   work/page.tsx         # Full work page (server)
   gallery/page.tsx      # Gallery (server + GalleryClient)
   playlist/page.tsx     # Playlist (server + PlaylistClient)
-  playground/page.tsx   # Experimental demos
+  playground/
+    page.tsx            # Experiment launcher
+    backtesting-engine/ # Live experiment — Pyodide + Zustand
   studio/[[...tool]]/page.tsx  # Sanity Studio (client)
 
   components/
     providers/
-      SmoothScroll.tsx  # Lenis initializer wrapper
+      SmoothScroll.tsx  # Lenis initializer wrapper (skips touch devices)
     sections/
       Hero.tsx          # Animated blobs, parallax fade, CTA
       About.tsx
@@ -129,19 +169,22 @@ app/
       Footer.tsx
     ui/
       Navbar.tsx        # Fixed header + fullscreen overlay menu
-      CustomCursor.tsx  # Ring + dot cursor, expands on hover
+      CustomCursor.tsx  # Ring + dot cursor, disabled on touch devices
       SectionNav.tsx    # Left-side sticky section indicator (lg only)
       PageTransition.tsx# Fade+slide on route change
-      SpotifyWidget.tsx # Top-right now-playing (hides near contact)
+      SpotifyWidget.tsx # Top-right now-playing, polls every 15s, hides near contact
       CtaLink.tsx       # Gradient-border CTA button
       SectionLabel.tsx  # Pill label with ✦ prefix
       VisitorCount.tsx
 
   hooks/
     useReveal.ts        # IntersectionObserver → { ref, isVisible }
-    useLenis.ts         # Initialize Lenis smooth scroll
-    useActiveSection.ts # Track active nav section
-    useScrollY.ts       # window.scrollY tracker
+    useLenis.ts         # Initialize Lenis smooth scroll (touch-aware)
+    useActiveSection.ts # Track active nav section (4 sections, threshold 0.4)
+    useScrollY.ts       # window.scrollY tracker (passive listener)
+
+  store/
+    backtestStore.ts    # Zustand store (playground only)
 
 sanity/
   schemaTypes/
@@ -173,7 +216,7 @@ next.config.ts          # Image remote patterns + static asset cache headers
 
 **Rate limiting** uses an in-memory `Map<ip, { count, reset }>` — resets on server restart; not persistent across deployments. Contact: 3/hr, Comments: 5/hr.
 
-**Spotify token** is cached in memory until expiry. On error, returns `{ isPlaying: false }` gracefully.
+**Spotify token** is cached in memory until expiry. On error, returns `{ isPlaying: false }` gracefully. `SpotifyWidget` polls `/api/spotify/now-playing` every 15 seconds client-side.
 
 **Contact form** → POST `/api/contact` → creates `contactSubmission` in Sanity + sends email via Resend.
 

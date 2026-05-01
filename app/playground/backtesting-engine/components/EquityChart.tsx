@@ -100,7 +100,7 @@ export function EquityChart({
       ctx.setLineDash([3, 5])
       benchmark.forEach((p, i) => {
         const x = pad.left + (i / (benchmark.length - 1)) * (w - pad.left - pad.right)
-        if (i == 0) ctx.moveTo(x, scaleY(p.value))
+        if (i === 0) ctx.moveTo(x, scaleY(p.value))
         else ctx.lineTo(x, scaleY(p.value))
       })
       ctx.stroke()

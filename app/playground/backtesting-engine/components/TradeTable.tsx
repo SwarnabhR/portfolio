@@ -2,6 +2,7 @@
 'use client'
 
 import { useCallback } from 'react'
+import type { CSSProperties } from 'react'
 import { useBacktestStore } from '@/store/backtestStore'
 import type { BacktestTrade } from '../types'
 import { fmt, pct } from '../lib/format'
@@ -15,7 +16,7 @@ interface TradeTableProps {
   endDate:      string
 }
 
-const chipStyle = (active: boolean): React.CSSProperties => ({
+const chipStyle = (active: boolean): CSSProperties => ({
   padding: '5px 14px',
   fontSize: 12,
   letterSpacing: '0.06em',

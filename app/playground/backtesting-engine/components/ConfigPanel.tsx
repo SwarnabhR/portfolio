@@ -10,17 +10,10 @@ import { labelStyle, cardStyle, chipStyle } from '../lib/styles'
 
 // ─── Local style helpers ──────────────────────────────────────────────────────
 
-const card: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.03)',
-  border: '1px solid rgba(255,255,255,0.07)',
-  borderRadius: 6,
-  padding: 20,
-}
-
 const inputStyle: React.CSSProperties = {
   background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  borderRadius: 4,
+  border: '1px solid var(--border)',
+  borderRadius: 'var(--radius-sm)',
   color: 'var(--fg-1)',
   padding: '8px 12px',
   fontSize: 13,
@@ -78,7 +71,7 @@ export function ConfigPanel({ onRun }: ConfigPanelProps) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16, marginBottom: 24 }}>
 
         {/* Exchange */}
-        <div style={card}>
+        <div style={cardStyle}>
           <label style={labelStyle}>Exchange</label>
           <select
             value={exchange}
@@ -98,7 +91,7 @@ export function ConfigPanel({ onRun }: ConfigPanelProps) {
         </div>
 
         {/* Symbol */}
-        <div style={card}>
+        <div style={cardStyle}>
           <label style={labelStyle}>Symbol</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
             {exMeta.sampleStocks.map(s => (
@@ -122,7 +115,7 @@ export function ConfigPanel({ onRun }: ConfigPanelProps) {
         </div>
 
         {/* Date range */}
-        <div style={card}>
+        <div style={cardStyle}>
           <label style={labelStyle}>Date Range</label>
           <div style={{ display: 'flex', gap: 8 }}>
             <div style={{ flex: 1 }}>
@@ -137,7 +130,7 @@ export function ConfigPanel({ onRun }: ConfigPanelProps) {
         </div>
 
         {/* Initial capital */}
-        <div style={card}>
+        <div style={cardStyle}>
           <label style={labelStyle}>Initial Capital ({exMeta.currency})</label>
           <input
             type="number" min={1000} step={1000}
@@ -217,7 +210,7 @@ export function ConfigPanel({ onRun }: ConfigPanelProps) {
             width: 14, height: 14, borderRadius: '50%',
             border: '2px solid rgba(255,255,255,0.15)',
             borderTopColor: 'rgba(160,96,255,0.8)',
-            animation: 'spin 0.7s linear infinite',
+            animation: 'btSpin 0.7s linear infinite',
             display: 'inline-block',
           }} />
         )}

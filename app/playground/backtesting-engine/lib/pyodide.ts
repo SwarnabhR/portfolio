@@ -146,9 +146,15 @@ start_idx = 0
 win_num = 0
 
 while True:
-    is_start = 0 if mode == 'anchored' else start_idx
-    is_end   = is_start + in_days
-    oos_end  = is_end + out_days
+    if mode == 'anchored':
+        # IS window is fixed at 0 and grows each step; OOS slides forward by out_days
+        is_start = 0
+        is_end   = in_days + win_num * out_days
+    else:
+        # Rolling: both IS and OOS windows advance together by in_days
+        is_start = start_idx
+        is_end   = start_idx + in_days
+    oos_end = is_end + out_days
     if oos_end > total:
         break
     windows.append((win_num, df.iloc[is_start:is_end], df.iloc[is_end:oos_end]))
