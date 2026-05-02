@@ -45,15 +45,6 @@ const EXPERIENCE = [
   },
 ]
 
-const EDUCATION = [
-  {
-    period: '2022 – present',
-    degree: 'b.tech · computer science & engineering',
-    institution: 'IIT Kharagpur',
-    description: 'Core focus on algorithms, systems programming, machine learning, and quantitative methods. Pursuing independent research in financial ML and market microstructure alongside formal coursework.',
-  },
-]
-
 const PUBLICATIONS = [
   {
     year: '2023',
@@ -142,20 +133,6 @@ function ExperienceItem({ e, i }: { e: typeof EXPERIENCE[0]; i: number }) {
         {e.highlights.map(h => (
           <span key={h} style={{ fontSize: 10, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--fg-3)', border: '1px solid var(--border)', borderRadius: 999, padding: '3px 10px' }}>{h}</span>
         ))}
-      </div>
-    </div>
-  )
-}
-
-function EducationItem({ e, i }: { e: typeof EDUCATION[0]; i: number }) {
-  const { ref, isVisible } = useReveal()
-  return (
-    <div ref={ref} className="edu-row" style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: 24, borderBottom: '1px solid var(--border)', paddingBottom: 28, opacity: isVisible ? 1 : 0, transform: isVisible ? 'none' : 'translateY(16px)', transition: `all 0.6s ease ${i * 80}ms` }}>
-      <span style={{ fontSize: 'var(--text-xs)', color: 'var(--fg-3)', letterSpacing: '0.06em', paddingTop: 4 }}>{e.period}</span>
-      <div>
-        <h3 style={{ fontSize: 'clamp(15px, 2vw, 22px)', fontWeight: 400, letterSpacing: '-0.02em', color: 'var(--fg-1)', marginBottom: 4 }}>{e.degree}</h3>
-        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-3)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>{e.institution}</p>
-        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--fg-2)', lineHeight: 1.7 }}>{e.description}</p>
       </div>
     </div>
   )
@@ -358,12 +335,6 @@ export default function WorkPage() {
           </div>
         </section>
 
-        {/* ── Education ─────────────────────────────────── */}
-        <section style={{ padding: '0 0 72px' }}>
-          <SectionLabel>Education</SectionLabel>
-          {EDUCATION.map((e, i) => <EducationItem key={i} e={e} i={i} />)}
-        </section>
-
         {/* ── Projects ──────────────────────────────────── */}
         <section style={{ padding: '0 0 72px' }}>
           <SectionLabel>Projects</SectionLabel>
@@ -397,9 +368,6 @@ export default function WorkPage() {
           /* Experience: reduce left padding */
           .exp-item { padding-left: 24px !important; }
           .exp-timeline-line { display: none; }
-
-          /* Education: single column */
-          .edu-row { grid-template-columns: 1fr !important; gap: 8px !important; }
 
           /* Projects: single content column, hide desktop stack column */
           .proj-headers { grid-template-columns: 1fr auto !important; }
