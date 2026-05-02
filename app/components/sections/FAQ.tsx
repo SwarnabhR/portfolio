@@ -41,7 +41,6 @@ function FaqRow({ faq, index }: { faq: FaqData & { num: string }; index: number 
     >
       <button
         onClick={() => setOpen(o => !o)}
-        onMouseEnter={() => setOpen(true)}
         aria-expanded={open}
         aria-controls={`faq-answer-${faq.num}`}
         className="w-full flex justify-between items-center gap-4 py-5 text-left"
@@ -82,7 +81,7 @@ function FaqRow({ faq, index }: { faq: FaqData & { num: string }; index: number 
         aria-label={faq.q}
         style={{
           overflow: 'hidden',
-          maxHeight: open ? 200 : 0,
+          maxHeight: open ? 600 : 0,
           transition: 'max-height 0.45s cubic-bezier(0.22,1,0.36,1)',
         }}
       >
@@ -105,7 +104,7 @@ export default function FAQ({ items }: { items?: { question: string; answer: str
   const { ref: headingRef, isVisible: headingVisible } = useReveal()
 
   return (
-    <section id="faq" className="relative bg-bg py-24 overflow-hidden">
+    <section id="faq" className="relative bg-bg py-16 md:py-24 overflow-hidden">
 
       <span
         aria-hidden="true"

@@ -98,7 +98,7 @@ export default function Contact() {
         </div>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-0">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-12 md:pt-24 pb-0">
 
         {/* Availability badge */}
         <div
@@ -134,12 +134,12 @@ export default function Contact() {
         {/* Left — 40% */}
         <div
           ref={leftRef}
-          className={`md:w-2/5 px-6 md:pl-6 md:pr-12 pt-12 pb-10 flex flex-col justify-between transition-all duration-700 ${
+          className={`md:w-2/5 px-6 md:pl-6 md:pr-12 pt-8 md:pt-12 pb-10 flex flex-col justify-between transition-all duration-700 ${
             leftVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
           <div className="flex flex-col gap-8">
-            <p className="text-md text-fg-2 leading-relaxed" style={{ maxWidth: 'min(300px, 100%)' }}>
+            <p className="text-base md:text-md text-fg-2 leading-relaxed" style={{ maxWidth: 'min(300px, 100%)' }}>
               open for ml engineering roles, quant research positions,
               and research collaborations — model development, trading systems,
               and inference infrastructure, especially where deep learning
@@ -172,7 +172,7 @@ export default function Contact() {
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className={`flex-1 px-6 md:pl-12 pt-12 pb-10 flex flex-col gap-6 transition-all duration-700 delay-150 ${
+          className={`flex-1 px-6 md:pl-12 pt-8 md:pt-12 pb-10 flex flex-col gap-6 transition-all duration-700 delay-150 ${
             formVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -250,12 +250,13 @@ export default function Contact() {
             disabled={status === 'sending' || status === 'sent'}
             className="self-start sm:self-end disabled:opacity-40"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
               fontSize: 'var(--text-sm)', fontWeight: 300, color: 'rgba(255,255,255,0.6)',
               background: 'transparent', border: 'none',
               borderBottom: '0.5px solid rgba(255,255,255,0.22)',
-              padding: '4px 0', cursor: 'pointer', letterSpacing: '0.08em',
+              padding: '12px 0', cursor: 'pointer', letterSpacing: '0.08em',
               marginTop: 8, transition: 'color 0.4s ease, border-color 0.4s ease',
+              minHeight: 44,
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.85)' }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.6)' }}

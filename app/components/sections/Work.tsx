@@ -36,7 +36,7 @@ function HighlightRow({ entry, index }: { entry: typeof HIGHLIGHTS[0]; index: nu
         transitionDelay: `${index * 70}ms`,
       }}
     >
-      <div className="flex items-baseline gap-4">
+      <div className="flex flex-wrap items-baseline gap-4 gap-y-1">
         <span className="text-xs tracking-wider font-light shrink-0" style={{ color: 'var(--fg-3)' }}>
           {entry.period}
         </span>
@@ -95,7 +95,7 @@ export default function Work() {
         >
           <h2
             className="font-light tracking-tight leading-none mb-4"
-            style={{ fontSize: 'var(--text-3xl)', color: 'var(--fg-1)', letterSpacing: '-0.02em' }}
+            style={{ fontSize: 'clamp(32px, 8vw, 64px)', color: 'var(--fg-1)', letterSpacing: '-0.02em' }}
           >
             experience & craft.
           </h2>

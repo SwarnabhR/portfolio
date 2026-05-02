@@ -107,8 +107,8 @@ export default function Navbar() {
                 aria-label={label}
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="transition-opacity duration-200 opacity-40 hover:opacity-100"
-                style={{ color: 'var(--fg-1)' }}
+                className="transition-opacity duration-200 opacity-40 hover:opacity-100 inline-flex items-center justify-center"
+                style={{ color: 'var(--fg-1)', padding: 8, minHeight: 44, minWidth: 44 }}
               >
                 {icon}
               </a>
@@ -117,10 +117,9 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen(true)}
-            onMouseEnter={e => { setMenuOpen(true); e.currentTarget.style.color = 'var(--fg-1)' }}
             onMouseLeave={e => (e.currentTarget.style.color = 'var(--fg-2)')}
-            className="flex flex-col items-stretch gap-1.25 transition-colors duration-300 group text-center"
-            style={{ color: 'var(--fg-2)' }}
+            className="flex flex-col items-stretch justify-center gap-1.25 transition-colors duration-300 group text-center"
+            style={{ color: 'var(--fg-2)', minHeight: 44, padding: '0 8px' }}
             aria-label="Open menu"
           >
             <span className="w-full h-px bg-current opacity-40 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-px" />
@@ -240,8 +239,8 @@ export default function Navbar() {
               aria-label={label}
               target={href.startsWith('http') ? '_blank' : undefined}
               rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="transition-opacity duration-200 opacity-40 hover:opacity-100"
-              style={{ color: 'var(--fg-1)' }}
+              className="transition-opacity duration-200 opacity-40 hover:opacity-100 inline-flex items-center justify-center"
+              style={{ color: 'var(--fg-1)', padding: 8, minHeight: 44, minWidth: 44 }}
             >
               {icon}
             </a>

@@ -68,7 +68,7 @@ export default function About() {
             className={`font-regular tracking-tight leading-snug text-fg-1 mb-8 transition-all duration-500 ${
               headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
-            style={{ fontSize: 'var(--text-xl)' }}
+            style={{ fontSize: 'clamp(22px, 5.5vw, 32px)' }}
           >
             {hovered !== null ? CONTENT[hovered].heading : 'architecting systems at the intersection of math and global liquidity.'}
           </h2>
@@ -104,7 +104,8 @@ export default function About() {
                 key={label}
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
-                className="flex items-center justify-end gap-4 py-4 border-b"
+                onClick={() => setHovered(hovered === i ? null : i)}
+                className="flex items-center justify-end gap-4 py-4 border-b cursor-pointer md:cursor-default"
                 style={{
                   borderColor: 'var(--border)',
                   opacity: isDimmed ? 0.22 : statsVisible ? 1 : 0,

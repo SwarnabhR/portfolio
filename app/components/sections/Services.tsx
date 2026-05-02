@@ -30,6 +30,8 @@ function useImageCursor() {
   const [active, setActive] = useState<ServiceData | null>(null)
 
   useEffect(() => {
+    if (window.matchMedia('(pointer: coarse)').matches) return
+
     const onMove = (e: MouseEvent) => { mx.current = e.clientX; my.current = e.clientY }
     window.addEventListener('mousemove', onMove, { passive: true })
 
@@ -82,6 +84,7 @@ function ServiceRow({
   onLeave: () => void
 }) {
   const [hovered, setHovered] = useState(false)
+  const [expandedMobile, setExpandedMobile] = useState(false)
   const { ref, isVisible } = useReveal()
   const dimmed = anyHover && !hovered
 
@@ -92,10 +95,10 @@ function ServiceRow({
       aria-label={service.title}
       onMouseEnter={() => { setHovered(true); onEnter() }}
       onMouseLeave={() => { setHovered(false); onLeave() }}
-      className="flex justify-between items-center gap-6 border-b py-5"
+      onClick={() => setExpandedMobile(!expandedMobile)}
+      className="flex flex-col border-b transition-all duration-300"
       style={{
         borderColor: 'var(--border)',
-        cursor: 'default',
         opacity: dimmed ? 0.25 : isVisible ? 1 : 0,
         transform: isVisible
           ? hovered ? 'translateX(-6px)' : 'translateX(0)'
@@ -103,31 +106,43 @@ function ServiceRow({
         transition: `opacity 0.4s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1) ${isVisible ? 0 : index * 80}ms`,
       }}
     >
-      <div className="flex items-baseline gap-3">
-        <span
-          className="text-xs tracking-wider transition-colors duration-300"
-          style={{ color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)' }}
+      <div className="flex justify-between items-center gap-6 py-5 cursor-default md:cursor-default">
+        <div className="flex items-baseline gap-3">
+          <span
+            className="text-xs tracking-wider transition-colors duration-300"
+            style={{ color: hovered ? 'rgba(160,96,255,0.9)' : 'var(--fg-3)' }}
+          >
+            {service.index}
+          </span>
+          <span
+            className="font-light tracking-tight transition-colors duration-300"
+            style={{
+              fontSize: 'clamp(15px, 3vw, 28px)',
+              letterSpacing: '-0.02em',
+              color: hovered ? 'var(--fg-1)' : 'rgba(255,255,255,0.88)',
+            }}
+          >
+            {service.title}
+          </span>
+        </div>
+
+        <p
+          className="font-light text-right hidden md:block text-fg-2"
+          style={{ fontSize: 'var(--text-sm)', maxWidth: 280, lineHeight: 1.6 }}
         >
-          {service.index}
-        </span>
-        <span
-          className="font-light tracking-tight transition-colors duration-300"
-          style={{
-            fontSize: 'clamp(15px, 3vw, 28px)',
-            letterSpacing: '-0.02em',
-            color: hovered ? 'var(--fg-1)' : 'rgba(255,255,255,0.88)',
-          }}
-        >
-          {service.title}
-        </span>
+          {service.description}
+        </p>
       </div>
 
-      <p
-        className="font-light text-right hidden md:block text-fg-2"
-        style={{ fontSize: 'var(--text-sm)', maxWidth: 280, lineHeight: 1.6 }}
-      >
-        {service.description}
-      </p>
+      {/* Mobile description — tap to expand */}
+      {expandedMobile && (
+        <p
+          className="md:hidden font-light text-fg-2 pb-5 animate-in fade-in duration-300"
+          style={{ fontSize: 'var(--text-sm)', lineHeight: 1.6, maxWidth: 640 }}
+        >
+          {service.description}
+        </p>
+      )}
     </div>
   )
 }

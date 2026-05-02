@@ -33,7 +33,7 @@ const POSITIONS_DESKTOP = [
   'translate(-55%,  -80%)',
 ]
 const POSITIONS_MOBILE = [
-  'translate(-100%, -20%)',
+  'translate(-85%, -20%)',
   'translate(-30%,   18%)',
   'translate(-50%,  -72%)',
 ]
@@ -146,7 +146,7 @@ export default function Testimonials({ items }: { items?: { quote: string; name:
         `}</style>
 
         {/* Card floor */}
-        <div style={{ position: 'relative', width: isMobile ? 280 : 340, height: isMobile ? 220 : 260, zIndex: 2 }}>
+        <div style={{ position: 'relative', width: isMobile ? '85vw' : 340, height: isMobile ? 220 : 260, zIndex: 2, maxWidth: 340 }}>
           {CARDS.map((card, i) => {
             const isLanded = landed[i]
             const POSITIONS = isMobile ? POSITIONS_MOBILE : POSITIONS_DESKTOP
