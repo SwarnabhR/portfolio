@@ -210,10 +210,8 @@ class Backtest:
         gross_pnl: float, net_pnl: float, total_cost: float,
         shares: int,
     ) -> dict:
-        if direction == "long":
-            pnl_pct = (exit_price - entry_price) / entry_price
-        else:
-            pnl_pct = (entry_price - exit_price) / entry_price
+        capital_deployed = entry_price * shares
+        pnl_pct = net_pnl / capital_deployed if capital_deployed != 0 else 0.0
         return {
             "entry_date":  entry_date,
             "exit_date":   exit_date,

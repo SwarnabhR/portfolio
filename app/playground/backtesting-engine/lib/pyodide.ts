@@ -112,7 +112,7 @@ result = json.dumps({
         'max_drawdown_pct': round(float(metrics.max_drawdown_pct), 2),
         'win_rate':         round(float(metrics.win_rate) * 100,    2),
         'total_trades':     int(metrics.total_trades),
-        'total_return_pct': round(float(metrics.total_return_pct), 2),
+        'total_return_pct': round(float(metrics.total_return_pct) * 100, 2),
     },
     'equity_curve': equity_list,
     'benchmark': benchmark_list,
@@ -194,7 +194,7 @@ for win_num, in_df, out_df in windows:
         'in_sharpe': round(best.sharpe_ratio, 3), 'in_cagr': round(best.cagr * 100, 2),
         'out_sharpe': round(float(metrics.sharpe_ratio), 3),
         'out_cagr': round(float(metrics.cagr) * 100, 2),
-        'out_return': round(float(metrics.total_return_pct), 2),
+        'out_return': round(float(metrics.total_return_pct) * 100, 2),
         'out_trades': int(metrics.total_trades),
         'out_drawdown': round(float(metrics.max_drawdown_pct), 2),
     })

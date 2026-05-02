@@ -56,8 +56,9 @@ export function EquityChart({
 
     // baseline (initial capital)
     const baseY = scaleY(initial)
-    ctx.strokeStyle = 'rgba(255,255,255,0.12)'
-    ctx.setLineDash([4, 4])
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)'
+    ctx.lineWidth = 1
+    ctx.setLineDash([5, 5])
     ctx.beginPath(); ctx.moveTo(pad.left, baseY); ctx.lineTo(w - pad.right, baseY); ctx.stroke()
     ctx.setLineDash([])
 
@@ -95,13 +96,15 @@ export function EquityChart({
     // benchmark (buy & hold)
     if (benchmark && benchmark.length > 1) {
       ctx.beginPath()
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)'
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)'
       ctx.lineWidth = 1
-      ctx.setLineDash([3, 5])
-      benchmark.forEach((p, i) => {
-        const x = pad.left + (i / (benchmark.length - 1)) * (w - pad.left - pad.right)
-        if (i === 0) ctx.moveTo(x, scaleY(p.value))
-        else ctx.lineTo(x, scaleY(p.value))
+      ctx.setLineDash([5, 5])
+      // Align benchmark to curve's x-axis: skip first point if benchmark is longer
+      const startIdx = benchmark.length > curve.length ? 1 : 0
+      benchmark.slice(startIdx).forEach((p, idx) => {
+        const i = startIdx + idx
+        if (idx === 0) ctx.moveTo(scaleX(i), scaleY(p.value))
+        else ctx.lineTo(scaleX(i), scaleY(p.value))
       })
       ctx.stroke()
       ctx.setLineDash([])
