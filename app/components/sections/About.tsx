@@ -5,30 +5,30 @@ import { useReveal } from '@/hooks/useReveal'
 import CtaLink from '@/components/ui/CtaLink'
 
 const STATS = [
-  { value: '7+',  label: 'markets covered', badge: 'right' },
-  { value: '20+', label: 'strategies backtested', badge: 'left'  },
-  { value: '1',   label: 'papers published', badge: 'right' },
-  { value: '4+',  label: 'systems deployed', badge: 'left'  },
+  { value: '8+',  label: 'years building systems', badge: 'right' },
+  { value: '20+', label: 'production deployments', badge: 'left'  },
+  { value: '1',   label: 'published ml research', badge: 'right' },
+  { value: '4+',  label: 'programming languages', badge: 'left'  },
 ]
 
 const ACCENTS = ['#ffffff', '#e8e8e8', '#f5f5f5', '#e0e0e0']
 
 const CONTENT = [
   {
-    heading: 'global multi-asset coverage.',
-    body: 'i architect multi-regime execution infrastructure spanning 7+ venues—nse/bse equities, nyse cash markets, crypto perpetuals, g10 forex, and commodity derivatives. ml-driven signal extraction surfaces cross-asset dependencies that pure statistical approaches miss. tick-level lob reconciliation across exchanges with heterogeneous microstructure. nanosecond-precision timestamp synchronization. the edge isn\'t depth in a single market; it\'s understanding how they move together through learned representations.'
+    heading: 'real-time systems & backends.',
+    body: 'building event-driven architectures that handle high throughput with low latency. real-time data pipelines, distributed state management, and infrastructure that doesn\'t break under load. kafka, rust, c++, cuda. whether it\'s exchange order books, live ml inference, or blockchain state transitions—the engineering principles are similar: think in streams, eliminate unnecessary buffering, and design for failure gracefully.'
   },
   {
-    heading: 'systematic strategy development.',
-    body: 'i\'ve developed and rigorously backtested 20+ quantitative strategies. cross-sectional momentum. mean-reversion with tail hedging. linked-market propagation signals derived from neural models. walk-forward validation, realistic tca modeling, slippage regimes—this is how i distinguish edge from overfitting. the full ml lifecycle: feature engineering, model training, interpretability analysis, and deployment. regime-dependent alpha decay and market impact elasticity modelled with precision.'
+    heading: 'machine learning & research.',
+    body: 'deep learning and ml across computer vision (veriguard—deepfake detection, published), time-series forecasting, and signal extraction. end-to-end: architecture design, training, validation, interpretability. shipped ml in trading systems but equally interested in vision, nlp, and domains where neural networks unlock new capabilities. python, pytorch, rigorous experimental methodology.'
   },
   {
-    heading: 'published research.',
-    body: 'veriguard—deepfake detection using fusion nets—was published on first submission. peer-reviewed, rigorous, institutional-grade. current research synthesizes microsecond-granularity alternative data feeds with neural network ensembles to model how macroeconomic shocks propagate across linked markets. saliency maps and shapley decomposition ensure interpretability that satisfies both traders and compliance. this is the level of research that moves institutional capital.'
+    heading: 'algorithmic trading.',
+    body: 'strategy research, backtesting infrastructure, and live execution systems. signal extraction across equities, crypto perpetuals, forex. walk-forward validation, realistic cost modeling, and understanding how markets move. built systems that process tick-level data and trade across multiple asset classes. interesting blend of quantitative analysis, low-latency engineering, and risk management.'
   },
   {
-    heading: 'production-grade systems.',
-    body: 'i maintain 4+ production systems built without compromise. low-latency backtest engines with walk-forward optimization. sub-second tick ingestion with nanosecond timestamps. exchange api orchestration across kiteconnect and ccxt. ml inference pipelines with rigorous model versioning. circuit breaker logic. audit trails. hard latency slas and graceful degradation under market stress. infrastructure that doesn\'t just work—it scales under pressure.'
+    heading: 'blockchain & crypto.',
+    body: 'hands-on with smart contracts, dex mechanics, protocol design, and on-chain economics. built systems for state verification, incentive alignment, and trading on blockchain. interested in where crypto intersects with ml (prediction markets, on-chain oracles) and systems design (consensus, slashing, finality). the cryptographic side fascinates me as much as the trading applications.'
   }
 ]
 
@@ -70,7 +70,7 @@ export default function About() {
             }`}
             style={{ fontSize: 'clamp(22px, 5.5vw, 32px)' }}
           >
-            {hovered !== null ? CONTENT[hovered].heading : 'architecting systems at the intersection of math and global liquidity.'}
+            {hovered !== null ? CONTENT[hovered].heading : 'building across ml, trading systems, and blockchain infrastructure.'}
           </h2>
 
           <div
@@ -80,7 +80,7 @@ export default function About() {
             }`}
           >
             <p className="text-base text-fg-2 leading-relaxed">
-              {hovered !== null ? CONTENT[hovered].body : 'as a cs graduate based in bengaluru, i engineer institutional-grade quantitative trading architectures and production ml systems. my expertise bridges deep learning, high-performance computing, and market microstructure—from neural signal research to rigorous, bias-free backtesting and live inference pipelines.'}
+              {hovered !== null ? CONTENT[hovered].body : 'i build systems that work. cs graduate based in bengaluru, with hands-on experience across machine learning, algorithmic trading, blockchain, and real-time backends. i care about clean architecture and systems that scale, but code quality and shipping what works matters more. expertise in python, rust, c++, and designing systems without overengineering.'}
             </p>
 
             <div className="flex gap-4 pt-4 flex-wrap">

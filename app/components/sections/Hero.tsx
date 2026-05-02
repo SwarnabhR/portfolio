@@ -252,16 +252,15 @@ export default function Hero() {
           className="font-regular tracking-tight leading-none text-fg-1 mb-4 sm:mb-8"
           style={{ fontSize: 'clamp(38px, 9vw, 100px)' }}
         >
-          Quant & ML eng.
+          ML & systems developer.
           <br />
-          <span style={{ color: 'rgba(255,255,255,0.45)' }}>Systems that learn and trade.</span>
+          <span style={{ color: 'rgba(255,255,255,0.45)' }}>Passionate about good architecture.</span>
         </h1>
 
         {/* Two-col sub layout */}
         <div className="flex flex-col-reverse items-start sm:flex-row justify-between sm:items-end gap-4 sm:gap-6" style={{ marginTop: 'clamp(1rem, 3vw, 2rem)' }}>
           <p className="font-light leading-relaxed" style={{ fontSize: 'var(--text-base)', color: 'rgba(255,255,255,0.48)', maxWidth: 'min(340px, 100%)' }}>
-            building ml models, algorithmic trading systems, and inference pipelines
-            that connect deep learning, quantitative math, and market reactions across asset classes.
+            building production ml systems, real-time backends, and infrastructure that scales. interests span machine learning, algorithmic trading, blockchain, and technologies that push systems to their limits.
           </p>
           <CtaLink href="#contact">contact me ↗</CtaLink>
         </div>

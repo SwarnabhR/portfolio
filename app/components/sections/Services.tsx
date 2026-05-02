@@ -13,10 +13,10 @@ const GRADIENTS = [
 type ServiceData = { index: string; title: string; description: string; gradient: string }
 
 const DEFAULT_SERVICES: ServiceData[] = [
-  { index: '01', title: 'ml model development', description: 'End-to-end model lifecycle — architecture design, training, interpretability, and production deployment for deep learning and classical ML systems.', gradient: GRADIENTS[0] },
-  { index: '02', title: 'algorithmic strategy development', description: 'Signal research to live execution — momentum, mean-reversion, and neural signal models across equities, crypto, forex, and commodities.', gradient: GRADIENTS[1] },
-  { index: '03', title: 'data pipeline & mlops', description: 'Real-time data ingestion, feature stores, model versioning, and inference infrastructure at scale.', gradient: GRADIENTS[2] },
-  { index: '04', title: 'quantitative research', description: 'Fast-news analysis, cross-asset dependency modelling, walk-forward validation, and cost modelling grounded in rigorous statistical methodology.', gradient: GRADIENTS[3] },
+  { index: '01', title: 'machine learning systems', description: 'End-to-end ml — from problem definition through training, validation, and production deployment. deep learning, time-series forecasting, computer vision, and signal extraction. pytorch, rigorous validation methodology, and systems that generalize.', gradient: GRADIENTS[0] },
+  { index: '02', title: 'real-time backends & pipelines', description: 'High-throughput, low-latency infrastructure for trading, data processing, and live inference. event streams, distributed processing, and backends that scale without breaking. kafka, rust, and systems designed for reliability.', gradient: GRADIENTS[1] },
+  { index: '03', title: 'algorithmic trading', description: 'Strategy research and execution infrastructure. backtesting with walk-forward validation, realistic cost modeling, and live trading across equities, crypto, and forex. signal research and understanding market microstructure.', gradient: GRADIENTS[2] },
+  { index: '04', title: 'blockchain systems', description: 'Smart contracts, protocol design, dex mechanics, and on-chain execution. incentive design, consensus mechanisms, and understanding where crypto intersects with ml and trading infrastructure.', gradient: GRADIENTS[3] },
 ]
 
 function useImageCursor() {
@@ -222,7 +222,7 @@ export default function Services({ items }: { items?: { title: string; descripti
           }`}
           style={{ fontSize: 'clamp(24px, 5vw, 40px)', letterSpacing: '-0.02em', maxWidth: 480 }}
         >
-          quant research and ml engineering — built to give you an edge.
+          building systems that scale — ml, trading, backends.
         </h2>
 
         <div

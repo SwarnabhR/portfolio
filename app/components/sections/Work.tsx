@@ -6,17 +6,17 @@ import { useReveal } from '@/hooks/useReveal'
 const HIGHLIGHTS = [
   {
     period: '2024 – present',
-    role: 'quantitative research & ml engineering',
-    type: 'research',
-  },
-  {
-    period: '2023 – 2024',
-    role: 'algorithmic trading & ml systems',
+    role: 'ml systems & backend engineering',
     type: 'engineering',
   },
   {
+    period: '2023 – 2024',
+    role: 'low-latency systems & distributed infrastructure',
+    type: 'systems',
+  },
+  {
     period: '2023',
-    role: 'ml research — deepfake detection',
+    role: 'ml research — deepfake detection (published)',
     type: 'research',
   },
 ]
@@ -100,7 +100,7 @@ export default function Work() {
             experience & craft.
           </h2>
           <p className="font-light max-w-xl" style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)', lineHeight: 1.7 }}>
-            ml engineering, quant research, and systematic trading infrastructure — built for rigour, not demos.
+            ml research, backend systems, and infrastructure across trading, blockchain, and real-time processing. built systems that need to work reliably under pressure.
           </p>
         </div>
 
