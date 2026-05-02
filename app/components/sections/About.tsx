@@ -5,10 +5,10 @@ import { useReveal } from '@/hooks/useReveal'
 import CtaLink from '@/components/ui/CtaLink'
 
 const STATS = [
-  { value: '8+',  label: 'years building systems', badge: 'right' },
+  { value: '2+',  label: 'years building systems', badge: 'right' },
   { value: '20+', label: 'production deployments', badge: 'left'  },
   { value: '1',   label: 'published ml research', badge: 'right' },
-  { value: '4+',  label: 'programming languages', badge: 'left'  },
+  { value: '6+',  label: 'programming languages', badge: 'left'  },
 ]
 
 const ACCENTS = ['#ffffff', '#e8e8e8', '#f5f5f5', '#e0e0e0']
