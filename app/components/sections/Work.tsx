@@ -5,19 +5,19 @@ import { useReveal } from '@/hooks/useReveal'
 
 const HIGHLIGHTS = [
   {
-    period: '2024 – present',
-    role: 'ml systems & backend engineering',
-    type: 'engineering',
+    period: '2026 – present',
+    role: 'quantitative developer — trading systems',
+    type: 'quantitative',
   },
   {
-    period: '2023 – 2024',
-    role: 'low-latency systems & distributed infrastructure',
-    type: 'systems',
+    period: '2025',
+    role: 'ml engineer — SAP treasury platform',
+    type: 'sap',
   },
   {
-    period: '2023',
-    role: 'ml research — deepfake detection (published)',
-    type: 'research',
+    period: '2024 – 2025',
+    role: 'systems & infrastructure projects',
+    type: 'projects',
   },
 ]
 
@@ -100,7 +100,7 @@ export default function Work() {
             experience & craft.
           </h2>
           <p className="font-light max-w-xl" style={{ fontSize: 'var(--text-base)', color: 'var(--fg-2)', lineHeight: 1.7 }}>
-            ml research, backend systems, and infrastructure across trading, blockchain, and real-time processing. built systems that need to work reliably under pressure.
+            treasury and financial systems expertise. quantitative development, ml engineering, and enterprise platform architecture on SAP BTP. focused on treasury forecasting, cashflow optimization, low-latency execution, and scalable financial infrastructure.
           </p>
         </div>
 

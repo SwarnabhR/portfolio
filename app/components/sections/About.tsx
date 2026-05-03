@@ -5,8 +5,8 @@ import { useReveal } from '@/hooks/useReveal'
 import CtaLink from '@/components/ui/CtaLink'
 
 const STATS = [
-  { value: '2+',  label: 'years building systems', badge: 'right' },
-  { value: '20+', label: 'production deployments', badge: 'left'  },
+  { value: '1+',  label: 'years professional', badge: 'right' },
+  { value: '30+', label: 'technologies mastered', badge: 'left'  },
   { value: '6+',  label: 'programming languages', badge: 'right' },
 ]
 
@@ -14,20 +14,20 @@ const ACCENTS = ['#ffffff', '#e8e8e8', '#f5f5f5', '#e0e0e0']
 
 const CONTENT = [
   {
-    heading: 'real-time systems & backends.',
-    body: 'building event-driven architectures that handle high throughput with low latency. real-time data pipelines, distributed state management, and infrastructure that doesn\'t break under load. kafka, rust, c++, cuda. whether it\'s exchange order books, live ml inference, or blockchain state transitions—the engineering principles are similar: think in streams, eliminate unnecessary buffering, and design for failure gracefully.'
+    heading: 'treasury & financial systems.',
+    body: 'enterprise treasury platform architecture on SAP BTP. built AI-driven forecasting for AR/AP cashflow prediction, FX-volatility modeling, and working capital optimization. experience with end-to-end platform engineering: data orchestration, federated inference, mlops pipelines, and production-grade compliance frameworks. strong domain expertise in treasury workflows, financial modeling, and enterprise integration patterns.'
   },
   {
-    heading: 'machine learning & research.',
-    body: 'deep learning and ml across computer vision (deepfake detection research), time-series forecasting, and signal extraction. end-to-end: architecture design, training, validation, interpretability. shipped ml in trading systems but equally interested in vision, nlp, and domains where neural networks unlock new capabilities. python, pytorch, rigorous experimental methodology.'
+    heading: 'real-time systems & data pipelines.',
+    body: 'building event-driven architectures for financial systems that handle high throughput with low latency. real-time data pipelines, distributed state management, and infrastructure that scales reliably. kafka, rust, c++, cuda. whether it\'s trading execution, live ml inference, or treasury settlement—the engineering principles are similar: think in streams, eliminate buffering, design for failure gracefully.'
   },
   {
-    heading: 'algorithmic trading.',
-    body: 'strategy research, backtesting infrastructure, and live execution systems. signal extraction across equities, crypto perpetuals, forex. walk-forward validation, realistic cost modeling, and understanding how markets move. built systems that process tick-level data and trade across multiple asset classes. interesting blend of quantitative analysis, low-latency engineering, and risk management.'
+    heading: 'machine learning & financial forecasting.',
+    body: 'deep learning and ml across time-series forecasting, signal extraction, and financial prediction. built ai-driven treasury systems using tensorflow for cashflow and volatility forecasting. end-to-end: architecture design, training, validation, interpretability. shipped ml in trading and financial systems. python, tensorflow, pytorch. focus on practical financial applications.'
   },
   {
-    heading: 'blockchain & crypto.',
-    body: 'hands-on with smart contracts, dex mechanics, protocol design, and on-chain economics. built systems for state verification, incentive alignment, and trading on blockchain. interested in where crypto intersects with ml (prediction markets, on-chain oracles) and systems design (consensus, slashing, finality). the cryptographic side fascinates me as much as the trading applications.'
+    heading: 'quantitative trading & execution.',
+    body: 'algorithm research, backtesting infrastructure, and live execution systems. developed 20+ trading algorithms, built signal-to-execution pipelines, and optimized for sub-millisecond latency. signal extraction across equities and derivatives. walk-forward validation, realistic cost modeling, and understanding market microstructure. blend of quantitative analysis, low-latency engineering, and risk management.'
   }
 ]
 
@@ -69,7 +69,7 @@ export default function About() {
             }`}
             style={{ fontSize: 'clamp(22px, 5.5vw, 32px)' }}
           >
-            {hovered !== null ? CONTENT[hovered].heading : 'building across ml, trading systems, and blockchain infrastructure.'}
+            {hovered !== null ? CONTENT[hovered].heading : 'quantitative developer — ml, trading systems, and backend infrastructure.'}
           </h2>
 
           <div
@@ -79,7 +79,7 @@ export default function About() {
             }`}
           >
             <p className="text-base text-fg-2 leading-relaxed">
-              {hovered !== null ? CONTENT[hovered].body : 'i build systems that work. cs graduate based in bengaluru, with hands-on experience across machine learning, algorithmic trading, blockchain, and real-time backends. i care about clean architecture and systems that scale, but code quality and shipping what works matters more. expertise in python, rust, c++, and designing systems without overengineering.'}
+              {hovered !== null ? CONTENT[hovered].body : 'cs engineer with treasury and financial systems expertise. currently developing quantitative algorithms and backend infrastructure for trading systems. hands-on experience with SAP BTP, AI-driven treasury forecasting, cashflow prediction, and enterprise platform architecture. python, tensorflow, rust, c++—focused on building scalable financial systems without overengineering. bengaluru-based.'}
             </p>
 
             <div className="flex gap-4 pt-4 flex-wrap">

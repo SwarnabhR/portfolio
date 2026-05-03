@@ -15,32 +15,25 @@ import {
 /* ── Data ─────────────────────────────────────────────────── */
 
 const STATS = [
-  { value: '4',   label: 'projects' },
-  { value: '3+',  label: 'years' },
-  { value: '29',  label: 'technologies' },
+  { value: '7+',  label: 'projects' },
+  { value: '1+',  label: 'years professional' },
+  { value: '30+', label: 'technologies' },
 ]
 
 const EXPERIENCE = [
   {
-    period: '2024 – present',
-    role: 'quantitative research & ml engineering',
-    type: 'research',
-    description: 'Cross-asset signal research and ML model development — deep learning for fast-news propagation, neural dependency models across linked markets, and walk-forward validation. Focus on the full ML lifecycle from feature engineering to production inference.',
-    highlights: ['deep learning signals', 'cross-asset dependency', 'ml model deployment'],
+    period: '2026 – present',
+    role: 'quantitative / backend developer',
+    type: 'quantitative',
+    description: 'Quantitative algorithm development for trading and financial systems: conducted research to develop and validate 20+ trading algorithms using large-scale financial datasets. Built 20+ REST API endpoints with high data fidelity and low-latency retrieval. Engineered signal-to-execution pipeline for automated order placement with optimized latency. Strong foundation in financial data engineering, risk management, and algorithmic execution.',
+    highlights: ['algorithm development', 'financial engineering', 'execution systems'],
   },
   {
-    period: '2023 – 2024',
-    role: 'algorithmic trading & ml systems',
+    period: '2025 (Jul – Dec)',
+    role: 'ml engineer — treasury & financial systems',
     type: 'engineering',
-    description: 'End-to-end systematic execution infrastructure with integrated ML inference: real-time tick ingestion, order routing, position management, and neural signal models across equities and derivatives. Built for sub-second latency at scale.',
-    highlights: ['ml inference', 'order routing', 'sub-second latency'],
-  },
-  {
-    period: '2023',
-    role: 'ml research',
-    type: 'research',
-    description: 'Computer vision research in deepfake detection using XceptionNet architecture. Developed a high-accuracy classification model for AI-generated image detection.',
-    highlights: ['deepfake detection', 'XceptionNet', 'deep learning'],
+    description: 'Enterprise SAP treasury platform development: built AI-driven treasury forecasting components on SAP BTP using Python and TensorFlow. Developed financial models for AR/AP cashflow prediction, FX-volatility forecasting, and working capital optimization. Engineered end-to-end enterprise platform architecture with multi-layered data orchestration, federated inference pathways, and production MLOps pipelines. Implemented DevSecOps, zero-trust access controls, and cross-cloud compliance frameworks for deterministic performance.',
+    highlights: ['sap btp', 'treasury domain expertise', 'enterprise architecture'],
   },
 ]
 
@@ -49,49 +42,49 @@ const PUBLICATIONS: Array<{ year: string; title: string; venue: string; descript
 const PROJECTS = [
   {
     index: '01',
-    title: 's. roy & co. backtesting platform',
-    tags: ['Python', 'QuestDB', 'Streamlit'],
-    description: 'End-to-end backtesting engine for NSE/BSE, NYSE, SSE, and LSE equities — extensible to crypto, forex, and commodity futures. Ingests real-time OHLCV data, runs strategy simulations, and outputs risk-adjusted performance metrics.',
-    status: 'in progress',
-    dot: '#f59e0b',
-    href: null,
-  },
-  {
-    index: '02',
-    title: 'real-time market data pipeline',
-    tags: ['TimescaleDB', 'Docker', 'Kafka'],
-    description: 'High-frequency tick and fast-news ingestion system studying how information propagates through linked markets with sub-second latency. Designed for cross-asset dependency research.',
+    title: 'backtesting engine',
+    tags: ['Python', 'Pandas', 'TimescaleDB'],
+    description: 'Production-grade backtesting framework for NSE/BSE equities with OHLCV-based strategy evaluation and risk-adjusted performance analytics. Built for extensibility across asset classes and timeframes.',
     status: 'live',
     dot: '#22c55e',
     href: null,
   },
   {
+    index: '02',
+    title: 'ar/ap cashflow forecasting',
+    tags: ['TensorFlow', 'Time-Series', 'Python'],
+    description: 'ML-based accounts receivable and payable cashflow forecasting model for treasury and financial planning. Built with time-series regression techniques for early-stage prototype. Demonstrates financial domain expertise in working capital optimization.',
+    status: 'complete',
+    dot: '#a78bfa',
+    href: null,
+  },
+  {
     index: '03',
-    title: 'veriguard — deepfake detection',
-    tags: ['XceptionNet', 'PyTorch', 'CUDA'],
-    description: 'Deep learning model detecting AI-generated and deepfake images using XceptionNet architecture. Achieves high classification accuracy across multiple generation methods.',
-    status: 'research',
+    title: 'fx-volatility forecasting',
+    tags: ['TensorFlow', 'Python', 'Financial Models'],
+    description: 'AI-driven FX volatility prediction system for treasury risk management and hedging decisions. Time-series deep learning model for foreign exchange market forecasting.',
+    status: 'complete',
     dot: '#a78bfa',
     href: null,
   },
   {
     index: '04',
-    title: 'technical analysis screener',
-    tags: ['Python', 'FastAPI', 'PostgreSQL'],
-    description: 'Automated screening system filtering equities, crypto, forex, and commodities to surface high-probability setups across timeframes using a composite of technical signals.',
-    status: 'live',
-    dot: '#22c55e',
+    title: 'blockchain in rust',
+    tags: ['Rust', 'P2P', 'Distributed Systems'],
+    description: 'Minimal blockchain implementation with peer-to-peer synchronization and proof-of-work mining. Demonstrates distributed systems and consensus mechanism fundamentals.',
+    status: 'complete',
+    dot: '#a78bfa',
     href: null,
   },
 ]
 
 const STACK = [
-  { category: 'Languages',       items: ['Python', 'TypeScript', 'C', 'C++', 'Rust', 'SQL'] },
-  { category: 'Backend & Async', items: ['FastAPI', 'Celery', 'Kafka', 'Redis', 'gRPC'] },
-  { category: 'Data & Infra',    items: ['QuestDB', 'TimescaleDB', 'ClickHouse', 'PostgreSQL', 'Docker', 'Kubernetes', 'Airflow', 'Linux'] },
-  { category: 'ML / GPU',        items: ['PyTorch', 'CUDA', 'OpenCV', 'WASM'] },
-  { category: 'Web & Viz',       items: ['Next.js', 'React', 'Streamlit'] },
-  { category: 'Blockchain',      items: ['Solidity', 'EVM'] },
+  { category: 'Languages',           items: ['Python', 'TypeScript', 'C', 'C++', 'Rust', 'SQL'] },
+  { category: 'Backend & Cloud',     items: ['FastAPI', 'Celery', 'Kafka', 'Redis', 'gRPC', 'SAP BTP'] },
+  { category: 'Data & Infra',        items: ['QuestDB', 'TimescaleDB', 'ClickHouse', 'PostgreSQL', 'Docker', 'Kubernetes', 'Airflow', 'CI/CD'] },
+  { category: 'ML & Financial Models', items: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Time-Series Analysis', 'CUDA'] },
+  { category: 'Web & Analytics',     items: ['Next.js', 'React', 'Streamlit', 'PowerBI', 'Jupyter'] },
+  { category: 'Blockchain & Other',  items: ['Solidity', 'EVM'] },
 ]
 
 type SimpleIcon = { path: string; hex: string }
