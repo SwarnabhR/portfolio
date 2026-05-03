@@ -7,8 +7,7 @@ import CtaLink from '@/components/ui/CtaLink'
 const STATS = [
   { value: '2+',  label: 'years building systems', badge: 'right' },
   { value: '20+', label: 'production deployments', badge: 'left'  },
-  { value: '1',   label: 'published ml research', badge: 'right' },
-  { value: '6+',  label: 'programming languages', badge: 'left'  },
+  { value: '6+',  label: 'programming languages', badge: 'right' },
 ]
 
 const ACCENTS = ['#ffffff', '#e8e8e8', '#f5f5f5', '#e0e0e0']
@@ -20,7 +19,7 @@ const CONTENT = [
   },
   {
     heading: 'machine learning & research.',
-    body: 'deep learning and ml across computer vision (veriguard—deepfake detection, published), time-series forecasting, and signal extraction. end-to-end: architecture design, training, validation, interpretability. shipped ml in trading systems but equally interested in vision, nlp, and domains where neural networks unlock new capabilities. python, pytorch, rigorous experimental methodology.'
+    body: 'deep learning and ml across computer vision (deepfake detection research), time-series forecasting, and signal extraction. end-to-end: architecture design, training, validation, interpretability. shipped ml in trading systems but equally interested in vision, nlp, and domains where neural networks unlock new capabilities. python, pytorch, rigorous experimental methodology.'
   },
   {
     heading: 'algorithmic trading.',
