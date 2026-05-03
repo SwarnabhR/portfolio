@@ -18,7 +18,6 @@ const STATS = [
   { value: '4',   label: 'projects' },
   { value: '3+',  label: 'years' },
   { value: '29',  label: 'technologies' },
-  { value: '1',   label: 'publication' },
 ]
 
 const EXPERIENCE = [
@@ -40,21 +39,12 @@ const EXPERIENCE = [
     period: '2023',
     role: 'ml research',
     type: 'research',
-    description: 'Computer vision research in deepfake detection using XceptionNet architecture. Developed a high-accuracy classification model for AI-generated image detection. Findings published as a peer-reviewed paper.',
-    highlights: ['deepfake detection', 'XceptionNet', 'peer-reviewed'],
+    description: 'Computer vision research in deepfake detection using XceptionNet architecture. Developed a high-accuracy classification model for AI-generated image detection.',
+    highlights: ['deepfake detection', 'XceptionNet', 'deep learning'],
   },
 ]
 
-const PUBLICATIONS = [
-  {
-    year: '2023',
-    title: 'veriguard: deepfake detection using xceptionnet',
-    venue: 'peer-reviewed research paper',
-    description: 'A deep learning system for detecting AI-generated and manipulated images using the XceptionNet architecture. Achieves high classification accuracy across multiple deepfake generation methods.',
-    tags: ['deep learning', 'computer vision', 'xceptionnet', 'pytorch'],
-    href: null,
-  },
-]
+const PUBLICATIONS: Array<{ year: string; title: string; venue: string; description: string; tags: string[]; href: null }> = []
 
 const PROJECTS = [
   {
@@ -79,8 +69,8 @@ const PROJECTS = [
     index: '03',
     title: 'veriguard — deepfake detection',
     tags: ['XceptionNet', 'PyTorch', 'CUDA'],
-    description: 'Deep learning model detecting AI-generated and deepfake images using XceptionNet architecture. Achieves high classification accuracy across multiple generation methods. Published as a peer-reviewed research paper.',
-    status: 'published',
+    description: 'Deep learning model detecting AI-generated and deepfake images using XceptionNet architecture. Achieves high classification accuracy across multiple generation methods.',
+    status: 'research',
     dot: '#a78bfa',
     href: null,
   },
@@ -346,11 +336,6 @@ export default function WorkPage() {
           {PROJECTS.map((project, i) => <ProjectItem key={project.index} project={project} i={i} />)}
         </section>
 
-        {/* ── Publications ──────────────────────────────── */}
-        <section style={{ padding: '0 0 72px' }}>
-          <SectionLabel>Publications</SectionLabel>
-          {PUBLICATIONS.map((pub, i) => <PublicationItem key={i} pub={pub} i={i} />)}
-        </section>
 
         {/* ── Tech Stack ────────────────────────────────── */}
         <section style={{ padding: '0 0 80px' }}>

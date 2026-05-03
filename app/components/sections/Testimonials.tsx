@@ -22,7 +22,7 @@ type CardData = { date: string; quote: string; name: string; role: string; rotat
 const DEFAULT_CARDS: CardData[] = [
   { date: '08.2024', quote: '"Exceptional research instincts and rigorous methodology. Built a backtesting framework from scratch that caught edge cases our senior team had missed."', name: 'Internship Lead', role: 'Quantitative Research Desk', rotation: ROTATIONS[0], glow: GLOWS[0] },
   { date: '03.2024', quote: '"Rare combination of statistical depth and engineering discipline. The ML pipeline he delivered runs in production with zero issues since launch."', name: 'Research Supervisor', role: 'Algo Trading Team', rotation: ROTATIONS[1], glow: GLOWS[1] },
-  { date: '11.2023', quote: '"Delivered a deepfake detection model that outperformed baselines by 12%. The paper was accepted on first submission — an impressive result."', name: 'Academic Advisor', role: 'CS Department', rotation: ROTATIONS[2], glow: GLOWS[2] },
+  { date: '11.2023', quote: '"Delivered a deepfake detection model that outperformed baselines by 12%. Demonstrated strong research capabilities and attention to detail throughout the project."', name: 'Academic Advisor', role: 'CS Department', rotation: ROTATIONS[2], glow: GLOWS[2] },
 ]
 
 const THRESHOLDS = [0.18, 0.42, 0.66]
